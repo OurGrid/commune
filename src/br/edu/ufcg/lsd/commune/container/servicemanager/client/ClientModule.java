@@ -21,16 +21,16 @@ package br.edu.ufcg.lsd.commune.container.servicemanager.client;
 
 import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.ContainerContext;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationClientController;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationClientManager;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
+import br.edu.ufcg.lsd.commune.container.control.ClientModuleController;
+import br.edu.ufcg.lsd.commune.container.control.ClientModuleManager;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestRequirements;
 
-public abstract class ClientModule<A extends ApplicationServerManager, B extends ManagerClientService<A>> extends Module {
+public abstract class ClientModule<A extends ServerModuleManager, B extends ManagerClientService<A>> extends Module {
 
 	private InitializationContext<A, B> initializationContext;
 	private ContainerID serverContainerID;
@@ -90,8 +90,8 @@ public abstract class ClientModule<A extends ApplicationServerManager, B extends
 	}
 	
 	@Override
-	protected ApplicationClientManager createApplicationManager() {
-		return new ApplicationClientController();
+	protected ClientModuleManager createApplicationManager() {
+		return new ClientModuleController();
 	}
 	
 	protected Class<A> getManagerObjectType() {

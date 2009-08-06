@@ -20,11 +20,12 @@
 package br.edu.ufcg.lsd.commune.container.control;
 
 import br.edu.ufcg.lsd.commune.api.Remote;
-import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
 
 @Remote
-public interface ApplicationManagerClient extends ApplicationStatusProviderClient, ApplicationControlClient{
+public interface ModuleControl {
 
-	public void init(ServiceManager serviceManager);
+	void start( ModuleControlClient client );
+
+	void stop( boolean callExit, boolean force, ModuleControlClient client );
 	
 }

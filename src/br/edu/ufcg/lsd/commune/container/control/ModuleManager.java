@@ -19,13 +19,17 @@
  */
 package br.edu.ufcg.lsd.commune.container.control;
 
+import java.io.Serializable;
+
 import br.edu.ufcg.lsd.commune.api.Remote;
+import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
+
 
 @Remote
-public interface ApplicationControl {
+public interface ModuleManager {
 
-	void start( ApplicationControlClient client );
-
-	void stop( boolean callExit, boolean force, ApplicationControlClient client );
+	void init(ServiceManager serviceManager);
+	
+	public <T extends Serializable> void runAction(String actionName, T handler);
 	
 }

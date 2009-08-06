@@ -22,7 +22,7 @@ package br.edu.ufcg.lsd.commune.container.servicemanager.actions;
 import java.io.Serializable;
 
 import br.edu.ufcg.lsd.commune.container.Container;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationManager;
+import br.edu.ufcg.lsd.commune.container.control.ModuleManager;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.message.Message;
 
@@ -39,10 +39,10 @@ public class RepetitionRunnable implements Runnable {
 
 	private String actionName;
 	private Serializable handler;
-	private ApplicationManager componentControl;
+	private ModuleManager componentControl;
 	private final Container container;
 	
-	public RepetitionRunnable(Container container, ApplicationManager componentControl, String actionName, 
+	public RepetitionRunnable(Container container, ModuleManager componentControl, String actionName, 
 			Serializable handler) {
 		this.container = container;
 		this.componentControl = componentControl;

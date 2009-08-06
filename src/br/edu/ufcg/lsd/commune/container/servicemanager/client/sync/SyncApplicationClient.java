@@ -24,13 +24,13 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import br.edu.ufcg.lsd.commune.container.ContainerContext;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.container.control.ControlOperationResult;
 import br.edu.ufcg.lsd.commune.container.servicemanager.client.ClientModule;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 
-public abstract class SyncApplicationClient<A extends ApplicationServerManager, B extends SyncManagerClient<A>> 
+public abstract class SyncApplicationClient<A extends ServerModuleManager, B extends SyncManagerClient<A>> 
 	extends ClientModule<A, B> {
 
 	protected BlockingQueue<Object> queue;

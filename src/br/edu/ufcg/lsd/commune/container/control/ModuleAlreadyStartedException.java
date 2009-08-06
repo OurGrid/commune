@@ -19,15 +19,14 @@
  */
 package br.edu.ufcg.lsd.commune.container.control;
 
-import java.util.Map;
+public class ModuleAlreadyStartedException extends RuntimeException {
 
-import br.edu.ufcg.lsd.commune.api.Remote;
+	private static final long serialVersionUID = 40L;
 
-@Remote
-public interface ApplicationStatusProviderClient {
 
-	void hereIsUpTime( long uptime );
+	public ModuleAlreadyStartedException() {
 
-	void hereIsConfiguration( Map<String, String> configuration );
-	
+		super();
+	}
+
 }

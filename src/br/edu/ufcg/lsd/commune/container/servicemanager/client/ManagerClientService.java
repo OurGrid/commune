@@ -22,11 +22,11 @@ package br.edu.ufcg.lsd.commune.container.servicemanager.client;
 import br.edu.ufcg.lsd.commune.api.FailureNotification;
 import br.edu.ufcg.lsd.commune.api.InvokeOnDeploy;
 import br.edu.ufcg.lsd.commune.api.RecoveryNotification;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationManagerClient;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
+import br.edu.ufcg.lsd.commune.container.control.ModuleManagerClient;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
 
-public abstract class ManagerClientService<T extends ApplicationServerManager> implements ApplicationManagerClient {
+public abstract class ManagerClientService<T extends ServerModuleManager> implements ModuleManagerClient {
 
 	private ServiceManager serviceManager;
 

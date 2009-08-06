@@ -27,8 +27,8 @@ import org.junit.Test;
 
 import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationControlClient;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
+import br.edu.ufcg.lsd.commune.container.control.ModuleControlClient;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.matchers.ControlOperationResultMatcher;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.util.TestDeployMonitorUtil;
 import br.edu.ufcg.lsd.commune.functionaltests.util.Context;
@@ -66,12 +66,12 @@ public class TestDeployMonitor extends TestWithTestableCommuneContainer {
 
 		ObjectDeployment control = application.getObject(Module.CONTROL_OBJECT_NAME);
 		
-		ApplicationControlClient appClient = EasyMock.createMock(ApplicationControlClient.class);
+		ModuleControlClient appClient = EasyMock.createMock(ModuleControlClient.class);
 		appClient.operationSucceed(ControlOperationResultMatcher.noError());
 		
 		EasyMock.replay(appClient);
 		
-		((ApplicationServerManager)control.getObject()).start(appClient);
+		((ServerModuleManager)control.getObject()).start(appClient);
 		
 		object = application.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
 

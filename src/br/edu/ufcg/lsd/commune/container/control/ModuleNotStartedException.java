@@ -20,30 +20,19 @@
 package br.edu.ufcg.lsd.commune.container.control;
 
 
-public class ComponentStoppedException extends RuntimeException {
+public class ModuleNotStartedException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param newDetail
-	 */
-	public ComponentStoppedException(Throwable newDetail) {
-		super(newDetail);
+
+	public ModuleNotStartedException( String moduleName ) {
+
+		super( moduleName + " control was not started" );
 	}
 
-	/**
-	 * @param message
-	 */
-	public ComponentStoppedException(String message) {
-		super(message);
-	}
 
-	/**
-	 * @param message
-	 * @param newDetail
-	 */
-	public ComponentStoppedException(String message, Throwable newDetail) {
-		super(message, newDetail);
-	}
+	public ModuleNotStartedException( String moduleName, Exception errorCause ) {
 
+		super( moduleName + " control was not started", errorCause );
+	}
 }

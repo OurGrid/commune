@@ -19,17 +19,9 @@
  */
 package br.edu.ufcg.lsd.commune.container.control;
 
-import java.io.Serializable;
-
 import br.edu.ufcg.lsd.commune.api.Remote;
-import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
-
 
 @Remote
-public interface ApplicationManager {
+public interface ClientModuleManager extends ModuleManager {
 
-	void init(ServiceManager serviceManager);
-	
-	public <T extends Serializable> void runAction(String actionName, T handler);
-	
 }

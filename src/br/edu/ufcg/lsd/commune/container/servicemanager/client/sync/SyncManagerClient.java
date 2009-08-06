@@ -24,12 +24,12 @@ import java.util.concurrent.BlockingQueue;
 
 import br.edu.ufcg.lsd.commune.api.FailureNotification;
 import br.edu.ufcg.lsd.commune.api.RecoveryNotification;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.container.control.ControlOperationResult;
 import br.edu.ufcg.lsd.commune.container.servicemanager.client.ClientModule;
 import br.edu.ufcg.lsd.commune.container.servicemanager.client.ManagerClientService;
 
-public class SyncManagerClient<T extends ApplicationServerManager> extends ManagerClientService<T> {
+public class SyncManagerClient<T extends ServerModuleManager> extends ManagerClientService<T> {
 
 	private BlockingQueue<Object> queue;
 	private boolean callExit;

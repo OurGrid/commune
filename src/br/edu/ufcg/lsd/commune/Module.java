@@ -31,8 +31,8 @@ import sun.security.provider.certpath.X509CertPath;
 import br.edu.ufcg.lsd.commune.container.Container;
 import br.edu.ufcg.lsd.commune.container.ContainerContext;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationManager;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerController;
+import br.edu.ufcg.lsd.commune.container.control.ModuleManager;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleController;
 import br.edu.ufcg.lsd.commune.container.logging.CommuneLogger;
 import br.edu.ufcg.lsd.commune.container.logging.CommuneLoggerFactory;
 import br.edu.ufcg.lsd.commune.container.servicemanager.FileTransferManager;
@@ -104,12 +104,12 @@ public class Module {
 		getContainer().deploy(CONTROL_OBJECT_NAME, createApplicationManager());
 	}
 	
-	protected ApplicationManager createApplicationManager() {
-		return new ApplicationServerController();
+	protected ModuleManager createApplicationManager() {
+		return new ServerModuleController();
 	}
 	
-	protected ApplicationManager getApplicationManager() {
-		return (ApplicationManager) getContainer().getObjectRepository().get(CONTROL_OBJECT_NAME).getObject();
+	protected ModuleManager getApplicationManager() {
+		return (ModuleManager) getContainer().getObjectRepository().get(CONTROL_OBJECT_NAME).getObject();
 	}
 	
 	protected Container createContainer(String containerName, ContainerContext context) {
@@ -160,15 +160,15 @@ public class Module {
 	
 	public <T extends Serializable> Future<?> scheduleActionWithFixedDelay(String actionName, 
 			long initialDelay, long delay, TimeUnit timeUnit, T handler) {
-		ApplicationManager manager = 
-			(ApplicationManager) container.getObjectRepository().get(Module.CONTROL_OBJECT_NAME).getProxy();
+		ModuleManager manager = 
+			(ModuleManager) container.getObjectRepository().get(Module.CONTROL_OBJECT_NAME).getProxy();
 		RepetitionRunnable runnable = new RepetitionRunnable(container, manager, actionName, handler);
 		return getTimer().scheduleWithFixedDelay(runnable, initialDelay, delay, timeUnit);
 	}
 	
 	public <T extends Serializable> Future<?> scheduleActionToRunOnce(String actionName, long delay, TimeUnit timeUnit, T handler) {
-		ApplicationManager manager = 
-			(ApplicationManager) container.getObjectRepository().get(Module.CONTROL_OBJECT_NAME).getProxy();
+		ModuleManager manager = 
+			(ModuleManager) container.getObjectRepository().get(Module.CONTROL_OBJECT_NAME).getProxy();
 		
 		RepetitionRunnable runnable = new RepetitionRunnable(container, manager, actionName, handler);
 		return getTimer().schedule(runnable, delay, timeUnit);

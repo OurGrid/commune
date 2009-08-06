@@ -29,9 +29,9 @@ import br.edu.ufcg.lsd.commune.monitor.MonitorConstants;
 import br.edu.ufcg.lsd.commune.monitor.MonitorProperties;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 
-public class ApplicationServerController extends ApplicationController implements ApplicationServerManager {
+public class ServerModuleController extends ModuleController implements ServerModuleManager {
 	
-	public void start(@MonitoredBy(Module.CONTROL_OBJECT_NAME) ApplicationControlClient client) {
+	public void start(@MonitoredBy(Module.CONTROL_OBJECT_NAME) ModuleControlClient client) {
 		
 		if (validateStartSenderPublicKey(client, getServiceManager().getSenderPublicKey()) && canComponentBeStarted(client)) {
 
@@ -55,7 +55,7 @@ public class ApplicationServerController extends ApplicationController implement
 				
 			} catch (Exception e) {
 				
-				result =  new ControlOperationResult(new ComponentNotStartedException(getComponentName(), e));
+				result =  new ControlOperationResult(new ModuleNotStartedException(getComponentName(), e));
 				try {
 					client.operationSucceed(result);
 					killContainer(false, result);
@@ -76,16 +76,16 @@ public class ApplicationServerController extends ApplicationController implement
 		}
 	}
 
-	protected boolean canComponentBeStarted(ApplicationControlClient client) {
+	protected boolean canComponentBeStarted(ModuleControlClient client) {
 		ContainerDAO dao = getServiceManager().getContainerDAO();
 		
 		ControlOperationResult result = null;
 		
 		if(dao.isStopped()) {
-			result = new ControlOperationResult(new ComponentStoppedException(getComponentName() + " is stopped"));
+			result = new ControlOperationResult(new ModuleStoppedException(getComponentName() + " is stopped"));
 		}
 		else if (dao.isStarted()) {
-			ComponentAlreadyStartedException cae = new ComponentAlreadyStartedException();
+			ModuleAlreadyStartedException cae = new ModuleAlreadyStartedException();
 			result = new ControlOperationResult(cae);
 		}
 		
@@ -110,7 +110,7 @@ public class ApplicationServerController extends ApplicationController implement
 	}
 	
 	public void stop(boolean callExit, boolean force, 
-			@MonitoredBy(Module.CONTROL_OBJECT_NAME) ApplicationControlClient client) {
+			@MonitoredBy(Module.CONTROL_OBJECT_NAME) ModuleControlClient client) {
 		
 		if (validateStopSenderPublicKey(client, getServiceManager().getSenderPublicKey()) && canComponentBeUsed(client)){
 			ControlOperationResult result = new ControlOperationResult();
@@ -133,11 +133,11 @@ public class ApplicationServerController extends ApplicationController implement
 		}
 	}
 
-	protected boolean validateStartSenderPublicKey(ApplicationControlClient client, String senderPublicKey) {
+	protected boolean validateStartSenderPublicKey(ModuleControlClient client, String senderPublicKey) {
 		return true;
 	}
 	
-	protected boolean validateStopSenderPublicKey(ApplicationControlClient client, String senderPublicKey) {
+	protected boolean validateStopSenderPublicKey(ModuleControlClient client, String senderPublicKey) {
 		return true;
 	}
 
@@ -151,16 +151,16 @@ public class ApplicationServerController extends ApplicationController implement
 		getServiceManager().getContainerDAO().stopContainer();
 	}
 
-	protected boolean canComponentBeUsed(ApplicationControlClient client) {
+	protected boolean canComponentBeUsed(ModuleControlClient client) {
 		ContainerDAO dao = getServiceManager().getContainerDAO();
 		
 		ControlOperationResult result = null;
 
 		if(dao.isStopped()){
-			result = new ControlOperationResult(new ComponentStoppedException(getComponentName() + " is stopped"));
+			result = new ControlOperationResult(new ModuleStoppedException(getComponentName() + " is stopped"));
 		}
 		else if (!dao.isStarted()) {
-			result = new ControlOperationResult(new ComponentNotStartedException(getComponentName()));
+			result = new ControlOperationResult(new ModuleNotStartedException(getComponentName()));
 		}
 
 		if (result == null) {
@@ -187,35 +187,35 @@ public class ApplicationServerController extends ApplicationController implement
 
 	}
 
-	public void getConfiguration(@MonitoredBy(Module.CONTROL_OBJECT_NAME) ApplicationStatusProviderClient client) {
+	public void getConfiguration(@MonitoredBy(Module.CONTROL_OBJECT_NAME) ModuleStatusProviderClient client) {
 		
 		client.hereIsConfiguration( getServiceManager().getContainerContext().getProperties() );
 		
 	}
 
-	public void getUpTime(@MonitoredBy(Module.CONTROL_OBJECT_NAME) ApplicationStatusProviderClient client) {
+	public void getUpTime(@MonitoredBy(Module.CONTROL_OBJECT_NAME) ModuleStatusProviderClient client) {
 		
 		client.hereIsUpTime(getServiceManager().getContainerDAO().getUpTime());
 		
 	}
 	
 	@RecoveryNotification
-	public void controlClientIsUp(ApplicationControlClient client) {
+	public void controlClientIsUp(ModuleControlClient client) {
 		
 	}
 	
 	@FailureNotification
-	public void controlClientIsDown(ApplicationControlClient client) {
+	public void controlClientIsDown(ModuleControlClient client) {
 		
 	}
 	
 	@RecoveryNotification
-	public void statusProviderClientIsUp(ApplicationStatusProviderClient statusProviderClient) {
+	public void statusProviderClientIsUp(ModuleStatusProviderClient statusProviderClient) {
 		
 	}
 	
 	@FailureNotification
-	public void statusProviderClientIsDown(ApplicationStatusProviderClient statusProviderClient) {
+	public void statusProviderClientIsDown(ModuleStatusProviderClient statusProviderClient) {
 		
 	}
 	

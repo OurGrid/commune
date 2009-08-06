@@ -19,11 +19,15 @@
  */
 package br.edu.ufcg.lsd.commune.container.control;
 
+import java.util.Map;
+
 import br.edu.ufcg.lsd.commune.api.Remote;
 
 @Remote
-public interface ApplicationControlClient {
+public interface ModuleStatusProviderClient {
 
-	void operationSucceed( ControlOperationResult controlOperationResult );
+	void hereIsUpTime( long uptime );
+
+	void hereIsConfiguration( Map<String, String> configuration );
 	
 }

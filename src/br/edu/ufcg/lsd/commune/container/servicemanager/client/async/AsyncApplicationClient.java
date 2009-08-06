@@ -20,13 +20,13 @@
 package br.edu.ufcg.lsd.commune.container.servicemanager.client.async;
 
 import br.edu.ufcg.lsd.commune.container.ContainerContext;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.container.servicemanager.client.ClientModule;
 import br.edu.ufcg.lsd.commune.container.servicemanager.client.ManagerClientService;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 
-public abstract class AsyncApplicationClient<A extends ApplicationServerManager, B extends ManagerClientService<A>> extends 
+public abstract class AsyncApplicationClient<A extends ServerModuleManager, B extends ManagerClientService<A>> extends 
 	ClientModule<A, B>{
 
 	public AsyncApplicationClient(String containerName,

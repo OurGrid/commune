@@ -26,8 +26,8 @@ import java.io.Serializable;
  * Class created to receive the information needed to describe the result of a
  * control operation.
  * 
- * @see ApplicationManager
- * @see ApplicationManagerClient
+ * @see ModuleManager
+ * @see ModuleManagerClient
  */
 public class ControlOperationResult implements Serializable {
 

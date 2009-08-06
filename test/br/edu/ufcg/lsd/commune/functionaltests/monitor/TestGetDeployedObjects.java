@@ -28,10 +28,10 @@ import java.util.Map;
 import org.junit.Test;
 
 import br.edu.ufcg.lsd.commune.Module;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationControl;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationManager;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationStatusProvider;
+import br.edu.ufcg.lsd.commune.container.control.ModuleControl;
+import br.edu.ufcg.lsd.commune.container.control.ModuleManager;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
+import br.edu.ufcg.lsd.commune.container.control.ModuleStatusProvider;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.data.DeployableClass;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.data.DeployableInterface;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.util.TestDeployMonitorUtil;
@@ -53,10 +53,10 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		
 		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Module.CONTROL_OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list1 = new ArrayList<Class<?>>();
-		list1.add(ApplicationManager.class);
-		list1.add(ApplicationServerManager.class);
-		list1.add(ApplicationControl.class);
-		list1.add(ApplicationStatusProvider.class);
+		list1.add(ModuleManager.class);
+		list1.add(ServerModuleManager.class);
+		list1.add(ModuleControl.class);
+		list1.add(ModuleStatusProvider.class);
 		deployedObjects.put(deploymentID1, list1);
 		
 		DeploymentID deploymentID2 = testGetDeployedObjectsUtil.getMonitorControllerDeployment(application).getDeploymentID();
@@ -77,10 +77,10 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		
 		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Module.CONTROL_OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list1 = new ArrayList<Class<?>>();
-		list1.add(ApplicationManager.class);
-		list1.add(ApplicationServerManager.class);
-		list1.add(ApplicationControl.class);
-		list1.add(ApplicationStatusProvider.class);
+		list1.add(ModuleManager.class);
+		list1.add(ServerModuleManager.class);
+		list1.add(ModuleControl.class);
+		list1.add(ModuleStatusProvider.class);
 		deployedObjects.put(deploymentID1, list1);
 		
 		DeploymentID deploymentID2 = testGetDeployedObjectsUtil.getMonitorControllerDeployment(application).getDeploymentID();
@@ -106,10 +106,10 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		
 		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Module.CONTROL_OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list1 = new ArrayList<Class<?>>();
-		list1.add(ApplicationManager.class);
-		list1.add(ApplicationServerManager.class);
-		list1.add(ApplicationControl.class);
-		list1.add(ApplicationStatusProvider.class);
+		list1.add(ModuleManager.class);
+		list1.add(ServerModuleManager.class);
+		list1.add(ModuleControl.class);
+		list1.add(ModuleStatusProvider.class);
 		deployedObjects.put(deploymentID1, list1);
 		
 		DeploymentID deploymentID2 = testGetDeployedObjectsUtil.getMonitorControllerDeployment(application).getDeploymentID();
@@ -138,10 +138,10 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		
 		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Module.CONTROL_OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list1 = new ArrayList<Class<?>>();
-		list1.add(ApplicationManager.class);
-		list1.add(ApplicationServerManager.class);
-		list1.add(ApplicationControl.class);
-		list1.add(ApplicationStatusProvider.class);
+		list1.add(ModuleManager.class);
+		list1.add(ServerModuleManager.class);
+		list1.add(ModuleControl.class);
+		list1.add(ModuleStatusProvider.class);
 		deployedObjects.put(deploymentID1, list1);
 		
 		DeploymentID deploymentID2 = testGetDeployedObjectsUtil.getMonitorControllerDeployment(application).getDeploymentID();

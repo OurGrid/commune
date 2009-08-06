@@ -20,8 +20,8 @@
 package br.edu.ufcg.lsd.commune;
 
 import br.edu.ufcg.lsd.commune.container.ContainerContext;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerController;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleController;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 
@@ -33,8 +33,8 @@ public class ServerModule extends Module {
 	}
 	
 	@Override
-	protected ApplicationServerManager createApplicationManager() {
-		return new ApplicationServerController();
+	protected ServerModuleManager createApplicationManager() {
+		return new ServerModuleController();
 	}
 
 }

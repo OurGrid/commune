@@ -21,11 +21,11 @@ package br.edu.ufcg.lsd.commune.container.servicemanager.client.async;
 
 import br.edu.ufcg.lsd.commune.api.FailureNotification;
 import br.edu.ufcg.lsd.commune.api.RecoveryNotification;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.container.servicemanager.client.ClientModule;
 import br.edu.ufcg.lsd.commune.container.servicemanager.client.ManagerClientService;
 
-public abstract class AsyncManagerClient<T extends ApplicationServerManager> extends ManagerClientService<T> {
+public abstract class AsyncManagerClient<T extends ServerModuleManager> extends ManagerClientService<T> {
 
 	@RecoveryNotification
 	public void controlIsUp(T control) {

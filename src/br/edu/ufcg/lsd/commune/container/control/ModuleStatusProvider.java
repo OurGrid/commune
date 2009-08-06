@@ -22,6 +22,10 @@ package br.edu.ufcg.lsd.commune.container.control;
 import br.edu.ufcg.lsd.commune.api.Remote;
 
 @Remote
-public interface ApplicationClientManager extends ApplicationManager {
+public interface ModuleStatusProvider {
 
+	void getUpTime( ModuleStatusProviderClient client );
+
+	void getConfiguration( ModuleStatusProviderClient client );
+	
 }

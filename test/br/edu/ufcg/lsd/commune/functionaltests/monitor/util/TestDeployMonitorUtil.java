@@ -5,8 +5,8 @@ import org.easymock.EasyMock;
 
 import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationControlClient;
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
+import br.edu.ufcg.lsd.commune.container.control.ModuleControlClient;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.MonitorAcceptanceUtil;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.matchers.ControlOperationResultMatcher;
 import br.edu.ufcg.lsd.commune.functionaltests.util.Context;
@@ -17,12 +17,12 @@ public class TestDeployMonitorUtil extends MonitorAcceptanceUtil {
 	public TestableApplication startApplication(TestableApplication application) throws Exception {
 		ObjectDeployment control = application.getObject(Module.CONTROL_OBJECT_NAME);
 		
-		ApplicationControlClient appClient = EasyMock.createMock(ApplicationControlClient.class);
+		ModuleControlClient appClient = EasyMock.createMock(ModuleControlClient.class);
 		appClient.operationSucceed(ControlOperationResultMatcher.noError());
 		
 		EasyMock.replay(appClient);
 		
-		((ApplicationServerManager)control.getObject()).start(appClient);
+		((ServerModuleManager)control.getObject()).start(appClient);
 		
 		EasyMock.verify(appClient);
 		
@@ -35,12 +35,12 @@ public class TestDeployMonitorUtil extends MonitorAcceptanceUtil {
 		
 		ObjectDeployment control = application.getObject(Module.CONTROL_OBJECT_NAME);
 		
-		ApplicationControlClient appClient = EasyMock.createMock(ApplicationControlClient.class);
+		ModuleControlClient appClient = EasyMock.createMock(ModuleControlClient.class);
 		appClient.operationSucceed(ControlOperationResultMatcher.noError());
 		
 		EasyMock.replay(appClient);
 		
-		((ApplicationServerManager)control.getObject()).start(appClient);
+		((ServerModuleManager)control.getObject()).start(appClient);
 		
 		EasyMock.verify(appClient);
 		

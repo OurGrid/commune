@@ -19,34 +19,31 @@
  */
 package br.edu.ufcg.lsd.commune.container.control;
 
-import java.io.Serializable;
 
-import br.edu.ufcg.lsd.commune.api.InvokeOnDeploy;
-import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
-import br.edu.ufcg.lsd.commune.container.servicemanager.actions.RepeatedAction;
+public class ModuleStoppedException extends RuntimeException {
 
-public class ApplicationController implements ApplicationManager {
+	private static final long serialVersionUID = 1L;
 
-	private ServiceManager serviceManager;
-
-	@InvokeOnDeploy
-	public void init(ServiceManager serviceManager) {
-		this.serviceManager = serviceManager;
+	/**
+	 * @param newDetail
+	 */
+	public ModuleStoppedException(Throwable newDetail) {
+		super(newDetail);
 	}
 
 	/**
-	 * @return the serviceManager
+	 * @param message
 	 */
-	protected ServiceManager getServiceManager() {
-		return serviceManager;
+	public ModuleStoppedException(String message) {
+		super(message);
 	}
-	
-	public final <T extends Serializable> void runAction(String actionName, T handler) {
-		
-		RepeatedAction scheduledAction = 
-			(RepeatedAction) getServiceManager().getApplication().getScheduledAction(actionName);
-		scheduledAction.run(handler, getServiceManager());
-		
+
+	/**
+	 * @param message
+	 * @param newDetail
+	 */
+	public ModuleStoppedException(String message, Throwable newDetail) {
+		super(message, newDetail);
 	}
 
 }

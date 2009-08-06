@@ -19,14 +19,34 @@
  */
 package br.edu.ufcg.lsd.commune.container.control;
 
-public class ComponentAlreadyStartedException extends RuntimeException {
+import java.io.Serializable;
 
-	private static final long serialVersionUID = 40L;
+import br.edu.ufcg.lsd.commune.api.InvokeOnDeploy;
+import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
+import br.edu.ufcg.lsd.commune.container.servicemanager.actions.RepeatedAction;
 
+public class ModuleController implements ModuleManager {
 
-	public ComponentAlreadyStartedException() {
+	private ServiceManager serviceManager;
 
-		super();
+	@InvokeOnDeploy
+	public void init(ServiceManager serviceManager) {
+		this.serviceManager = serviceManager;
+	}
+
+	/**
+	 * @return the serviceManager
+	 */
+	protected ServiceManager getServiceManager() {
+		return serviceManager;
+	}
+	
+	public final <T extends Serializable> void runAction(String actionName, T handler) {
+		
+		RepeatedAction scheduledAction = 
+			(RepeatedAction) getServiceManager().getApplication().getScheduledAction(actionName);
+		scheduledAction.run(handler, getServiceManager());
+		
 	}
 
 }

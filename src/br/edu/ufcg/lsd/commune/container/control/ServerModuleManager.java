@@ -19,20 +19,9 @@
  */
 package br.edu.ufcg.lsd.commune.container.control;
 
+import br.edu.ufcg.lsd.commune.api.Remote;
 
-public class ComponentNotStartedException extends Exception {
-
-	private static final long serialVersionUID = 1L;
-
-
-	public ComponentNotStartedException( String moduleName ) {
-
-		super( moduleName + " control was not started" );
-	}
-
-
-	public ComponentNotStartedException( String moduleName, Exception errorCause ) {
-
-		super( moduleName + " control was not started", errorCause );
-	}
+@Remote
+public interface ServerModuleManager extends ModuleManager, ModuleControl, ModuleStatusProvider {
+	
 }

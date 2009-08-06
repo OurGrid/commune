@@ -19,9 +19,9 @@
  */
 package br.edu.ufcg.lsd.commune.container.servicemanager.client;
 
-import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
+import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 
-public interface InitializationContext<A extends ApplicationServerManager, B extends ManagerClientService<A>> {
+public interface InitializationContext<A extends ServerModuleManager, B extends ManagerClientService<A>> {
 
 	public B createManagerClient();
 	

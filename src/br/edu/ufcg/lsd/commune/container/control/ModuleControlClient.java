@@ -22,6 +22,8 @@ package br.edu.ufcg.lsd.commune.container.control;
 import br.edu.ufcg.lsd.commune.api.Remote;
 
 @Remote
-public interface ApplicationServerManager extends ApplicationManager, ApplicationControl, ApplicationStatusProvider {
+public interface ModuleControlClient {
+
+	void operationSucceed( ControlOperationResult controlOperationResult );
 	
 }
