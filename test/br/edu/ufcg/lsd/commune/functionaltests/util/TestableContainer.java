@@ -20,9 +20,9 @@
 package br.edu.ufcg.lsd.commune.functionaltests.util;
 
 import br.edu.ufcg.lsd.commune.container.Container;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
 import br.edu.ufcg.lsd.commune.container.IMessageDeliverer;
 import br.edu.ufcg.lsd.commune.container.IMessageSender;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.processor.filetransfer.FileTransferProcessor;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestProcessor;
 import br.edu.ufcg.lsd.commune.processor.objectdeployer.ServiceProcessor;
@@ -33,7 +33,7 @@ public class TestableContainer extends Container {
 	private TestableServiceProcessor serviceProcessor;
 	private TestableFileTransferProcessor fileTransferProcessor;
 	
-	public TestableContainer(TestableApplication communeContainer, String containerName, ContainerContext context) {
+	public TestableContainer(TestableApplication communeContainer, String containerName, ModuleContext context) {
 		super(communeContainer, containerName, context);
 	}
 

@@ -20,7 +20,7 @@
 package br.edu.ufcg.lsd.commune.network;
 
 import br.edu.ufcg.lsd.commune.container.Container;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.network.application.ApplicationProtocol;
 import br.edu.ufcg.lsd.commune.network.certification.CertificationProtocol;
 import br.edu.ufcg.lsd.commune.network.loopback.VirtualMachineLoopbackProtocol;
@@ -32,7 +32,7 @@ public class NetworkBuilder {
 
 	public CommuneNetwork build(Container container) {
 		
-		ContainerContext context = container.getContext();
+		ModuleContext context = container.getContext();
 		CommuneNetwork communeNetwork = new CommuneNetwork(container);
 		
 		XMPPProtocol xmppProtocol = 

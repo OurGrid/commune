@@ -27,13 +27,13 @@ import java.util.concurrent.TimeUnit;
 import sun.security.provider.certpath.X509CertPath;
 import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
 import br.edu.ufcg.lsd.commune.container.InvalidMonitoringException;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.container.logging.CommuneLogger;
 import br.edu.ufcg.lsd.commune.container.servicemanager.actions.RepeatedAction;
 import br.edu.ufcg.lsd.commune.container.servicemanager.dao.ContainerDAO;
 import br.edu.ufcg.lsd.commune.container.servicemanager.dao.DAO;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
@@ -51,13 +51,13 @@ public class ServiceManager implements Serializable {
 
 	
 	private transient final Module application;
-	private transient final ContainerContext containerContext;
+	private transient final ModuleContext containerContext;
 	private transient final ObjectDeployment objDeployment;
 	
 	private FileTransferManager fileTransferManager;
 	
 	
-	public ServiceManager(Module application, ContainerContext containerContext, ObjectDeployment deployment) {
+	public ServiceManager(Module application, ModuleContext containerContext, ObjectDeployment deployment) {
 		this.application = application;
 		this.containerContext = containerContext;
 		this.objDeployment = deployment;
@@ -76,7 +76,7 @@ public class ServiceManager implements Serializable {
 		return application;
 	}
 
-	public ContainerContext getContainerContext() {
+	public ModuleContext getContainerContext() {
 		return containerContext;
 	}
 

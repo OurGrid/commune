@@ -21,7 +21,7 @@ package br.edu.ufcg.lsd.commune.network.certification.providers;
 
 import java.lang.reflect.Constructor;
 
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.network.certification.CertificationProperties;
 
 public class CertificationDataProviderFactory {
@@ -35,7 +35,7 @@ public class CertificationDataProviderFactory {
 	 */
 	@SuppressWarnings("unchecked")
 	public CertificationDataProvider createCertificationDataProvider(
-			ContainerContext context) {
+			ModuleContext context) {
 		
     	if (context == null) {
     		throw new IllegalArgumentException( "The container context is mandatory" );
@@ -55,7 +55,7 @@ public class CertificationDataProviderFactory {
 				(Class<CertificationDataProvider>) Class.forName(providerClass);
 			
 			Constructor<CertificationDataProvider> constructor = clazz.getConstructor(
-					ContainerContext.class);
+					ModuleContext.class);
 			
 			CertificationDataProvider certificationDataProvider = constructor.newInstance(context);
 			

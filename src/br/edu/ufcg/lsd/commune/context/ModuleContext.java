@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package br.edu.ufcg.lsd.commune.container;
+package br.edu.ufcg.lsd.commune.context;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,10 +26,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import br.edu.ufcg.lsd.commune.container.ContainerUtils;
+import br.edu.ufcg.lsd.commune.container.InvalidContextPropertyException;
 import br.edu.ufcg.lsd.commune.network.xmpp.XMPPProperties;
 
 
-public class ContainerContext {
+public class ModuleContext {
 
 	protected Properties currentProperties;
 
@@ -38,7 +40,7 @@ public class ContainerContext {
 
 	private static final String LINE_SEPARATOR = System.getProperty( "line.separator" );
 
-	public ContainerContext(Map<?, ?> properties) {
+	public ModuleContext(Map<?, ?> properties) {
 		currentProperties = new Properties( System.getProperties() );
 		currentProperties.putAll(properties);
 	}

@@ -17,26 +17,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package br.edu.ufcg.lsd.commune.container.contextfactory;
+package br.edu.ufcg.lsd.commune.context;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-public class PropertiesParser implements ContextParser {
 
-	private Map<Object, Object> properties;
+public interface ContextFactory {
 
-	public PropertiesParser(Map<String, String> properties) {
-		Map<Object, Object> context = new HashMap<Object, Object>();
-		for (Entry<String, String> entry : properties.entrySet()) {
-			context.put(entry.getKey(), entry.getValue());
-		}
-		this.properties = context;
-	}
+	public ModuleContext createContext();
 	
-	public Map<Object, Object> parseContext() {
-		return properties;
-	}
-
+	public Map<?, ?> getDefaultProperties();
+	
+	public void validate(Map<Object, Object> properties);
+	
+	public void setParser(ContextParser parser);
+	
 }

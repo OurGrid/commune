@@ -32,8 +32,8 @@ import org.easymock.classextension.EasyMock;
 
 import sun.security.provider.certpath.X509CertPath;
 import br.edu.ufcg.lsd.commune.Module;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
@@ -148,7 +148,7 @@ public class AcceptanceTestUtil {
 	 * Get the actual configuration public key
 	 * @return
 	 */
-	public static String getPublicKeyFromConfiguration(ContainerContext context){
+	public static String getPublicKeyFromConfiguration(ModuleContext context){
 		return context.getProperty(SignatureProperties.PROP_PUBLIC_KEY);
 	 }
 	

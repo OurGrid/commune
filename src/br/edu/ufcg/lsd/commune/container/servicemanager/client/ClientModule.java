@@ -20,10 +20,10 @@
 package br.edu.ufcg.lsd.commune.container.servicemanager.client;
 
 import br.edu.ufcg.lsd.commune.Module;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
 import br.edu.ufcg.lsd.commune.container.control.ClientModuleController;
 import br.edu.ufcg.lsd.commune.container.control.ClientModuleManager;
 import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
@@ -39,7 +39,7 @@ public abstract class ClientModule<A extends ServerModuleManager, B extends Mana
 	
 	private static final String MANAGER_CLIENT = "MANAGER_CLIENT";
 	
-	public ClientModule(String containerName, ContainerContext context)
+	public ClientModule(String containerName, ModuleContext context)
 			throws CommuneNetworkException, ProcessorStartException {
 		super(containerName, context);
 		init();

@@ -30,8 +30,8 @@ import java.util.ArrayList;
 
 import sun.security.provider.certpath.X509CertPath;
 import br.edu.ufcg.lsd.commune.ModuleProperties;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
-import br.edu.ufcg.lsd.commune.container.contextfactory.ContainerContextUtils;
+import br.edu.ufcg.lsd.commune.context.ContainerContextUtils;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 
 /**
  *
@@ -39,9 +39,9 @@ import br.edu.ufcg.lsd.commune.container.contextfactory.ContainerContextUtils;
 public class FileCertificationDataProvider implements CertificationDataProvider {
 
 	private X509CertPath myCertPath;
-	private ContainerContext context;
+	private ModuleContext context;
 
-	public FileCertificationDataProvider(ContainerContext context) throws CertificateException, IOException {
+	public FileCertificationDataProvider(ModuleContext context) throws CertificateException, IOException {
 		this.context = context;
 		this.myCertPath = generateMyCertPath();
 	}

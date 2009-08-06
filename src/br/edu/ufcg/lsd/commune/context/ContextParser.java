@@ -17,20 +17,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package br.edu.ufcg.lsd.commune.container.contextfactory;
+package br.edu.ufcg.lsd.commune.context;
 
 import java.util.Map;
 
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
 
-public interface ContextFactory {
-
-	public ContainerContext createContext();
+public interface ContextParser {
 	
-	public Map<?, ?> getDefaultProperties();
-	
-	public void validate(Map<Object, Object> properties);
-	
-	public void setParser(ContextParser parser);
+	public Map<Object, Object> parseContext();
 	
 }

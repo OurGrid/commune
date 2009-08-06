@@ -32,7 +32,7 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.util.StringUtils;
 
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.InvalidIdentificationException;
 import br.edu.ufcg.lsd.commune.network.CommuneNetwork;
@@ -51,10 +51,10 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 	private HashMap<String,String> chats;
 
 	private FragmentationManager fm;
-	private ContainerContext context;
+	private ModuleContext context;
 
 
-	public XMPPProtocol(CommuneNetwork communicationLayer, ContainerID identification, ContainerContext context) {
+	public XMPPProtocol(CommuneNetwork communicationLayer, ContainerID identification, ModuleContext context) {
 		super(communicationLayer);
 		
 		this.identification = identification;

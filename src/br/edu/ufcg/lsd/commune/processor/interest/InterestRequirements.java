@@ -21,7 +21,7 @@ package br.edu.ufcg.lsd.commune.processor.interest;
 
 import java.io.Serializable;
 
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 
 
 public class InterestRequirements implements Serializable {
@@ -32,7 +32,7 @@ public class InterestRequirements implements Serializable {
 	private long heartbeatDelay;
 
 
-	public InterestRequirements(ContainerContext context) {
+	public InterestRequirements(ModuleContext context) {
 		int defaultDetectionDelay = context.parseIntegerProperty(InterestProperties.PROP_WAN_DETECTION_TIME);
 		int defaultHeartbeatDelay = context.parseIntegerProperty(InterestProperties.PROP_WAN_HEARTBEAT_DELAY);
 

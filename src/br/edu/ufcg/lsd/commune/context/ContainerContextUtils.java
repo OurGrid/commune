@@ -17,12 +17,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package br.edu.ufcg.lsd.commune.container.contextfactory;
+package br.edu.ufcg.lsd.commune.context;
 
 import java.io.File;
 
 import br.edu.ufcg.lsd.commune.ModuleProperties;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
 
 /**
  *
@@ -34,7 +33,7 @@ public class ContainerContextUtils {
 	 * @param filePath
 	 * @return
 	 */
-	public static String normalizeFilePath(ContainerContext context, String filePath) {
+	public static String normalizeFilePath(ModuleContext context, String filePath) {
 		return normalizeFilePath(context.getProperty(ModuleProperties.PROP_CONFDIR), filePath);
 	}
 	

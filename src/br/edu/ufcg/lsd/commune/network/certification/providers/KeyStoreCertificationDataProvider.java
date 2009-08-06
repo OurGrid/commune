@@ -32,7 +32,7 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
 import sun.security.provider.certpath.X509CertPath;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.network.ProtocolException;
 
 /**
@@ -44,11 +44,11 @@ public class KeyStoreCertificationDataProvider implements
 
 	private static final String KEYSTORE_TYPE = "JKS";
 	
-	private final ContainerContext context;
+	private final ModuleContext context;
 
 	private X509CertPath myCertPath;
 	
-	public KeyStoreCertificationDataProvider(ContainerContext context) 
+	public KeyStoreCertificationDataProvider(ModuleContext context) 
 	throws GeneralSecurityException, IOException {
 		this.context = context;
 		init();

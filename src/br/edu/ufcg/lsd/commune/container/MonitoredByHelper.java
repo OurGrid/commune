@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ufcg.lsd.commune.api.MonitoredBy;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.message.MessageUtil;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestManager;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestRequirements;
@@ -80,7 +81,7 @@ public class MonitoredByHelper {
 		String detectionTimeProperty = annotation.detectionTimeProperty();
 		String heartBeatDelayProperty = annotation.heartBeatDelayProperty();
 		
-		ContainerContext context = container.getContext();
+		ModuleContext context = container.getContext();
 		
 		try {
 			if (!detectionTimeProperty.equals("")) {

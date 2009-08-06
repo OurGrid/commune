@@ -21,7 +21,7 @@ package br.edu.ufcg.lsd.commune.functionaltests.util;
 
 import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.Container;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
@@ -29,14 +29,14 @@ import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 public class TestableApplication extends Module {
 
 	
-	public TestableApplication(String containerName, ContainerContext context) 
+	public TestableApplication(String containerName, ModuleContext context) 
 			throws CommuneNetworkException, ProcessorStartException {
 		super(containerName, context);
 	}
 
 
 	@Override
-	protected Container createContainer(String containerName, ContainerContext context) {
+	protected Container createContainer(String containerName, ModuleContext context) {
 		return new TestableContainer(this, containerName, context);
 	}
 	

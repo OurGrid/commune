@@ -27,7 +27,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 
 import br.edu.ufcg.lsd.commune.container.Container;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 
 public class TransferManager {
@@ -40,10 +40,10 @@ public class TransferManager {
 	private IncomingTransfersManager incomingManager;
 	private OutgoingTransfersManager outgoingManager;
 	private final int maxOut;
-	private ContainerContext context;
+	private ModuleContext context;
 
 
-	public TransferManager(int maxOut, ContainerContext context) {
+	public TransferManager(int maxOut, ModuleContext context) {
 		this.context = context;
 		this.maxOut = maxOut;
 	}

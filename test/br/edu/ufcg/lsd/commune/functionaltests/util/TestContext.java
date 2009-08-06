@@ -21,15 +21,15 @@ package br.edu.ufcg.lsd.commune.functionaltests.util;
 
 import java.util.HashMap;
 
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 
-public class TestContext extends ContainerContext {
+public class TestContext extends ModuleContext {
 
 	public TestContext() {
 		super(new HashMap<Object,Object>());
 	}
 	
-	public TestContext(ContainerContext context) {
+	public TestContext(ModuleContext context) {
 		super(context.getProperties());
 	}
 

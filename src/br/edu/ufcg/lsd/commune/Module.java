@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 
 import sun.security.provider.certpath.X509CertPath;
 import br.edu.ufcg.lsd.commune.container.Container;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.container.control.ModuleManager;
 import br.edu.ufcg.lsd.commune.container.control.ServerModuleController;
@@ -42,6 +41,7 @@ import br.edu.ufcg.lsd.commune.container.servicemanager.actions.RepetitionRunnab
 import br.edu.ufcg.lsd.commune.container.servicemanager.dao.ContainerDAO;
 import br.edu.ufcg.lsd.commune.container.servicemanager.dao.DAO;
 import br.edu.ufcg.lsd.commune.container.servicemanager.dao.DAOCache;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.network.certification.providers.CertificationDataProvider;
 import br.edu.ufcg.lsd.commune.network.certification.providers.CertificationDataProviderFactory;
@@ -68,7 +68,7 @@ public class Module {
 	
 	private FileTransferManager fileTransferManager;
 	
-	public Module(String containerName, ContainerContext context) 
+	public Module(String containerName, ModuleContext context) 
 			throws CommuneNetworkException, ProcessorStartException {
 		
 		/*Load my certificate*/
@@ -91,7 +91,7 @@ public class Module {
 		this.createAndDeployApplicationManager();
 	}
 
-	private X509CertPath loadCertificate(ContainerContext context) {
+	private X509CertPath loadCertificate(ModuleContext context) {
 		
 		CertificationDataProvider certificationDataProvider = 
 			new CertificationDataProviderFactory().createCertificationDataProvider(context);
@@ -112,7 +112,7 @@ public class Module {
 		return (ModuleManager) getContainer().getObjectRepository().get(CONTROL_OBJECT_NAME).getObject();
 	}
 	
-	protected Container createContainer(String containerName, ContainerContext context) {
+	protected Container createContainer(String containerName, ModuleContext context) {
 		return new Container(this, containerName, context);
 	}
 

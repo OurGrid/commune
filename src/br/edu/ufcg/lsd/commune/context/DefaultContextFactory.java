@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package br.edu.ufcg.lsd.commune.container.contextfactory;
+package br.edu.ufcg.lsd.commune.context;
 
 import java.net.InetAddress;
 import java.net.URI;
@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
-import br.edu.ufcg.lsd.commune.container.ContainerContext;
 import br.edu.ufcg.lsd.commune.container.InvalidContextPropertyException;
 import br.edu.ufcg.lsd.commune.monitor.MonitorProperties;
 import br.edu.ufcg.lsd.commune.network.signature.SignatureProperties;
@@ -46,11 +45,11 @@ public class DefaultContextFactory implements ContextFactory {
 		this.parser = parser;
 	}
 
-	public ContainerContext createContext() {
+	public ModuleContext createContext() {
 		return createContext(true);
 	}
 	
-	public ContainerContext createContext(boolean validate) {
+	public ModuleContext createContext(boolean validate) {
 		if (parser == null) {
 			throw new NullPointerException("A ContextParser must be set.");
 		}
@@ -63,7 +62,7 @@ public class DefaultContextFactory implements ContextFactory {
 			validate(properties);
 		}	
 		
-		ContainerContext context = new ContainerContext(properties);
+		ModuleContext context = new ModuleContext(properties);
 		
 		return context;
 	}
