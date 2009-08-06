@@ -26,7 +26,7 @@ import br.edu.ufcg.lsd.commune.api.FailureNotification;
 import br.edu.ufcg.lsd.commune.api.RecoveryNotification;
 import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
 import br.edu.ufcg.lsd.commune.container.control.ControlOperationResult;
-import br.edu.ufcg.lsd.commune.container.servicemanager.client.ApplicationClient;
+import br.edu.ufcg.lsd.commune.container.servicemanager.client.ClientModule;
 import br.edu.ufcg.lsd.commune.container.servicemanager.client.ManagerClientService;
 
 public class SyncManagerClient<T extends ApplicationServerManager> extends ManagerClientService<T> {
@@ -77,7 +77,7 @@ public class SyncManagerClient<T extends ApplicationServerManager> extends Manag
 	@Override
 	@FailureNotification
 	public void controlIsDown(T control) {
-		ApplicationClient<T, ManagerClientService<T>> containerClient = getApplicationClient();
+		ClientModule<T, ManagerClientService<T>> containerClient = getApplicationClient();
 		containerClient.setManager(null);
 	}
 	

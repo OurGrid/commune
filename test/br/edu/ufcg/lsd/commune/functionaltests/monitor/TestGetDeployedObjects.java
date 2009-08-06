@@ -27,7 +27,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.control.ApplicationControl;
 import br.edu.ufcg.lsd.commune.container.control.ApplicationManager;
 import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
@@ -51,7 +51,7 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		
 		Map<DeploymentID, Collection<Class<?>>> deployedObjects = new HashMap<DeploymentID, Collection<Class<?>>>();
 		
-		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Application.CONTROL_OBJECT_NAME).getDeploymentID();
+		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Module.CONTROL_OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list1 = new ArrayList<Class<?>>();
 		list1.add(ApplicationManager.class);
 		list1.add(ApplicationServerManager.class);
@@ -75,7 +75,7 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		
 		Map<DeploymentID, Collection<Class<?>>> deployedObjects = new HashMap<DeploymentID, Collection<Class<?>>>();
 		
-		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Application.CONTROL_OBJECT_NAME).getDeploymentID();
+		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Module.CONTROL_OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list1 = new ArrayList<Class<?>>();
 		list1.add(ApplicationManager.class);
 		list1.add(ApplicationServerManager.class);
@@ -104,7 +104,7 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		
 		Map<DeploymentID, Collection<Class<?>>> deployedObjects = new HashMap<DeploymentID, Collection<Class<?>>>();
 		
-		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Application.CONTROL_OBJECT_NAME).getDeploymentID();
+		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Module.CONTROL_OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list1 = new ArrayList<Class<?>>();
 		list1.add(ApplicationManager.class);
 		list1.add(ApplicationServerManager.class);
@@ -136,7 +136,7 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		
 		Map<DeploymentID, Collection<Class<?>>> deployedObjects = new HashMap<DeploymentID, Collection<Class<?>>>();
 		
-		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Application.CONTROL_OBJECT_NAME).getDeploymentID();
+		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Module.CONTROL_OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list1 = new ArrayList<Class<?>>();
 		list1.add(ApplicationManager.class);
 		list1.add(ApplicationServerManager.class);

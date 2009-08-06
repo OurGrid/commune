@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.logging.CommuneLogger;
 
 /**
@@ -33,9 +33,9 @@ import br.edu.ufcg.lsd.commune.container.logging.CommuneLogger;
  */
 public abstract class DAO {
 	
-	private final Application application;
+	private final Module application;
 	
-	public DAO(Application container) {
+	public DAO(Module container) {
 		this.application = container;
 	}
 

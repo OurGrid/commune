@@ -21,7 +21,7 @@ package br.edu.ufcg.lsd.commune.functionaltests.util;
 
 import org.junit.After;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
@@ -30,7 +30,7 @@ import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 public class TestWithApplication {
 
 	
-	protected Application application;
+	protected Module application;
 
 	
 	@After

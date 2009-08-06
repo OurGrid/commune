@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.easymock.EasyMock;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.MonitorAcceptanceUtil;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.matchers.StubDataMatcher;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
@@ -17,7 +17,7 @@ import br.edu.ufcg.lsd.commune.monitor.data.StubData;
 
 public class TestGetStubsUtil extends MonitorAcceptanceUtil {
 	
-	public void getEmptyListOfStubs(Application application) {
+	public void getEmptyListOfStubs(Module application) {
 		CommuneMonitor monitor = getMonitorController(application);
 		
 		CommuneMonitorClient client = EasyMock.createMock(CommuneMonitorClient.class);
@@ -29,7 +29,7 @@ public class TestGetStubsUtil extends MonitorAcceptanceUtil {
 		EasyMock.verify(client);
 	}
 
-	public void getStubs(Application application, DeploymentID monitorDID, DeploymentID stubDID, ServiceID stubSID,
+	public void getStubs(Module application, DeploymentID monitorDID, DeploymentID stubDID, ServiceID stubSID,
 			Class<?>... classes) {
 		CommuneMonitor monitor = getMonitorController(application);
 		
@@ -42,7 +42,7 @@ public class TestGetStubsUtil extends MonitorAcceptanceUtil {
 		EasyMock.verify(client);
 	}
 	
-	public void getStubs(Application application, Collection<StubData> stubDatas) {
+	public void getStubs(Module application, Collection<StubData> stubDatas) {
 		CommuneMonitor monitor = getMonitorController(application);
 		
 		CommuneMonitorClient client = EasyMock.createMock(CommuneMonitorClient.class);

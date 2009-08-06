@@ -22,7 +22,7 @@ package br.edu.ufcg.lsd.commune.functionaltests.monitor;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.functionaltests.util.Context;
 import br.edu.ufcg.lsd.commune.functionaltests.util.TestContext;
@@ -39,16 +39,16 @@ public class MonitorAcceptanceUtil {
 		return context;
 	}
 	
-	public CommuneMonitorController getMonitorController(Application application) {
+	public CommuneMonitorController getMonitorController(Module application) {
 		ObjectDeployment objectDeployment = application.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
 		return (CommuneMonitorController) objectDeployment.getObject();
 	}
 	
-    public ObjectDeployment getMonitorControllerDeployment(Application application) {
+    public ObjectDeployment getMonitorControllerDeployment(Module application) {
     	return application.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
     }
     
-    public ObjectDeployment getObjectDeployment(Application application, String serviceName) {
+    public ObjectDeployment getObjectDeployment(Module application, String serviceName) {
     	return application.getObject(serviceName);
     }
 	

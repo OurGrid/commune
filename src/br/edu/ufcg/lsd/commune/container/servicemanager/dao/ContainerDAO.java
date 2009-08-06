@@ -20,7 +20,7 @@
 package br.edu.ufcg.lsd.commune.container.servicemanager.dao;
 
 import sun.security.provider.certpath.X509CertPath;
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.control.TimeDataGenerator;
 
 /**
@@ -31,7 +31,7 @@ public class ContainerDAO extends DAO {
 	protected transient TimeDataGenerator timeDataGenerator;
 	private X509CertPath myCertPath;
 	
-	public ContainerDAO(Application application) {
+	public ContainerDAO(Module application) {
 		super(application);
 		
 		this.timeDataGenerator = new TimeDataGenerator();

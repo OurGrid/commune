@@ -19,7 +19,7 @@
  */
 package br.edu.ufcg.lsd.commune.container.control;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.api.FailureNotification;
 import br.edu.ufcg.lsd.commune.api.MonitoredBy;
 import br.edu.ufcg.lsd.commune.api.RecoveryNotification;
@@ -31,7 +31,7 @@ import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 
 public class ApplicationServerController extends ApplicationController implements ApplicationServerManager {
 	
-	public void start(@MonitoredBy(Application.CONTROL_OBJECT_NAME) ApplicationControlClient client) {
+	public void start(@MonitoredBy(Module.CONTROL_OBJECT_NAME) ApplicationControlClient client) {
 		
 		if (validateStartSenderPublicKey(client, getServiceManager().getSenderPublicKey()) && canComponentBeStarted(client)) {
 
@@ -110,7 +110,7 @@ public class ApplicationServerController extends ApplicationController implement
 	}
 	
 	public void stop(boolean callExit, boolean force, 
-			@MonitoredBy(Application.CONTROL_OBJECT_NAME) ApplicationControlClient client) {
+			@MonitoredBy(Module.CONTROL_OBJECT_NAME) ApplicationControlClient client) {
 		
 		if (validateStopSenderPublicKey(client, getServiceManager().getSenderPublicKey()) && canComponentBeUsed(client)){
 			ControlOperationResult result = new ControlOperationResult();
@@ -187,13 +187,13 @@ public class ApplicationServerController extends ApplicationController implement
 
 	}
 
-	public void getConfiguration(@MonitoredBy(Application.CONTROL_OBJECT_NAME) ApplicationStatusProviderClient client) {
+	public void getConfiguration(@MonitoredBy(Module.CONTROL_OBJECT_NAME) ApplicationStatusProviderClient client) {
 		
 		client.hereIsConfiguration( getServiceManager().getContainerContext().getProperties() );
 		
 	}
 
-	public void getUpTime(@MonitoredBy(Application.CONTROL_OBJECT_NAME) ApplicationStatusProviderClient client) {
+	public void getUpTime(@MonitoredBy(Module.CONTROL_OBJECT_NAME) ApplicationStatusProviderClient client) {
 		
 		client.hereIsUpTime(getServiceManager().getContainerDAO().getUpTime());
 		

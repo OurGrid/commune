@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import org.easymock.EasyMock;
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.MonitorAcceptanceUtil;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.matchers.TransferDataMatcher;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
@@ -16,7 +16,7 @@ import br.edu.ufcg.lsd.commune.monitor.data.TransferData;
 
 public class TestGetFileTransfersUtil extends MonitorAcceptanceUtil {
 	
-	public void getFileTransfers(Application application) {
+	public void getFileTransfers(Module application) {
 		CommuneMonitor monitor = getMonitorController(application);
 		
 		CommuneMonitorClient client = EasyMock.createMock(CommuneMonitorClient.class);
@@ -28,7 +28,7 @@ public class TestGetFileTransfersUtil extends MonitorAcceptanceUtil {
 		EasyMock.verify(client);		
 	}
 	
-	public void getFileTransfers(Application application, DeploymentID destinationID, DeploymentID listenerID, Status status, File file,
+	public void getFileTransfers(Module application, DeploymentID destinationID, DeploymentID listenerID, Status status, File file,
 			int queuePosition, boolean isIncoming) {
 		CommuneMonitor monitor = getMonitorController(application);
 		

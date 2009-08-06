@@ -21,7 +21,7 @@ package br.edu.ufcg.lsd.commune.container.contextfactory;
 
 import java.io.File;
 
-import br.edu.ufcg.lsd.commune.ApplicationProperties;
+import br.edu.ufcg.lsd.commune.ModuleProperties;
 import br.edu.ufcg.lsd.commune.container.ContainerContext;
 
 /**
@@ -35,7 +35,7 @@ public class ContainerContextUtils {
 	 * @return
 	 */
 	public static String normalizeFilePath(ContainerContext context, String filePath) {
-		return normalizeFilePath(context.getProperty(ApplicationProperties.PROP_CONFDIR), filePath);
+		return normalizeFilePath(context.getProperty(ModuleProperties.PROP_CONFDIR), filePath);
 	}
 	
 	/**

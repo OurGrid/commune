@@ -25,7 +25,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import sun.security.provider.certpath.X509CertPath;
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
 import br.edu.ufcg.lsd.commune.container.ContainerContext;
 import br.edu.ufcg.lsd.commune.container.InvalidMonitoringException;
@@ -50,14 +50,14 @@ public class ServiceManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	
-	private transient final Application application;
+	private transient final Module application;
 	private transient final ContainerContext containerContext;
 	private transient final ObjectDeployment objDeployment;
 	
 	private FileTransferManager fileTransferManager;
 	
 	
-	public ServiceManager(Application application, ContainerContext containerContext, ObjectDeployment deployment) {
+	public ServiceManager(Module application, ContainerContext containerContext, ObjectDeployment deployment) {
 		this.application = application;
 		this.containerContext = containerContext;
 		this.objDeployment = deployment;
@@ -72,7 +72,7 @@ public class ServiceManager implements Serializable {
 		return application.getFileTransferManager();
 	}
 	
-	public Application getApplication() {
+	public Module getApplication() {
 		return application;
 	}
 

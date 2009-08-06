@@ -31,7 +31,7 @@ import javax.security.auth.x500.X500Principal;
 import org.easymock.classextension.EasyMock;
 
 import sun.security.provider.certpath.X509CertPath;
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.ContainerContext;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
@@ -68,31 +68,31 @@ public class AcceptanceTestUtil {
 		return TestObjectsRegistry.getTestObject(deploymentID);
 	}
 	
-	public static DeploymentID publishTestObject(Application application, String user, String server, String moduleName, String objName, 
+	public static DeploymentID publishTestObject(Module application, String user, String server, String moduleName, String objName, 
 			Object obj, Class<?> stubClass) {
 		
 		ContainerID apID = new ContainerID(user, server, moduleName);
     	return publishTestObject(application, apID, objName, obj, stubClass);
 	}
 
-	public static DeploymentID publishTestObject(Application application, String user, String server, String moduleName, String publicKey, 
+	public static DeploymentID publishTestObject(Module application, String user, String server, String moduleName, String publicKey, 
 			String objName, Object obj, Class<?> stubClass) {
 		
 		ContainerID apID = new ContainerID(user, server, moduleName, publicKey);
     	return publishTestObject(application, apID, objName, obj, stubClass);
 	}
 	
-	public static void publishTestObject(Application application, DeploymentID deploymentID, Object obj, Class<?> stubClass) {
+	public static void publishTestObject(Module application, DeploymentID deploymentID, Object obj, Class<?> stubClass) {
         publishTestObject(application, deploymentID, obj, stubClass, true);
 	}
 
-	public static void publishTestObject(Application application, DeploymentID deploymentID, 
+	public static void publishTestObject(Module application, DeploymentID deploymentID, 
 			Object obj, Class<?> stubClass, boolean stubUp) {
         TestObjectsRegistry.publish(obj, deploymentID);
         application.createTestStub(obj, stubClass, deploymentID, stubUp);
 	}	
 	
-	private static DeploymentID publishTestObject(Application application, ContainerID apID, String objName, Object obj, Class<?> stubClass) {
+	private static DeploymentID publishTestObject(Module application, ContainerID apID, String objName, Object obj, Class<?> stubClass) {
 		ServiceID entityID = new ServiceID(apID, objName);
     	DeploymentID objectID = new DeploymentID(entityID);
 
@@ -101,7 +101,7 @@ public class AcceptanceTestUtil {
 		return objectID;
 	}
 
-	public static void notifyRecovery(Application app, DeploymentID targetID) {
+	public static void notifyRecovery(Module app, DeploymentID targetID) {
 		app.getContainer().getInterestManager().getInterest(
 				targetID.getServiceID()).setLastHeartbeat();
 		app.getContainer().setStubDeploymentID(targetID);
@@ -110,7 +110,7 @@ public class AcceptanceTestUtil {
 
 	/* Interest and notification */
 	
-	public static boolean isInterested(Application application, ServiceID monitorableID, DeploymentID interestedID) {
+	public static boolean isInterested(Module application, ServiceID monitorableID, DeploymentID interestedID) {
 		return application.getContainer().getInterestManager().isInterested(interestedID, monitorableID);
 	}
 	
@@ -152,17 +152,17 @@ public class AcceptanceTestUtil {
 		return context.getProperty(SignatureProperties.PROP_PUBLIC_KEY);
 	 }
 	
-	public static void setExecutionContext(Application application, ObjectDeployment runningObject, 
+	public static void setExecutionContext(Module application, ObjectDeployment runningObject, 
 			CommuneAddress currentConsumer) {
 		application.getContainer().setExecutionContext(runningObject, currentConsumer, application.getMyCertPath());
 	}
 
-	public static void setExecutionContext(Application application, ObjectDeployment runningObject, 
+	public static void setExecutionContext(Module application, ObjectDeployment runningObject, 
 			CommuneAddress currentConsumer, X509CertPath senderCertPath) {
 		application.getContainer().setExecutionContext(runningObject, currentConsumer, senderCertPath);
 	}
 	
-	public static void setExecutionContext(Application application, ObjectDeployment runningObject, 
+	public static void setExecutionContext(Module application, ObjectDeployment runningObject, 
 			String publicKey) {
 		DeploymentID fakeID = new DeploymentID("a@b/c","d");
 		fakeID.setPublicKey(publicKey);
@@ -192,7 +192,7 @@ public class AcceptanceTestUtil {
 
 
 	@SuppressWarnings("unchecked")
-	public static <T> T getStub(Application application, DeploymentID rwpID, Class<T> clazz) {
+	public static <T> T getStub(Module application, DeploymentID rwpID, Class<T> clazz) {
 		return (T) application.getContainer().getStubRepository().getStub(rwpID.getServiceID()).getProxy(clazz);
 		
 	}

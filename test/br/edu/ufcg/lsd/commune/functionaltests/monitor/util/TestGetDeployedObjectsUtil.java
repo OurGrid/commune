@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.easymock.EasyMock;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.MonitorAcceptanceUtil;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.matchers.DeployedObjectsMatcher;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
@@ -14,7 +14,7 @@ import br.edu.ufcg.lsd.commune.monitor.CommuneMonitorClient;
 
 public class TestGetDeployedObjectsUtil extends MonitorAcceptanceUtil {
 	
-	public void getDeployedObjects(Application application, Map<DeploymentID, Collection<Class<?>>> deployedObjects) {
+	public void getDeployedObjects(Module application, Map<DeploymentID, Collection<Class<?>>> deployedObjects) {
 		CommuneMonitor monitor = getMonitorController(application);
 		
 		CommuneMonitorClient client = EasyMock.createMock(CommuneMonitorClient.class);

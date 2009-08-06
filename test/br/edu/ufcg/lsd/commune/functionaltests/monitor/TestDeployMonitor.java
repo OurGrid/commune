@@ -25,7 +25,7 @@ import static junit.framework.Assert.assertNull;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.container.control.ApplicationControlClient;
 import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
@@ -64,7 +64,7 @@ public class TestDeployMonitor extends TestWithTestableCommuneContainer {
 		ObjectDeployment object = application.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
 		assertNull(object);
 
-		ObjectDeployment control = application.getObject(Application.CONTROL_OBJECT_NAME);
+		ObjectDeployment control = application.getObject(Module.CONTROL_OBJECT_NAME);
 		
 		ApplicationControlClient appClient = EasyMock.createMock(ApplicationControlClient.class);
 		appClient.operationSucceed(ControlOperationResultMatcher.noError());

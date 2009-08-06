@@ -26,12 +26,12 @@ import java.util.concurrent.BlockingQueue;
 import br.edu.ufcg.lsd.commune.container.ContainerContext;
 import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
 import br.edu.ufcg.lsd.commune.container.control.ControlOperationResult;
-import br.edu.ufcg.lsd.commune.container.servicemanager.client.ApplicationClient;
+import br.edu.ufcg.lsd.commune.container.servicemanager.client.ClientModule;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 
 public abstract class SyncApplicationClient<A extends ApplicationServerManager, B extends SyncManagerClient<A>> 
-	extends ApplicationClient<A, B> {
+	extends ClientModule<A, B> {
 
 	protected BlockingQueue<Object> queue;
 	

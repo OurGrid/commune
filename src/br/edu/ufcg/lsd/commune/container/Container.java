@@ -27,7 +27,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import sun.security.provider.certpath.X509CertPath;
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
@@ -57,7 +57,7 @@ import br.edu.ufcg.lsd.commune.processor.objectdeployer.ServiceProcessor;
 public class Container {
 
 	
-	private final Application application;
+	private final Module application;
 	private ContainerID containerID;
 	private ContainerContext context;
 	private boolean isShutdown = false;
@@ -87,7 +87,7 @@ public class Container {
     private final ReceiverHelper receiverHelper;
     
 	
-	public Container(Application application, String containerName, ContainerContext context) {
+	public Container(Module application, String containerName, ContainerContext context) {
 		
     	this.application = application;
 		if (containerName == null) {

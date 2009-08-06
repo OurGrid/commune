@@ -52,8 +52,8 @@ public abstract class ManagerClientService<T extends ApplicationServerManager> i
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected ApplicationClient<T, ManagerClientService<T>> getApplicationClient() {
-		return (ApplicationClient<T, ManagerClientService<T>>) getServiceManager().getApplication();
+	protected ClientModule<T, ManagerClientService<T>> getApplicationClient() {
+		return (ClientModule<T, ManagerClientService<T>>) getServiceManager().getApplication();
 	}
 
 }

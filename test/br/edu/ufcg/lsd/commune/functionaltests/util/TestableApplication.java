@@ -19,14 +19,14 @@
  */
 package br.edu.ufcg.lsd.commune.functionaltests.util;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.Container;
 import br.edu.ufcg.lsd.commune.container.ContainerContext;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 
-public class TestableApplication extends Application {
+public class TestableApplication extends Module {
 
 	
 	public TestableApplication(String containerName, ContainerContext context) 

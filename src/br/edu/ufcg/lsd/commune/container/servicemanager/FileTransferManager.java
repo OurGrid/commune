@@ -2,7 +2,7 @@ package br.edu.ufcg.lsd.commune.container.servicemanager;
 
 import java.io.Serializable;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.processor.filetransfer.IncomingTransferHandle;
 import br.edu.ufcg.lsd.commune.processor.filetransfer.OutgoingTransferHandle;
 import br.edu.ufcg.lsd.commune.processor.filetransfer.TransferReceiver;
@@ -14,10 +14,10 @@ public class FileTransferManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	
-	private transient final Application application;
+	private transient final Module application;
 	
 
-	public FileTransferManager(Application application) {
+	public FileTransferManager(Module application) {
 		this.application = application;
 	}
 	

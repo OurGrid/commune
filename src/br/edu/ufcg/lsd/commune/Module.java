@@ -48,7 +48,7 @@ import br.edu.ufcg.lsd.commune.network.certification.providers.CertificationData
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 
-public class Application {
+public class Module {
 
 	protected Container container;
 	private CommuneLogger logger;
@@ -68,7 +68,7 @@ public class Application {
 	
 	private FileTransferManager fileTransferManager;
 	
-	public Application(String containerName, ContainerContext context) 
+	public Module(String containerName, ContainerContext context) 
 			throws CommuneNetworkException, ProcessorStartException {
 		
 		/*Load my certificate*/
@@ -161,14 +161,14 @@ public class Application {
 	public <T extends Serializable> Future<?> scheduleActionWithFixedDelay(String actionName, 
 			long initialDelay, long delay, TimeUnit timeUnit, T handler) {
 		ApplicationManager manager = 
-			(ApplicationManager) container.getObjectRepository().get(Application.CONTROL_OBJECT_NAME).getProxy();
+			(ApplicationManager) container.getObjectRepository().get(Module.CONTROL_OBJECT_NAME).getProxy();
 		RepetitionRunnable runnable = new RepetitionRunnable(container, manager, actionName, handler);
 		return getTimer().scheduleWithFixedDelay(runnable, initialDelay, delay, timeUnit);
 	}
 	
 	public <T extends Serializable> Future<?> scheduleActionToRunOnce(String actionName, long delay, TimeUnit timeUnit, T handler) {
 		ApplicationManager manager = 
-			(ApplicationManager) container.getObjectRepository().get(Application.CONTROL_OBJECT_NAME).getProxy();
+			(ApplicationManager) container.getObjectRepository().get(Module.CONTROL_OBJECT_NAME).getProxy();
 		
 		RepetitionRunnable runnable = new RepetitionRunnable(container, manager, actionName, handler);
 		return getTimer().schedule(runnable, delay, timeUnit);

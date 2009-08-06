@@ -23,7 +23,7 @@ import org.easymock.classextension.EasyMock;
 import org.easymock.classextension.IMocksControl;
 import org.junit.Before;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.Container;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.functionaltests.util.TestContext;
@@ -102,7 +102,7 @@ public abstract class AcceptanceTestCase {
 		return context.getProperty(XMPPProperties.PROP_XMPP_SERVERNAME);
 	}
 	
-	public boolean isModuleStarted(Application application, String moduleName) {
+	public boolean isModuleStarted(Module application, String moduleName) {
 		String expectedModuleLocation = 
 			AcceptanceTestUtil.getModuleLocation(getDefaultUser(), getDefaultServer(), moduleName);
 
@@ -124,7 +124,7 @@ public abstract class AcceptanceTestCase {
 		return expectedModuleLocation.equals(realModuleLocation);
 	}
 	
-	public boolean isBound(Application application, String objectName) {
+	public boolean isBound(Module application, String objectName) {
 		if (application.getContainerDAO().isStopped()) {
 			return false;
 		}
@@ -134,7 +134,7 @@ public abstract class AcceptanceTestCase {
 
 	}
 	
-	public boolean isBound(Application application, String objectName, Class<?> type) {
+	public boolean isBound(Module application, String objectName, Class<?> type) {
 		if (application == null) {
 			return false;
 		}
@@ -147,7 +147,7 @@ public abstract class AcceptanceTestCase {
 		return objectDeployment != null && type.isInstance(objectDeployment.getObject());
 	}
 	
-	public boolean isBound(Application application, String moduleName, String objectName, long deploymentNumber, Class<?> type) {
+	public boolean isBound(Module application, String moduleName, String objectName, long deploymentNumber, Class<?> type) {
 		if (application.getContainerDAO().isStopped()) {
 			return false;
 		}
@@ -157,12 +157,12 @@ public abstract class AcceptanceTestCase {
 			objectDeployment.getDeploymentID().getDeploymentNumber() == deploymentNumber;
 	}
 	
-	public DeploymentID getBoundDeploymentID(Application application, String objName) {
+	public DeploymentID getBoundDeploymentID(Module application, String objName) {
 		ObjectDeployment objectDeployment = application.getObject(objName);
 		return objectDeployment.getDeploymentID();
 	}
 	
-	public DeploymentID publishTestObject(Application application, String moduleName, String objName, Object obj,Class<?> stubClass) {
+	public DeploymentID publishTestObject(Module application, String moduleName, String objName, Object obj,Class<?> stubClass) {
 		return AcceptanceTestUtil.publishTestObject(application, getDefaultUser(), getDefaultServer(), moduleName, objName, obj,
 				stubClass);
 	}

@@ -19,8 +19,22 @@
  */
 package br.edu.ufcg.lsd.commune;
 
-public interface ApplicationProperties {
+import br.edu.ufcg.lsd.commune.container.ContainerContext;
+import br.edu.ufcg.lsd.commune.container.control.ApplicationServerController;
+import br.edu.ufcg.lsd.commune.container.control.ApplicationServerManager;
+import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
+import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 
-	public static final String PROP_CONFDIR = "confdir";
+public class ServerModule extends Module {
+
+	public ServerModule(String containerName, ContainerContext context)
+			throws CommuneNetworkException, ProcessorStartException {
+		super(containerName, context);
+	}
 	
+	@Override
+	protected ApplicationServerManager createApplicationManager() {
+		return new ApplicationServerController();
+	}
+
 }

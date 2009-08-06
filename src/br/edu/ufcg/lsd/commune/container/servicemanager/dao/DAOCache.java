@@ -23,7 +23,7 @@ import java.lang.reflect.Constructor;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 
 
 /**
@@ -33,11 +33,11 @@ public class DAOCache {
 	
 	private Map<Class<?>, DAO> daoInstances = new LinkedHashMap<Class<?>, DAO>();
 	
-	public <U extends DAO> U createDAO(Application application, Class<U> daoType) {
+	public <U extends DAO> U createDAO(Module application, Class<U> daoType) {
 		
 		U dao = null;
 		try {
-			Constructor<U> constructor = daoType.getConstructor(new Class[] {Application.class});
+			Constructor<U> constructor = daoType.getConstructor(new Class[] {Module.class});
 			dao = constructor.newInstance(new Object[] {application} );
 		
 		} catch (Exception e) { //Programming errors

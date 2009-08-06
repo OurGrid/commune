@@ -19,7 +19,7 @@
  */
 package br.edu.ufcg.lsd.commune.container.servicemanager.client;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.ContainerContext;
 import br.edu.ufcg.lsd.commune.container.control.ApplicationClientController;
 import br.edu.ufcg.lsd.commune.container.control.ApplicationClientManager;
@@ -30,7 +30,7 @@ import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestRequirements;
 
-public abstract class ApplicationClient<A extends ApplicationServerManager, B extends ManagerClientService<A>> extends Application {
+public abstract class ClientModule<A extends ApplicationServerManager, B extends ManagerClientService<A>> extends Module {
 
 	private InitializationContext<A, B> initializationContext;
 	private ContainerID serverContainerID;
@@ -39,7 +39,7 @@ public abstract class ApplicationClient<A extends ApplicationServerManager, B ex
 	
 	private static final String MANAGER_CLIENT = "MANAGER_CLIENT";
 	
-	public ApplicationClient(String containerName, ContainerContext context)
+	public ClientModule(String containerName, ContainerContext context)
 			throws CommuneNetworkException, ProcessorStartException {
 		super(containerName, context);
 		init();
@@ -51,7 +51,7 @@ public abstract class ApplicationClient<A extends ApplicationServerManager, B ex
 
 	private void registerInterestOnManager() {
 		InterestRequirements requirements = new InterestRequirements(4, 2);
-		ServiceID controlID = new ServiceID(serverContainerID, Application.CONTROL_OBJECT_NAME);
+		ServiceID controlID = new ServiceID(serverContainerID, Module.CONTROL_OBJECT_NAME);
 		
 		getContainer().registerInterest(MANAGER_CLIENT, getManagerObjectType(), controlID, 
 				requirements);

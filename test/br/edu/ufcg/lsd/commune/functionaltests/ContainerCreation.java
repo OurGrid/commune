@@ -24,7 +24,7 @@ import java.io.File;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.edu.ufcg.lsd.commune.Application;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.functionaltests.util.Context;
 import br.edu.ufcg.lsd.commune.functionaltests.util.TestContext;
 import br.edu.ufcg.lsd.commune.functionaltests.util.TestWithApplication;
@@ -47,19 +47,19 @@ public class ContainerCreation extends TestWithApplication {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void validateConstructorAllNull() throws Exception {
-		application = new Application(null, null);
+		application = new Module(null, null);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void validateConstructorNullContext() throws Exception {
-		application = new Application(Context.A_CONTAINER_NAME, null);
+		application = new Module(Context.A_CONTAINER_NAME, null);
 	}
 
 	@Test(expected=CommuneNetworkException.class)
 	public void validateContextUnknownServer() throws Exception {
 		TestContext context = createBasicContext();
 		context.set(XMPPProperties.PROP_XMPP_SERVERNAME, UNKNOWN_SERVER);
-		application = new Application(Context.A_CONTAINER_NAME, context);
+		application = new Module(Context.A_CONTAINER_NAME, context);
 	}
 
 	private TestContext createBasicContext() {
@@ -79,7 +79,7 @@ public class ContainerCreation extends TestWithApplication {
 	public void validateContextUnknownPort() throws Exception {
 		TestContext context = Context.createRealContext();
 		context.set(XMPPProperties.PROP_XMPP_SERVERPORT, UNKNOWN_PORT);
-		application = new Application(Context.A_CONTAINER_NAME, context);
+		application = new Module(Context.A_CONTAINER_NAME, context);
 	}
 
 	@Ignore(value="Commune is not using secure port!!!")
@@ -87,19 +87,19 @@ public class ContainerCreation extends TestWithApplication {
 	public void validateContextUnknownSecurePort() throws Exception {
 		TestContext context = Context.createRealContext();
 		context.set(XMPPProperties.PROP_XMPP_SERVER_SECURE_PORT, UNKNOWN_SECURE_PORT);
-		application = new Application(Context.A_CONTAINER_NAME, context);
+		application = new Module(Context.A_CONTAINER_NAME, context);
 	}
 
 	@Test
 	public void correctCreation() throws Exception {
 		TestContext context = Context.createRealContext();
-		application = new Application(Context.A_CONTAINER_NAME, context);
+		application = new Module(Context.A_CONTAINER_NAME, context);
 	}
 	
 	@Test(expected=CommuneNetworkException.class)
 	public void validateContextWrongPassword() throws Exception {
 		TestContext context = Context.createRealContext();
 		context.set(XMPPProperties.PROP_PASSWORD, WRONG_PASSWORD);
-		application = new Application(Context.A_CONTAINER_NAME, context);
+		application = new Module(Context.A_CONTAINER_NAME, context);
 	}
 }
