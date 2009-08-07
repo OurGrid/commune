@@ -21,8 +21,18 @@ package br.edu.ufcg.lsd.commune.processor.filetransfer;
 
 import br.edu.ufcg.lsd.commune.api.Remote;
 
+/**
+ * 
+ * This interface specifies a listener to the transfer files progress events.
+ *
+ */
 @Remote
 public interface TransferProgressListener {
 
+	/**
+	 * This method update the listener about the progress of the file transfer. All the transfer 
+	 * information is specified on the transferProgress parameter. 
+	 * @param transferProgress The information about the file transfer progress. 
+	 */
 	void updateTransferProgress(TransferProgress transferProgress);
 }
