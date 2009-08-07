@@ -30,7 +30,7 @@ import br.edu.ufcg.lsd.commune.api.Remote;
 public interface TransferProgressListener {
 
 	/**
-	 * This method update the listener about the progress of the file transfer. All the transfer 
+	 * This method updates the listener about the progress of the file transfer. All the transfer 
 	 * information is specified on the transferProgress parameter. 
 	 * @param transferProgress The information about the file transfer progress. 
 	 */

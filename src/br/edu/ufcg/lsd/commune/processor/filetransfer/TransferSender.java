@@ -21,7 +21,7 @@ package br.edu.ufcg.lsd.commune.processor.filetransfer;
 
 /**
  * 
- * This interface specifies the callback of the transfer file status. Classes that implements this
+ * This interface specifies the callback of the transfer file status. Classes that implement this
  * Interface will notified about the sending files events. 
  * 
  */
