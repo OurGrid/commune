@@ -19,13 +19,33 @@
  */
 package br.edu.ufcg.lsd.commune.container.control;
 
+
 import br.edu.ufcg.lsd.commune.api.Remote;
+
+/**
+ * This remote interface must be implemented by classes that want to initiate or stop
+ * workers.
+ *
+ */
 
 @Remote
 public interface ModuleControl {
 
+	/**
+	 * This method initiate a specified worker received by parameter.
+	 * @param client The worker that will be started. 
+	 */
 	void start( ModuleControlClient client );
 
+	/**
+	 * This method stops the specified worker. The callexit parameter determines if the System.exit
+	 * method will be called. A forced shutdown means stop the worker without notifies any listener about
+	 * the worker stopped. 
+	 * @param callExit If true, this method will call the System.exit method. Otherwise, not.  
+	 * @param force If true, this method will do a forced shutdown of this worker. Otherwise, the worker
+	 * will be stopped normally, and the system will be notified about the shutdown of the one. 
+	 * @param client The worker that will be stopped.
+	 */
 	void stop( boolean callExit, boolean force, ModuleControlClient client );
 	
 }

@@ -21,9 +21,19 @@ package br.edu.ufcg.lsd.commune.container.control;
 
 import br.edu.ufcg.lsd.commune.api.Remote;
 
+/**
+ * This interface must be implemented by classes that want to know the result 
+ * of a control operation. 
+ *
+ */
 @Remote
 public interface ModuleControlClient {
 
+	/**
+	 * This method informs the result of a control operation execution. The controlOparationResult
+	 * contains the information needed to describe the result of an operation.
+	 * @param controlOperationResult The information about the execution of a control operation.
+	 */
 	void operationSucceed( ControlOperationResult controlOperationResult );
 	
 }
