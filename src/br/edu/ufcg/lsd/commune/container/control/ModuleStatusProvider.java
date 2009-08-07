@@ -21,11 +21,25 @@ package br.edu.ufcg.lsd.commune.container.control;
 
 import br.edu.ufcg.lsd.commune.api.Remote;
 
+/**
+ *  Provides basic operations for an entity that seeks to find the status of another entities
+ *  or properties related to it.
+ *  
+ *  @see ModuleStatusProviderClient.
+ */
 @Remote
 public interface ModuleStatusProvider {
 
+	/**
+	 * Get the entity's up time.
+	 * @param client The client of ApplicationStatusProvider.
+	 */
 	void getUpTime( ModuleStatusProviderClient client );
 
+	/**
+	 * Get the entity's actual configuration map.
+	 * @param client The client of ApplicationStatusProvider.
+	 */
 	void getConfiguration( ModuleStatusProviderClient client );
 	
 }
