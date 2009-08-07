@@ -19,11 +19,35 @@
  */
 package br.edu.ufcg.lsd.commune.processor.filetransfer;
 
+/**
+ * 
+ * This interface specifies the callback of the transfer file status.  Classes that implements this
+ * Interface will notified about receiving files events. 
+ *
+ */
 public interface TransferReceiver extends TransferProgressListener {
 
+	/**
+	 * This method informs the Receiver that the request of transfer was received by the Sender.
+	 * @param handle Specifies the transfer parameters.
+	 */
 	public void transferRequestReceived(IncomingTransferHandle handle);
 
+	/**
+	 * This method informs the Receiver that the transfer failed. The transfer parameters are specified by
+	 * the handle. The failCause informs the failure cause. The total transfered data is given by the
+	 * amountWritten parameter.
+	 * @param handle Specifies the transfer parameters.
+	 * @param failCause The failure cause.
+	 * @param amountWritten The total transfered data until the transfer fail.
+	 */
 	public void incomingTransferFailed(IncomingTransferHandle handle, Exception failCause, long amountWritten);
 
+	/**
+	 * This method informs the Receiver that the file transfer was completed. The transfer parameters are specified
+	 * by the handle. The total transfer data is given by the the amountWritten parameter. 
+	 * @param handle Specifies the transfer parameters. 
+	 * @param amountWritten The total transfered data.
+	 */
 	public void incomingTransferCompleted(IncomingTransferHandle handle, long amountWritten);
 }
