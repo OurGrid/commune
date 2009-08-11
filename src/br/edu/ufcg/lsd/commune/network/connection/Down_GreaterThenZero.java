@@ -25,8 +25,101 @@ package br.edu.ufcg.lsd.commune.network.connection;
  */
 public class Down_GreaterThenZero extends ConnectionStateAdapter {
 
+	
 	public Down_GreaterThenZero(ConnectionManager connectionManager) {
 		super(connectionManager);
 	}
 
+	
+	@Override
+	public void registerInterest(Connection connection) {
+		// Maintain state
+	}
+	
+	@Override
+	public void release(Connection connection) {
+		connection.setOutgoingSequence(null);
+		connection.setOutgoingSession(null);
+		connection.setIncomingSequence(null);
+		connection.setIncomingSession(null);
+		connection.setState(manager.initialState);
+	}
+
+	@Override
+	public void heartbeatOkSessionZeroSequence(Connection connection) {
+		gotoDownZero(connection);
+	}
+
+	@Override
+	public void heartbeatOkSessionOkSequence(Connection connection) {
+		// Maintain state
+	}
+
+	@Override
+	public void heartbeatOkSessionNonSequence(Connection connection) {
+		gotoDownZero(connection);
+	}
+	
+	@Override
+	public void heartbeatNonSessionZeroSequence(Connection connection) {
+		gotoDownZero(connection);
+	}
+	
+	@Override
+	public void heartbeatNonSessionOkSequence(Connection connection) {
+		gotoDownZero(connection);
+	}
+	
+	@Override
+	public void heartbeatNonSessionNonSequence(Connection connection) {
+		gotoDownZero(connection);
+	}
+
+	@Override
+	public void updateStatusUp(Connection connection) {
+		connection.setState(manager.uping_greatherThenZero);
+	}
+	
+	@Override
+	public void updateStatusDown(Connection connection) {
+		gotoDownZero(connection);
+	}
+	
+	@Override
+	public void updateStatusNonSession(Connection connection) {
+		gotoDownZero(connection);
+	}
+	
+	@Override
+	public void timeout(Connection connection) {
+		gotoDownZero(connection);
+	}
+	
+	@Override
+	public void messageOkSessionOkSequence(Connection connection) {
+		// Maintain state
+	}
+	
+	@Override
+	public void messageWithCallbackOkSessionOkSequence(Connection connection) {
+		connection.setState(manager.up_greatherThenZero);
+	}
+	
+	@Override
+	public void messageNonSequence(Connection connection) {
+		gotoDownZero(connection);
+	}
+	
+	@Override
+	public void messageNonSession(Connection connection) {
+		gotoDownZero(connection);
+	}
+	
+	private void gotoDownZero(Connection connection) {
+		connection.setIncomingSequence(null);
+		connection.setIncomingSession(null);
+		connection.setState(manager.down_zero);
+		
+		//TODO interromper mensagem
+	}
 }

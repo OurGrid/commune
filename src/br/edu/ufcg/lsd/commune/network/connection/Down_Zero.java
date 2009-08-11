@@ -39,6 +39,8 @@ public class Down_Zero extends ConnectionStateAdapter {
 	public void release(Connection connection) {
 		connection.setOutgoingSequence(null);
 		connection.setOutgoingSession(null);
+		connection.setIncomingSequence(null);
+		connection.setIncomingSession(null);
 		connection.setState(manager.initialState);
 	}
 
@@ -84,6 +86,11 @@ public class Down_Zero extends ConnectionStateAdapter {
 	
 	@Override
 	public void updateStatusNonSession(Connection connection) {
+		gotoDownZero(connection);
+	}
+	
+	@Override
+	public void timeout(Connection connection) {
 		gotoDownZero(connection);
 	}
 	
