@@ -51,27 +51,27 @@ public class Down_Zero extends ConnectionStateAdapter {
 	
 	@Override
 	public void heartbeatOkSessionOkSequence(Connection connection) {
-		gotoDownZero(connection);
+		gotoDownEmpty(connection);
 	}
 	
 	@Override
 	public void heartbeatOkSessionNonSequence(Connection connection) {
-		gotoDownZero(connection);
+		gotoDownEmpty(connection);
 	}
 	
 	@Override
 	public void heartbeatNonSessionZeroSequence(Connection connection) {
-		gotoDownZero(connection);
+		gotoDownEmpty(connection);
 	}
 	
 	@Override
 	public void heartbeatNonSessionOkSequence(Connection connection) {
-		gotoDownZero(connection);
+		gotoDownEmpty(connection);
 	}
 	
 	@Override
 	public void heartbeatNonSessionNonSequence(Connection connection) {
-		gotoDownZero(connection);
+		gotoDownEmpty(connection);
 	}
 	
 	@Override
@@ -81,17 +81,17 @@ public class Down_Zero extends ConnectionStateAdapter {
 	
 	@Override
 	public void updateStatusDown(Connection connection) {
-		gotoDownZero(connection);
+		gotoDownEmpty(connection);
 	}
 	
 	@Override
 	public void updateStatusNonSession(Connection connection) {
-		gotoDownZero(connection);
+		gotoDownEmpty(connection);
 	}
 	
 	@Override
 	public void timeout(Connection connection) {
-		gotoDownZero(connection);
+		gotoDownEmpty(connection);
 	}
 	
 	@Override
@@ -106,18 +106,18 @@ public class Down_Zero extends ConnectionStateAdapter {
 	
 	@Override
 	public void messageNonSequence(Connection connection) {
-		gotoDownZero(connection);
+		gotoDownEmpty(connection);
 	}
 	
 	@Override
 	public void messageNonSession(Connection connection) {
-		gotoDownZero(connection);
+		gotoDownEmpty(connection);
 	}
 	
-	private void gotoDownZero(Connection connection) {
+	private void gotoDownEmpty(Connection connection) {
 		connection.setIncomingSequence(null);
 		connection.setIncomingSession(null);
-		connection.setState(manager.down_zero);
+		connection.setState(manager.down_empty);
 		
 		//TODO interromper mensagem
 	}
