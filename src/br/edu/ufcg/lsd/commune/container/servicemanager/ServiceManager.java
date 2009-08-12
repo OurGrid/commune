@@ -298,8 +298,9 @@ public class ServiceManager implements Serializable {
 		return application.getContainer().getStubDeploymentID(object);
 	}
 	
-	public Object getStub(ServiceID serviceID, Class<?> clazz){
-		return application.getContainer().getStub(serviceID, clazz);
+	@SuppressWarnings("unchecked")
+	public <T> T getStub(ServiceID serviceID, Class<T> clazz){
+		return (T) application.getContainer().getStub(serviceID, clazz);
 	}
 
 	public DeploymentID getLocalObjectID(Object object) {
