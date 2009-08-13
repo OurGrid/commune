@@ -25,8 +25,106 @@ package br.edu.ufcg.lsd.commune.network.connection;
  */
 public class Uping_GreaterThenZero extends ConnectionStateAdapter {
 
+	
 	public Uping_GreaterThenZero(ConnectionManager connectionManager) {
 		super(connectionManager);
 	}
 
+	
+	@Override
+	public void registerInterest(Connection connection) {
+		// Maintain state
+	}
+	
+	@Override
+	public void release(Connection connection) {
+		connection.setOutgoingSequence(null);
+		connection.setOutgoingSession(null);
+		connection.setIncomingSequence(null);
+		connection.setIncomingSession(null);
+		connection.setState(manager.initialState);
+	}
+	
+	@Override
+	public void heartbeatOkSessionZeroSequence(Connection connection) {
+		gotoDowningEmpty(connection);
+	}
+	
+	@Override
+	public void heartbeatOkSessionOkSequence(Connection connection) {
+		// Maintain state
+	}
+
+	@Override
+	public void heartbeatOkSessionNonSequence(Connection connection) {
+		gotoDowningEmpty(connection);
+	}
+	
+	@Override
+	public void heartbeatNonSessionZeroSequence(Connection connection) {
+		gotoDowningEmpty(connection);
+	}
+	
+	@Override
+	public void heartbeatNonSessionOkSequence(Connection connection) {
+		gotoDowningEmpty(connection);
+	}
+	
+	@Override
+	public void heartbeatNonSessionNonSequence(Connection connection) {
+		gotoDowningEmpty(connection);
+	}
+
+	@Override
+	public void updateStatusUp(Connection connection) {
+		// Maintain state
+	}
+	
+	@Override
+	public void updateStatusDown(Connection connection) {
+		gotoDowningEmpty(connection);
+	}
+	
+	@Override
+	public void updateStatusNonSession(Connection connection) {
+		gotoDowningEmpty(connection);
+	}
+	
+	@Override
+	public void timeout(Connection connection) {
+		gotoDowningEmpty(connection);
+	}
+	
+	@Override
+	public void messageOkSessionOkSequence(Connection connection) {
+		// Maintain state
+	}
+	
+	@Override
+	public void messageWithCallbackOkSessionOkSequence(Connection connection) {
+		connection.setState(manager.up_greatherThenZero);
+	}
+	
+	@Override
+	public void messageNonSequence(Connection connection) {
+		gotoDowningEmpty(connection);
+	}
+	
+	@Override
+	public void messageNonSession(Connection connection) {
+		gotoDowningEmpty(connection);
+	}
+
+	@Override
+	public void notifyRecovery(Connection connection) {
+		connection.setState(manager.up_greatherThenZero);
+	}
+	
+	private void gotoDowningEmpty(Connection connection) {
+		connection.setIncomingSequence(null);
+		connection.setIncomingSession(null);
+		connection.setState(manager.downing_empty);
+		
+		//TODO interromper mensagem
+	}
 }

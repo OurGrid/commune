@@ -50,6 +50,11 @@ public class Up_Empty extends ConnectionStateAdapter {
 	}
 	
 	@Override
+	public void heartbeatOkSessionOkSequence(Connection connection) {
+		gotoDowningEmpty(connection);
+	}
+
+	@Override
 	public void heartbeatOkSessionNonSequence(Connection connection) {
 		gotoDowningEmpty(connection);
 	}
