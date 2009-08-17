@@ -19,6 +19,8 @@
  */
 package br.edu.ufcg.lsd.commune.network.connection;
 
+import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
+
 /**
  * In this state, the outgoing connection is down and the incoming connection
  * has a sequence number equal zero.  
@@ -50,27 +52,27 @@ public class Down_Zero extends ConnectionStateAdapter {
 	}
 	
 	@Override
-	public void heartbeatOkSessionOkSequence(Connection connection) {
+	public void heartbeatOkSessionOkSequence(Connection connection) throws DiscardMessageException {
 		gotoDownEmpty(connection);
 	}
 	
 	@Override
-	public void heartbeatOkSessionNonSequence(Connection connection) {
+	public void heartbeatOkSessionNonSequence(Connection connection) throws DiscardMessageException {
 		gotoDownEmpty(connection);
 	}
 	
 	@Override
-	public void heartbeatNonSessionZeroSequence(Connection connection) {
+	public void heartbeatNonSessionZeroSequence(Connection connection) throws DiscardMessageException {
 		gotoDownEmpty(connection);
 	}
 	
 	@Override
-	public void heartbeatNonSessionOkSequence(Connection connection) {
+	public void heartbeatNonSessionOkSequence(Connection connection) throws DiscardMessageException {
 		gotoDownEmpty(connection);
 	}
 	
 	@Override
-	public void heartbeatNonSessionNonSequence(Connection connection) {
+	public void heartbeatNonSessionNonSequence(Connection connection) throws DiscardMessageException {
 		gotoDownEmpty(connection);
 	}
 	
@@ -80,18 +82,20 @@ public class Down_Zero extends ConnectionStateAdapter {
 	}
 	
 	@Override
-	public void updateStatusDown(Connection connection) {
+	public void updateStatusDown(Connection connection) throws DiscardMessageException {
 		gotoDownEmpty(connection);
 	}
 	
 	@Override
-	public void updateStatusNonSession(Connection connection) {
+	public void updateStatusNonSession(Connection connection) throws DiscardMessageException {
 		gotoDownEmpty(connection);
 	}
 	
 	@Override
 	public void timeout(Connection connection) {
-		gotoDownEmpty(connection);
+		connection.setIncomingSequence(null);
+		connection.setIncomingSession(null);
+		connection.setState(manager.down_empty);
 	}
 	
 	@Override
@@ -105,21 +109,21 @@ public class Down_Zero extends ConnectionStateAdapter {
 	}
 	
 	@Override
-	public void messageNonSequence(Connection connection) {
+	public void messageNonSequence(Connection connection) throws DiscardMessageException {
 		gotoDownEmpty(connection);
 	}
 	
 	@Override
-	public void messageNonSession(Connection connection) {
+	public void messageNonSession(Connection connection) throws DiscardMessageException {
 		gotoDownEmpty(connection);
 	}
 	
-	private void gotoDownEmpty(Connection connection) {
+	private void gotoDownEmpty(Connection connection) throws DiscardMessageException {
 		connection.setIncomingSequence(null);
 		connection.setIncomingSession(null);
 		connection.setState(manager.down_empty);
 		
-		//TODO interromper mensagem
+		throw new DiscardMessageException();
 	}
 
 }

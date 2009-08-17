@@ -19,6 +19,8 @@
  */
 package br.edu.ufcg.lsd.commune.network.connection;
 
+import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
+
 
 public interface ConnectionState {
 	
@@ -26,35 +28,35 @@ public interface ConnectionState {
 
 	void release(Connection connection);
 	
-	void messageWithCallbackOkSessionOkSequence(Connection connection);
+	void messageWithCallbackOkSessionOkSequence(Connection connection) throws DiscardMessageException;
 
-	void heartbeatOkSessionZeroSequence(Connection connection);
+	void heartbeatOkSessionZeroSequence(Connection connection) throws DiscardMessageException;
 
-	void heartbeatOkSessionOkSequence(Connection connection);
+	void heartbeatOkSessionOkSequence(Connection connection) throws DiscardMessageException;
 
-	void heartbeatOkSessionNonSequence(Connection connection);
+	void heartbeatOkSessionNonSequence(Connection connection) throws DiscardMessageException;
 
-	void heartbeatNonSessionZeroSequence(Connection connection);
+	void heartbeatNonSessionZeroSequence(Connection connection) throws DiscardMessageException;
 
-	void heartbeatNonSessionOkSequence(Connection connection);
+	void heartbeatNonSessionOkSequence(Connection connection) throws DiscardMessageException;
 
-	void heartbeatNonSessionNonSequence(Connection connection);
+	void heartbeatNonSessionNonSequence(Connection connection) throws DiscardMessageException;
 
-	void updateStatusUp(Connection connection);
+	void updateStatusUp(Connection connection) throws DiscardMessageException;
 
-	void updateStatusDown(Connection connection);
+	void updateStatusDown(Connection connection) throws DiscardMessageException;
 
-	void updateStatusNonSession(Connection connection);
+	void updateStatusNonSession(Connection connection) throws DiscardMessageException;
 
-	void messageNonSession(Connection connection);
+	void messageNonSession(Connection connection) throws DiscardMessageException;
 
-	void messageNonSequence(Connection connection);
+	void messageNonSequence(Connection connection) throws DiscardMessageException;
 
-	void messageOkSessionOkSequence(Connection connection);
+	void messageOkSessionOkSequence(Connection connection) throws DiscardMessageException;
 
 	void timeout(Connection connection);
 
-	void notifyFailure(Connection connection);
+	void notifyFailure(Connection connection) throws DiscardMessageException;
 
-	void notifyRecovery(Connection connection);
+	void notifyRecovery(Connection connection) throws DiscardMessageException;
 }

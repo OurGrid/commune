@@ -40,6 +40,7 @@ import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.message.MessageParameter;
 import br.edu.ufcg.lsd.commune.message.MessageUtil;
 import br.edu.ufcg.lsd.commune.message.StubParameter;
+import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
 import br.edu.ufcg.lsd.commune.processor.AbstractProcessor;
 
 public class ServiceProcessor extends AbstractProcessor {
@@ -104,8 +105,8 @@ public class ServiceProcessor extends AbstractProcessor {
 			
 			if(isFailureNotificationMethod(method)) {
 				Object stub = parameterValues[0];
-				getContainer().setStubDown(stub);
 				fireNotifyFailure(getContainer().getStubDeploymentID(stub).getServiceID());
+				getContainer().setStubDown(stub);
 			}
 
 			if(isRecoveryNotificationMethod(method)) {
@@ -128,14 +129,14 @@ public class ServiceProcessor extends AbstractProcessor {
 		}		
 	}
 	
-	private void fireNotifyFailure(ServiceID serviceID) {
+	private void fireNotifyFailure(ServiceID serviceID) throws DiscardMessageException {
 		for (NotificationListener listener : notificationListeners) {
 			listener.notifyFailure(serviceID);
 		}
 	}
 
 
-	private void fireNotifyRecovery(ServiceID serviceID) {
+	private void fireNotifyRecovery(ServiceID serviceID) throws DiscardMessageException {
 		for (NotificationListener listener : notificationListeners) {
 			listener.notifyRecovery(serviceID);
 		}

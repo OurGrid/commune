@@ -21,6 +21,8 @@ package br.edu.ufcg.lsd.commune.network.connection;
 
 import java.security.SecureRandom;
 
+import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
+
 /**
  * By default, ignores all transitions
  * 
@@ -37,41 +39,71 @@ public class ConnectionStateAdapter implements ConnectionState {
 	}
 
 
-	public void heartbeatNonSessionNonSequence(Connection connection) {}
+	public void heartbeatNonSessionNonSequence(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
-	public void heartbeatNonSessionOkSequence(Connection connection) {}
+	public void heartbeatNonSessionOkSequence(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
-	public void heartbeatNonSessionZeroSequence(Connection connection) {}
+	public void heartbeatNonSessionZeroSequence(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
-	public void heartbeatOkSessionNonSequence(Connection connection) {}
+	public void heartbeatOkSessionNonSequence(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
-	public void heartbeatOkSessionOkSequence(Connection connection) {}
+	public void heartbeatOkSessionOkSequence(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
-	public void heartbeatOkSessionZeroSequence(Connection connection) {}
+	public void heartbeatOkSessionZeroSequence(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
-	public void messageWithCallbackOkSessionOkSequence(Connection connection) {}
+	public void messageWithCallbackOkSessionOkSequence(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
 	public void registerInterest(Connection connection) {}
 
 	public void release(Connection connection) {}
 
-	public void updateStatusDown(Connection connection) {}
+	public void updateStatusDown(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
-	public void updateStatusNonSession(Connection connection) {}
+	public void updateStatusNonSession(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
-	public void updateStatusUp(Connection connection) {}
+	public void updateStatusUp(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
-	public void messageNonSequence(Connection connection) {}
+	public void messageNonSequence(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
-	public void messageNonSession(Connection connection) {}
+	public void messageNonSession(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
-	public void messageOkSessionOkSequence(Connection connection) {}
+	public void messageOkSessionOkSequence(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
 	public void timeout(Connection connection) {}
 
-	public void notifyFailure(Connection connection) {}
+	public void notifyFailure(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
-	public void notifyRecovery(Connection connection) {}
+	public void notifyRecovery(Connection connection) throws DiscardMessageException {
+		throw new DiscardMessageException();
+	}
 
 	protected static Long generateSessionNumber() {
 		SecureRandom random = new SecureRandom();

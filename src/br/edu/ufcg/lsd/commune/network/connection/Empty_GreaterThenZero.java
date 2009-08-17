@@ -19,6 +19,8 @@
  */
 package br.edu.ufcg.lsd.commune.network.connection;
 
+import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
+
 /**
  * In this state, the outgoing connection is empty and the incoming connection
  * has a sequence number greater then zero.  
@@ -38,7 +40,7 @@ public class Empty_GreaterThenZero extends ConnectionStateAdapter {
 	}
 	
 	@Override
-	public void heartbeatOkSessionZeroSequence(Connection connection) {
+	public void heartbeatOkSessionZeroSequence(Connection connection) throws DiscardMessageException {
 		gotoInitial(connection);
 	}
 	
@@ -48,37 +50,37 @@ public class Empty_GreaterThenZero extends ConnectionStateAdapter {
 	}
 	
 	@Override
-	public void heartbeatOkSessionNonSequence(Connection connection) {
+	public void heartbeatOkSessionNonSequence(Connection connection) throws DiscardMessageException {
 		gotoInitial(connection);
 	}
 	
 	@Override
-	public void heartbeatNonSessionZeroSequence(Connection connection) {
+	public void heartbeatNonSessionZeroSequence(Connection connection) throws DiscardMessageException {
 		gotoInitial(connection);
 	}
 	
 	@Override
-	public void heartbeatNonSessionOkSequence(Connection connection) {
+	public void heartbeatNonSessionOkSequence(Connection connection) throws DiscardMessageException {
 		gotoInitial(connection);
 	}
 	
 	@Override
-	public void heartbeatNonSessionNonSequence(Connection connection) {
+	public void heartbeatNonSessionNonSequence(Connection connection) throws DiscardMessageException {
 		gotoInitial(connection);
 	}
 	
 	@Override
-	public void updateStatusUp(Connection connection) {
+	public void updateStatusUp(Connection connection) throws DiscardMessageException {
 		gotoInitial(connection);
 	}
 	
 	@Override
-	public void updateStatusDown(Connection connection) {
+	public void updateStatusDown(Connection connection) throws DiscardMessageException {
 		gotoInitial(connection);
 	}
 
 	@Override
-	public void updateStatusNonSession(Connection connection) {
+	public void updateStatusNonSession(Connection connection) throws DiscardMessageException {
 		gotoInitial(connection);
 	}
 	
@@ -93,20 +95,20 @@ public class Empty_GreaterThenZero extends ConnectionStateAdapter {
 	}
 
 	@Override
-	public void messageNonSequence(Connection connection) {
+	public void messageNonSequence(Connection connection) throws DiscardMessageException {
 		gotoInitial(connection);
 	}
 	
 	@Override
-	public void messageNonSession(Connection connection) {
+	public void messageNonSession(Connection connection) throws DiscardMessageException {
 		gotoInitial(connection);
 	}
 	
-	private void gotoInitial(Connection connection) {
+	private void gotoInitial(Connection connection) throws DiscardMessageException {
 		connection.setIncomingSequence(null);
 		connection.setIncomingSession(null);
 		connection.setState(manager.initialState);
 		
-		//TODO interromper mensagem
+		throw new DiscardMessageException();
 	}
 }
