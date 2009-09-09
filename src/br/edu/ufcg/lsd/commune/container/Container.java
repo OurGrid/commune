@@ -71,7 +71,7 @@ public class Container {
 
 	//Communication 
     protected CommuneNetwork communeNetwork;
-    protected NetworkBuilder networkBuilder = new NetworkBuilder();
+    protected NetworkBuilder networkBuilder = createNetworkBuilder();
     protected IMessageDeliverer messageDeliverer;
     protected IMessageSender messageSender;
     
@@ -121,6 +121,11 @@ public class Container {
         this.messageSender = this.communeNetwork;
     }
 
+	
+	public NetworkBuilder createNetworkBuilder() {
+        return new NetworkBuilder();
+    }
+	
 	public X509CertPath getMyCertPath() {
 		return this.application.getMyCertPath();
 	}

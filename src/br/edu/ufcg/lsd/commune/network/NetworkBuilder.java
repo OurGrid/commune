@@ -30,33 +30,56 @@ import br.edu.ufcg.lsd.commune.network.xmpp.XMPPProtocol;
 
 public class NetworkBuilder {
 
-	public CommuneNetwork build(Container container) {
-		
-		ModuleContext context = container.getContext();
-		CommuneNetwork communeNetwork = new CommuneNetwork(container);
-		
-		XMPPProtocol xmppProtocol = 
-			new XMPPProtocol(communeNetwork, container.getContainerID(), container.getContext());
+    protected CommuneNetwork communeNetwork;
 
-		ApplicationProtocol applicationProtocol = 
-			new ApplicationProtocol(communeNetwork, container.getContainerID());
-		
-		communeNetwork.init(applicationProtocol, xmppProtocol);
+    public CommuneNetwork build(Container container) {
+        ModuleContext context = container.getContext();
+        communeNetwork = new CommuneNetwork(container);
+        
+        Protocol xmppProtocol = createXMPPProtocol(container, communeNetwork);
+        Protocol applicationProtocol = createApplicationProtocol(container, communeNetwork);
+        communeNetwork.init(applicationProtocol, xmppProtocol);
 
-		VirtualMachineLoopbackProtocol virtualMachineLoopbackProtocol = 
-			new VirtualMachineLoopbackProtocol(communeNetwork, container.getContainerID());
-		communeNetwork.addProtocol(virtualMachineLoopbackProtocol);
-		
-    	String privateKey = context.getProperty(SignatureProperties.PROP_PRIVATE_KEY);
-		SignatureProtocol signatureProtocol = 
-			new SignatureProtocol(communeNetwork, privateKey);
-		communeNetwork.addProtocol(signatureProtocol);
-		
-		CertificationProtocol certificationProtocol = new CertificationProtocol(
-					communeNetwork, container.getMyCertPath());
-		
-		communeNetwork.addProtocol(certificationProtocol);
-		
- 		return communeNetwork;
-	}
+        VirtualMachineLoopbackProtocol virtualMachineLoopbackProtocol = 
+            createLoopbackProtocol(container, communeNetwork);
+        if (virtualMachineLoopbackProtocol != null) {
+            communeNetwork.addProtocol(virtualMachineLoopbackProtocol);
+        }
+        
+        String privateKey = context.getProperty(SignatureProperties.PROP_PRIVATE_KEY);
+        SignatureProtocol signatureProtocol = createSignatureProtocol(communeNetwork, privateKey);
+        if (signatureProtocol != null) {
+            communeNetwork.addProtocol(signatureProtocol);
+        }
+        
+        CertificationProtocol certificationProtocol = createCertificationProtocol(container, communeNetwork);
+        if (certificationProtocol != null) {
+            communeNetwork.addProtocol(certificationProtocol);
+        }
+        
+         return communeNetwork;
+    }
+
+    protected CertificationProtocol createCertificationProtocol(Container container, CommuneNetwork communeNetwork) {
+        return new CertificationProtocol(communeNetwork, container.getMyCertPath());
+    }
+
+    protected SignatureProtocol createSignatureProtocol(CommuneNetwork communeNetwork, String privateKey) {
+        return new SignatureProtocol(communeNetwork, privateKey);
+    }
+
+    protected VirtualMachineLoopbackProtocol createLoopbackProtocol(Container container, CommuneNetwork communeNetwork) {
+        return new VirtualMachineLoopbackProtocol(communeNetwork, container.getContainerID());
+    }
+
+    protected ApplicationProtocol createApplicationProtocol(Container container, CommuneNetwork communeNetwork) {
+        return new ApplicationProtocol(communeNetwork, container.getContainerID());
+    }
+
+    protected Protocol createXMPPProtocol(Container container, CommuneNetwork communeNetwork) {
+        XMPPProtocol xmppProtocol = 
+            new XMPPProtocol(communeNetwork, container.getContainerID(), container.getContext());
+        return xmppProtocol;
+    }
+
 }
