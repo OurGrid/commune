@@ -4,6 +4,7 @@ import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.Container;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.network.NetworkBuilder;
+import br.edu.ufcg.lsd.commune.network.Protocol;
 
 public class SystemTestContainer extends Container {
 
@@ -17,4 +18,8 @@ public class SystemTestContainer extends Container {
 	public NetworkBuilder createNetworkBuilder() {
 		return new SystemTestNetworkBuilder();
 	}
+	
+    public void addProtocol(Protocol protocol) {
+        communeNetwork.addProtocol(protocol);
+    }
 }
