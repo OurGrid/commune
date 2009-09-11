@@ -23,7 +23,7 @@ public class MessageBlocker extends Protocol {
 			throw new DiscardMessageException();
 		}
 
-		if (receiverBlocker.block(message)) {
+		if (receiverBlocker!= null && receiverBlocker.block(message)) {
 			throw new DiscardMessageException();
 		}
 	}
@@ -34,7 +34,7 @@ public class MessageBlocker extends Protocol {
 			throw new DiscardMessageException();
 		}
 
-		if (senderBlocker.block(message)) {
+		if (senderBlocker!= null && senderBlocker.block(message)) {
 			throw new DiscardMessageException();
 		}
 	}

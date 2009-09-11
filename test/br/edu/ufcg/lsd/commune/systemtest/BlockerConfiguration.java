@@ -4,12 +4,18 @@ import br.edu.ufcg.lsd.commune.message.Message;
 
 public class BlockerConfiguration {
 
-	private String functionName;
-	private int sequenceNumber = -1;
 	
+	public static final int DO_NOT_BLOCK_SEQUENCE = -1;
+	public static final String DO_NOT_BLOCK_FUNCTION = null;
+	
+	
+	private String functionName;
+	private int sequenceNumber = DO_NOT_BLOCK_SEQUENCE;
+	
+	
+	public BlockerConfiguration(){}
 	
 	public BlockerConfiguration(String functionName, int sequenceNumber) {
-		super();
 		this.functionName = functionName;
 		this.sequenceNumber = sequenceNumber;
 	}
@@ -35,11 +41,11 @@ public class BlockerConfiguration {
 		boolean function = true;
 		boolean sequence = true;
 		
-		if (functionName != null && !functionName.equals(message.getFunctionName())) {
+		if (functionName != DO_NOT_BLOCK_FUNCTION && !functionName.equals(message.getFunctionName())) {
 			function = false;
 		}
 		
-		if (sequenceNumber > 0 && !(sequenceNumber == message.getSequence())) {
+		if (sequenceNumber != DO_NOT_BLOCK_SEQUENCE && sequenceNumber != message.getSequence()) {
 			sequence = false;
 		}
 		
