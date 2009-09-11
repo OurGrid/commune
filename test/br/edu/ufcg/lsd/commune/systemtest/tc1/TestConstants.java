@@ -1,9 +1,13 @@
 package br.edu.ufcg.lsd.commune.systemtest.tc1;
 
+import br.edu.ufcg.lsd.commune.processor.interest.InterestProcessor;
+
 
 public interface TestConstants {
 	
 	String DEFAULT_SERVER_NAME = "xmpp.ourgrid.org";
+	
+	String HEARTBEAT_FUNCTION_NAME = InterestProcessor.IS_IT_ALIVE_MESSAGE;
 
 	String A_CONTAINER = "A_CONTAINER";
 	String A_SERVICE = "A_SERVICE";

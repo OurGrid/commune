@@ -5,6 +5,7 @@ import br.edu.ufcg.lsd.commune.container.Container;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.network.CommuneNetwork;
 import br.edu.ufcg.lsd.commune.network.Protocol;
+import br.edu.ufcg.lsd.commune.network.connection.ConnectionProtocol;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 
@@ -25,7 +26,16 @@ public class SystemTestModule extends Module {
     }
 
 	public CommuneNetwork getCommuneNetwork() {
-        SystemTestContainer container = (SystemTestContainer) getContainer();
+        SystemTestContainer container = getSystemTestContainer();
 		return container.getCommuneNetwork();
+	}
+
+	private SystemTestContainer getSystemTestContainer() {
+		return (SystemTestContainer) getContainer();
+	}
+	
+    
+	public ConnectionProtocol getConnectionProtocol() {
+		return getSystemTestContainer().getConnectionProtocol();
 	}
 }

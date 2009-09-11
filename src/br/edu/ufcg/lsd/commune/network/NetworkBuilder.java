@@ -23,6 +23,7 @@ import br.edu.ufcg.lsd.commune.container.Container;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.network.application.ApplicationProtocol;
 import br.edu.ufcg.lsd.commune.network.certification.CertificationProtocol;
+import br.edu.ufcg.lsd.commune.network.connection.ConnectionProtocol;
 import br.edu.ufcg.lsd.commune.network.loopback.VirtualMachineLoopbackProtocol;
 import br.edu.ufcg.lsd.commune.network.signature.SignatureProperties;
 import br.edu.ufcg.lsd.commune.network.signature.SignatureProtocol;
@@ -46,6 +47,11 @@ public class NetworkBuilder {
             communeNetwork.addProtocol(virtualMachineLoopbackProtocol);
         }
         
+        ConnectionProtocol connectionProtocol = createConnectionProtocol();
+        if (connectionProtocol != null) {
+            communeNetwork.addProtocol(connectionProtocol);
+        }
+        
         String privateKey = context.getProperty(SignatureProperties.PROP_PRIVATE_KEY);
         SignatureProtocol signatureProtocol = createSignatureProtocol(communeNetwork, privateKey);
         if (signatureProtocol != null) {
@@ -59,6 +65,10 @@ public class NetworkBuilder {
         
          return communeNetwork;
     }
+
+	protected ConnectionProtocol createConnectionProtocol() {
+		return new ConnectionProtocol(communeNetwork);
+	}
 
     protected CertificationProtocol createCertificationProtocol(Container container, CommuneNetwork communeNetwork) {
         return new CertificationProtocol(communeNetwork, container.getMyCertPath());

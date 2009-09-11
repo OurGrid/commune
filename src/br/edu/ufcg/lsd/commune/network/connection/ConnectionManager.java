@@ -377,4 +377,16 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			connectionLock.writeLock().unlock();
 		}
 	}
+
+
+	public Connection getConnection(ServiceID serviceID) {
+		try {
+			connectionLock.readLock().lock();
+
+			return connections.get(serviceID); 
+			
+		} finally {
+			connectionLock.readLock().unlock();
+		}
+	}
 }
