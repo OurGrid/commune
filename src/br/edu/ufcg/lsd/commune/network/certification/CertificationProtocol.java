@@ -58,7 +58,7 @@ public class CertificationProtocol extends Protocol {
 			throw new DiscardMessageException();
 		}
 		
-		if (message.getSequence() == 0) {
+		if (message.getSequence() != null && message.getSequence() == 0) {
 			message.setSenderCertificatePath(myCertificatePath);
 		}
 		
@@ -72,7 +72,7 @@ public class CertificationProtocol extends Protocol {
 		
 		X509CertPath senderCertificateChain = message.getSenderCertificatePath();
 		
-		if (message.getSequence() != 0) {
+		if (message.getSequence() != null && message.getSequence() != 0) {
 			
 			X509CertPath certificateChain = certificateCache.get(
 					message.getSource().getContainerID());

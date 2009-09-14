@@ -49,8 +49,8 @@ public class Message implements Serializable {
 
 	private String processorType;
 	private byte[] signature;
-	private long session;
-	private long sequence;
+	private Long session;
+	private Long sequence;
 	
 	private X509CertPath senderCertificateChain;
 	
@@ -291,19 +291,19 @@ public class Message implements Serializable {
 		return result;
 	}
 
-	public long getSession() {
+	public Long getSession() {
 		return session;
 	}
 
-	public void setSession(long session) {
+	public void setSession(Long session) {
 		this.session = session;
 	}
 
-	public long getSequence() {
+	public Long getSequence() {
 		return sequence;
 	}
 
-	public void setSequence(long sequence) {
+	public void setSequence(Long sequence) {
 		this.sequence = sequence;
 	}
 	

@@ -43,6 +43,10 @@ public class ConnectionProtocolBlockingTest {
 		
 		A_module.getContainer().deploy(A_SERVICE, new AReceiver());
 		
+		
+		Thread.sleep(300000);
+		
+		
 		Condition<ConnectionProtocol> A2B_down_connection = new Condition<ConnectionProtocol>() {
 
 			public boolean test(ConnectionProtocol protocol) {
