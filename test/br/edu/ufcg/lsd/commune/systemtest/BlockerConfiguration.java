@@ -38,17 +38,19 @@ public class BlockerConfiguration {
 	}
 	
 	public boolean block(Message message) {
-		boolean function = true;
-		boolean sequence = true;
+
+		if (functionName == DO_NOT_BLOCK_FUNCTION && sequenceNumber == DO_NOT_BLOCK_SEQUENCE) {
+			return false;
+		}
 		
 		if (functionName != DO_NOT_BLOCK_FUNCTION && !functionName.equals(message.getFunctionName())) {
-			function = false;
+			return false;
 		}
 		
 		if (sequenceNumber != DO_NOT_BLOCK_SEQUENCE && sequenceNumber != message.getSequence()) {
-			sequence = false;
+			return false;
 		}
 		
-		return function && sequence;
+		return true;
 	}
 }
