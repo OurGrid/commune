@@ -1,9 +1,17 @@
 package br.edu.ufcg.lsd.commune.systemtest.tc1;
 
-import static br.edu.ufcg.lsd.commune.systemtest.BlockerConfiguration.DO_NOT_BLOCK_SEQUENCE;
 import static br.edu.ufcg.lsd.commune.systemtest.BlockerConfiguration.DO_NOT_BLOCK_FUNCTION;
-
-import static br.edu.ufcg.lsd.commune.systemtest.tc1.TestConstants.*;
+import static br.edu.ufcg.lsd.commune.systemtest.BlockerConfiguration.DO_NOT_BLOCK_SEQUENCE;
+import static br.edu.ufcg.lsd.commune.systemtest.tc1.TestConstants.A_ADDRESS;
+import static br.edu.ufcg.lsd.commune.systemtest.tc1.TestConstants.A_CONTAINER;
+import static br.edu.ufcg.lsd.commune.systemtest.tc1.TestConstants.A_SERVICE;
+import static br.edu.ufcg.lsd.commune.systemtest.tc1.TestConstants.A_USER;
+import static br.edu.ufcg.lsd.commune.systemtest.tc1.TestConstants.B_ADDRESS;
+import static br.edu.ufcg.lsd.commune.systemtest.tc1.TestConstants.B_CONTAINER;
+import static br.edu.ufcg.lsd.commune.systemtest.tc1.TestConstants.B_SERVICE;
+import static br.edu.ufcg.lsd.commune.systemtest.tc1.TestConstants.B_USER;
+import static br.edu.ufcg.lsd.commune.systemtest.tc1.TestConstants.HEARTBEAT_FUNCTION_NAME;
+import static br.edu.ufcg.lsd.commune.systemtest.tc1.TestConstants.UPDATTE_STATUS_FUNCTION_NAME;
 
 import java.io.File;
 import java.util.HashMap;
@@ -20,7 +28,6 @@ import br.edu.ufcg.lsd.commune.context.PropertiesParser;
 import br.edu.ufcg.lsd.commune.network.certification.CertificationProperties;
 import br.edu.ufcg.lsd.commune.network.certification.providers.FileCertificationDataProvider;
 import br.edu.ufcg.lsd.commune.network.certification.providers.FileCertificationProperties;
-import br.edu.ufcg.lsd.commune.network.connection.Connection;
 import br.edu.ufcg.lsd.commune.network.connection.ConnectionProtocol;
 import br.edu.ufcg.lsd.commune.network.connection.Down_Empty;
 import br.edu.ufcg.lsd.commune.network.connection.Empty_Zero;
@@ -60,12 +67,7 @@ public class ConnectionProtocolBlockingTest {
 		
 		a_module.getContainer().deploy(A_SERVICE, new AReceiver());
 		
-		Condition<ConnectionProtocol> A2B_down_connection = new Condition<ConnectionProtocol>() {
-			public boolean test(ConnectionProtocol protocol) {
-				Connection connection = protocol.getConnection(B_ADDRESS);
-				return connection != null && (connection.getState() instanceof Down_Empty);
-			}
-		};
+		Condition<ConnectionProtocol> A2B_down_connection = new ConnectionStateCondition(B_ADDRESS, Down_Empty.class);
 		
 		ConditionChecker<ConnectionProtocol> checker = 
 			new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_down_connection);
@@ -80,27 +82,12 @@ public class ConnectionProtocolBlockingTest {
 		a_module.getContainer().deploy(A_SERVICE, new AReceiver());
 		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
 
-		Condition<ConnectionProtocol> A2B_seq0_rev_connection = new Condition<ConnectionProtocol>() {
-
-			public boolean test(ConnectionProtocol protocol) {
-				Connection connection = protocol.getConnection(A_ADDRESS);
-				
-				return connection != null && (connection.getState() instanceof Empty_Zero);
-			}
-		};
+		Condition<ConnectionProtocol> A2B_seq0_rev_connection = new ConnectionStateCondition(A_ADDRESS, Empty_Zero.class);
 		ConditionChecker<ConnectionProtocol> checker = 
 			new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), A2B_seq0_rev_connection);
 		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
 
-		Condition<ConnectionProtocol> A2B_uping_connection = new Condition<ConnectionProtocol>() {
-
-			public boolean test(ConnectionProtocol protocol) {
-				Connection connection = protocol.getConnection(B_ADDRESS);
-				
-				return connection != null && (connection.getState() instanceof Uping_Empty);
-			}
-		};
-		
+		Condition<ConnectionProtocol> A2B_uping_connection = new ConnectionStateCondition(B_ADDRESS, Uping_Empty.class);
 		checker = new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_uping_connection);
 		Assert.assertTrue(checker.doNotOccurs(1000, 5));
 	}
@@ -135,4 +122,4 @@ public class ConnectionProtocolBlockingTest {
 		DefaultContextFactory factory = new DefaultContextFactory(new PropertiesParser(properties));
 		return factory.createContext();
 	}
-}
+}  

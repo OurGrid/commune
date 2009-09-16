@@ -10,7 +10,7 @@ public class AReceiver implements A {
 
 	@InvokeOnDeploy
 	public void init(ServiceManager serviceManager) {
-		serviceManager.registerInterest(TestConstants.A_SERVICE, TestConstants.B_ADDRESS, B.class);
+		serviceManager.registerInterest(TestConstants.A_SERVICE, TestConstants.B_ADDRESS, B.class, 1000, 300);
 	}
 	
 	public void response() {}

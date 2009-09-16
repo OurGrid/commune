@@ -1,23 +1,23 @@
 package br.edu.ufcg.lsd.commune.systemtest.tc1;
 
+import br.edu.ufcg.lsd.commune.network.connection.Connection;
 import br.edu.ufcg.lsd.commune.network.connection.ConnectionProtocol;
-import br.edu.ufcg.lsd.commune.network.connection.ConnectionState;
 import br.edu.ufcg.lsd.commune.systemtest.Condition;
 
 public class ConnectionStateCondition implements Condition<ConnectionProtocol> {
 	
 	
-	private final String senderAddress;
-	private final ConnectionState state;
+	private final String remoteAddress;
+	private final Class<?> state;
 
-	public ConnectionStateCondition(String senderAddress, ConnectionState state) {
-		this.senderAddress = senderAddress;
+	public ConnectionStateCondition(String remoteAddress, Class<?> state) {
+		this.remoteAddress = remoteAddress;
 		this.state = state;
 	}
 
-	public boolean test(ConnectionProtocol t) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean test(ConnectionProtocol protocol) {
+		Connection connection = protocol.getConnection(remoteAddress);
+		return connection != null && (state.isInstance(connection.getState()));
 	}
 
 }
