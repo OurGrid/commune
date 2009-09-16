@@ -36,7 +36,7 @@ import br.edu.ufcg.lsd.commune.network.ProtocolException;
 
 public class CertificationProtocol extends Protocol {
 
-	private final X509CertPath myCertificatePath;
+	protected final X509CertPath myCertificatePath;
 	private final Map<ContainerID, X509CertPath> certificateCache;
 	
 	/**
@@ -58,7 +58,7 @@ public class CertificationProtocol extends Protocol {
 			throw new DiscardMessageException();
 		}
 		
-		if (message.getSequence() != null && message.getSequence() == 0) {
+		if (message.getSequence() != null && message.getSequence().equals(0L)) {
 			message.setSenderCertificatePath(myCertificatePath);
 		}
 		

@@ -86,7 +86,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	
 	public void sendingMessage(Message message) {
 		
-		if (container.isLocal(message.getDestination())) {
+		if (container.isLocal(message.getDestination().getContainerID())) {
 			//Do not define session and sequence numbers for local messages
 			
 		} else {
@@ -100,25 +100,34 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		
 			CommuneAddress destination = message.getDestination();
 			Connection connection = null;
+			Long session = null;
+			Long sequence = null;
 			
 			if (isFailureDetectorMessage(message)) {
 				
 				if (message.getFunctionName().equals(InterestProcessor.IS_IT_ALIVE_MESSAGE)) {
 					connection = connections.get(destination);
+					session = connection.getOutgoingSession();
+					sequence = connection.getOutgoingSequence();
+					
 				} else {
 					DeploymentID destinationDeploymentID = (DeploymentID)destination;
 					connection = connections.get(destinationDeploymentID.getServiceID());
+					session = connection.getIncomingSession();
+					sequence = connection.getIncomingSequence();
 				}
 				
 			} else {
 			
 				DeploymentID destinationDeploymentID = (DeploymentID)destination;
 				connection = connections.get(destinationDeploymentID.getServiceID());
-				connection.incOutcoingSequenceNumber();
+				connection.incOutgoingSequenceNumber();
+				session = connection.getOutgoingSession();
+				sequence = connection.getOutgoingSequence();
 			}
 			
-			message.setSequence(connection.getOutgoingSequence());
-			message.setSession(connection.getOutgoingSession());
+			message.setSequence(sequence);
+			message.setSession(session);
 		
 		} finally {
 			connectionLock.writeLock().unlock();
@@ -153,7 +162,8 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 					receiveHeartbeat(message, connection);
 					
 				} else if (InterestProcessor.UPDATE_STATUS_MESSAGE.equals(messageName)) {
-					connection = connections.get(source);
+					DeploymentID sourceDID = (DeploymentID) source; 
+					connection = connections.get(sourceDID.getServiceID());
 					receiveUpdateStatus(message, connection);
 				}
 
@@ -195,7 +205,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		
 		ConnectionState state = connection.getState();
 		
-		if (expectedSession == messageSession) {
+		if (expectedSession.equals(messageSession)) {
 			
 			if(messageSequence == 0) {
 				state.heartbeatOkSessionZeroSequence(connection);
@@ -212,7 +222,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				connection.setIncomingSession(message.getSession());
 				state.heartbeatNonSessionZeroSequence(connection);
 				
-			} else if(expectedSequence == messageSequence) {
+			} else if(expectedSequence.equals(messageSequence)) {
 				state.heartbeatNonSessionOkSequence(connection);
 				
 			} else {
@@ -223,11 +233,11 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 
 
 	private void receiveUpdateStatus(Message message, Connection connection) throws DiscardMessageException {
-		Long expectedSession = connection.getIncomingSession();
-		long messageSession = message.getSession();
+		Long expectedSession = connection.getOutgoingSession();
+		Long messageSession = message.getSession();
 		ConnectionState state = connection.getState();
 		
-		if (expectedSession == messageSession) {
+		if (expectedSession.equals(messageSession)) {
 
 			if (message.getParameterValues().length == 1) {
 				
@@ -251,14 +261,14 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		connection.incIncomingSequenceNumber();
 		Long expectedSequence = connection.getIncomingSequence();
 
-		long messageSession = message.getSession();
-		long messageSequence = message.getSequence();
+		Long messageSession = message.getSession();
+		Long messageSequence = message.getSequence();
 		
 		ConnectionState state = connection.getState();
 		
-		if (expectedSession == messageSession) {
+		if (expectedSession.equals(messageSession)) {
 			
-			if(messageSequence == expectedSequence) {
+			if(messageSequence.equals(expectedSequence)) {
 				
 				if(hasCallback(message)) {
 					state.messageWithCallbackOkSessionOkSequence(connection);

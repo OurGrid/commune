@@ -7,19 +7,35 @@ import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
 
 public class AReceiver implements A {
 
+	
+	private boolean sendMessage;
+	private boolean responseReceived;
+	
 
 	@InvokeOnDeploy
 	public void init(ServiceManager serviceManager) {
 		serviceManager.registerInterest(TestConstants.A_SERVICE, TestConstants.B_ADDRESS, B.class, 1000, 300);
 	}
 	
-	public void response() {}
+	public void response() {
+		responseReceived = true;
+	}
 	
 	@RecoveryNotification
 	public void begin(B b) {
-		b.message();
+		if (sendMessage) {
+			b.message();
+		}
 	}
 	
 	@FailureNotification
 	public void finish(B b) {}
+
+	public void setSendMessage(boolean sendMessage) {
+		this.sendMessage = sendMessage;
+	}
+
+	public boolean isResponseReceived() {
+		return responseReceived;
+	}
 }

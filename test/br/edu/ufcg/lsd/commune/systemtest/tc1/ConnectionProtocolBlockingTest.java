@@ -31,6 +31,7 @@ import br.edu.ufcg.lsd.commune.network.certification.providers.FileCertification
 import br.edu.ufcg.lsd.commune.network.connection.ConnectionProtocol;
 import br.edu.ufcg.lsd.commune.network.connection.Down_Empty;
 import br.edu.ufcg.lsd.commune.network.connection.Empty_Zero;
+import br.edu.ufcg.lsd.commune.network.connection.Up_Empty;
 import br.edu.ufcg.lsd.commune.network.connection.Uping_Empty;
 import br.edu.ufcg.lsd.commune.network.xmpp.XMPPProperties;
 import br.edu.ufcg.lsd.commune.systemtest.BlockerConfiguration;
@@ -92,6 +93,19 @@ public class ConnectionProtocolBlockingTest {
 		Assert.assertTrue(checker.doNotOccurs(1000, 5));
 	}
 
+	@Test
+	public void waitForConnectionUp() throws Exception {
+		AReceiver aReceiver = new AReceiver();
+		aReceiver.setSendMessage(false);
+		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+
+		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
+		ConditionChecker<ConnectionProtocol> checker = 
+			new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+	}
+	
 	private void createBlocker(SystemTestModule module, String recFunc, int recSeq, String sendFunc, int sendSeq) {
 		MessageBlocker protocol = new MessageBlocker(module.getCommuneNetwork());
 		module.addProtocol(protocol);
