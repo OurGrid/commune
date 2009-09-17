@@ -14,7 +14,7 @@ public class AReceiver implements A {
 
 	@InvokeOnDeploy
 	public void init(ServiceManager serviceManager) {
-		serviceManager.registerInterest(TestConstants.A_SERVICE, TestConstants.B_ADDRESS, B.class, 1000, 300);
+		serviceManager.registerInterest(TestConstants.A_SERVICE, TestConstants.B_ADDRESS, B.class, 3, 1);
 	}
 	
 	public void response() {
@@ -29,7 +29,9 @@ public class AReceiver implements A {
 	}
 	
 	@FailureNotification
-	public void finish(B b) {}
+	public void finish(B b) {
+		
+	}
 
 	public void setSendMessage(boolean sendMessage) {
 		this.sendMessage = sendMessage;

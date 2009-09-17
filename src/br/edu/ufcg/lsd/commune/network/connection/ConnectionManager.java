@@ -200,17 +200,19 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		Long expectedSession = connection.getIncomingSession();
 		Long expectedSequence = connection.getIncomingSequence();
 
-		long messageSession = message.getSession();
-		long messageSequence = message.getSequence();
+		Long messageSession = message.getSession();
+		Long messageSequence = message.getSequence();
+		
+		validate(messageSession, messageSequence);
 		
 		ConnectionState state = connection.getState();
 		
-		if (expectedSession.equals(messageSession)) {
+		if (messageSession.equals(expectedSession)) {
 			
 			if(messageSequence == 0) {
 				state.heartbeatOkSessionZeroSequence(connection);
 				
-			} else if(expectedSequence == messageSequence) {
+			} else if(messageSequence.equals(expectedSequence)) {
 				state.heartbeatOkSessionOkSequence(connection);
 				
 			} else {
@@ -222,7 +224,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				connection.setIncomingSession(message.getSession());
 				state.heartbeatNonSessionZeroSequence(connection);
 				
-			} else if(expectedSequence.equals(messageSequence)) {
+			} else if(messageSequence.equals(expectedSequence)) {
 				state.heartbeatNonSessionOkSequence(connection);
 				
 			} else {
@@ -232,9 +234,22 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	}
 
 
+	private void validate(Long messageSession, Long messageSequence) throws DiscardMessageException {
+		if (messageSession == null || messageSequence == null) {
+			throw new DiscardMessageException();
+		}
+	}
+
+	private void validate(Long messageSession) throws DiscardMessageException {
+		if (messageSession == null) {
+			throw new DiscardMessageException();
+		}
+	}
+
 	private void receiveUpdateStatus(Message message, Connection connection) throws DiscardMessageException {
 		Long expectedSession = connection.getOutgoingSession();
 		Long messageSession = message.getSession();
+		validate(messageSession);
 		ConnectionState state = connection.getState();
 		
 		if (expectedSession.equals(messageSession)) {
@@ -263,6 +278,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 
 		Long messageSession = message.getSession();
 		Long messageSequence = message.getSequence();
+		validate(messageSession, messageSequence);
 		
 		ConnectionState state = connection.getState();
 		

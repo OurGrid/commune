@@ -30,7 +30,9 @@ import br.edu.ufcg.lsd.commune.network.certification.providers.FileCertification
 import br.edu.ufcg.lsd.commune.network.certification.providers.FileCertificationProperties;
 import br.edu.ufcg.lsd.commune.network.connection.ConnectionProtocol;
 import br.edu.ufcg.lsd.commune.network.connection.Down_Empty;
+import br.edu.ufcg.lsd.commune.network.connection.Empty_GreaterThenZero;
 import br.edu.ufcg.lsd.commune.network.connection.Empty_Zero;
+import br.edu.ufcg.lsd.commune.network.connection.InitialState;
 import br.edu.ufcg.lsd.commune.network.connection.Up_Empty;
 import br.edu.ufcg.lsd.commune.network.connection.Uping_Empty;
 import br.edu.ufcg.lsd.commune.network.xmpp.XMPPProperties;
@@ -44,6 +46,9 @@ import br.edu.ufcg.lsd.commune.systemtest.SystemTestModule;
 public class ConnectionProtocolBlockingTest {
 	
 
+	private static final String A_APPLICATION_MESSAGE = "message";
+	
+	
 	private SystemTestModule a_module;
 	private SystemTestModule b_module;
 	
@@ -83,9 +88,10 @@ public class ConnectionProtocolBlockingTest {
 		a_module.getContainer().deploy(A_SERVICE, new AReceiver());
 		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
 
-		Condition<ConnectionProtocol> A2B_seq0_rev_connection = new ConnectionStateCondition(A_ADDRESS, Empty_Zero.class);
+		Condition<ConnectionProtocol> B2A_emp_seq0_connection = 
+			new ConnectionStateCondition(A_ADDRESS, Empty_Zero.class);
 		ConditionChecker<ConnectionProtocol> checker = 
-			new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), A2B_seq0_rev_connection);
+			new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_emp_seq0_connection);
 		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
 
 		Condition<ConnectionProtocol> A2B_uping_connection = new ConnectionStateCondition(B_ADDRESS, Uping_Empty.class);
@@ -105,8 +111,47 @@ public class ConnectionProtocolBlockingTest {
 			new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_connection);
 		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
 	}
+
+	@Test
+	public void remoteNodeReceiveMessage() throws Exception {
+		AReceiver aReceiver = new AReceiver();
+		aReceiver.setSendMessage(true);
+		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+
+		Condition<ConnectionProtocol> B2A_emp_seqG_connection = 
+			new ConnectionStateCondition(A_ADDRESS, Empty_GreaterThenZero.class);
+		ConditionChecker<ConnectionProtocol> checker = 
+			new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_emp_seqG_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+	}
 	
-	private void createBlocker(SystemTestModule module, String recFunc, int recSeq, String sendFunc, int sendSeq) {
+	@Test
+	public void applicationMessageLost() throws Exception {
+		createBlocker(a_module, DO_NOT_BLOCK_FUNCTION, DO_NOT_BLOCK_SEQUENCE, A_APPLICATION_MESSAGE, 1L);
+		
+		AReceiver aReceiver = new AReceiver();
+		aReceiver.setSendMessage(true);
+		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+		
+		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
+		ConditionChecker<ConnectionProtocol> checker = 
+			new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		
+		Condition<ConnectionProtocol> A2B_down_connection = 
+			new ConnectionStateCondition(B_ADDRESS, Down_Empty.class);
+		checker = new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_down_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		
+		Condition<ConnectionProtocol> B2A_initial_connection = 
+			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
+		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+	}
+	
+	private void createBlocker(SystemTestModule module, String recFunc, Long recSeq, String sendFunc, Long sendSeq) {
 		MessageBlocker protocol = new MessageBlocker(module.getCommuneNetwork());
 		module.addProtocol(protocol);
 		
