@@ -10,10 +10,13 @@ public class AReceiver implements A {
 	
 	private boolean sendMessage;
 	private boolean responseReceived;
+	private boolean releaseOnFailure;
+	private ServiceManager serviceManager;
 	
 
 	@InvokeOnDeploy
 	public void init(ServiceManager serviceManager) {
+		this.serviceManager = serviceManager;
 		serviceManager.registerInterest(TestConstants.A_SERVICE, TestConstants.B_ADDRESS, B.class, 3, 1);
 	}
 	
@@ -30,7 +33,9 @@ public class AReceiver implements A {
 	
 	@FailureNotification
 	public void finish(B b) {
-		
+		if(releaseOnFailure) {
+			serviceManager.release(b);
+		}
 	}
 
 	public void setSendMessage(boolean sendMessage) {
@@ -39,5 +44,10 @@ public class AReceiver implements A {
 
 	public boolean isResponseReceived() {
 		return responseReceived;
+	}
+
+	public void setReleaseOnFailure(boolean releaseOnFailure) {
+		this.releaseOnFailure = releaseOnFailure;
+		
 	}
 }

@@ -151,7 +151,71 @@ public class ConnectionProtocolBlockingTest {
 		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
 	}
 	
-	private void createBlocker(SystemTestModule module, String recFunc, Long recSeq, String sendFunc, Long sendSeq) {
+	@Test
+	public void applicationMessageLostRelease() throws Exception {
+		createBlocker(a_module, DO_NOT_BLOCK_FUNCTION, DO_NOT_BLOCK_SEQUENCE, A_APPLICATION_MESSAGE, 1L);
+		
+		AReceiver aReceiver = new AReceiver();
+		aReceiver.setSendMessage(true);
+		aReceiver.setReleaseOnFailure(true);
+		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+		
+		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
+		ConditionChecker<ConnectionProtocol> checker = 
+			new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		
+		Condition<ConnectionProtocol> A2B_null_connection = new NullConnectionCondition(B_ADDRESS);
+		checker = new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_null_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		
+		Condition<ConnectionProtocol> B2A_initial_connection = 
+			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
+		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+	}
+	
+	@Test
+	public void applicationMessageLostConnectionRecovery() throws Exception {
+		MessageBlocker blocker = 
+			createBlocker(a_module, DO_NOT_BLOCK_FUNCTION, DO_NOT_BLOCK_SEQUENCE, A_APPLICATION_MESSAGE, 1L);
+		
+		AReceiver aReceiver = new AReceiver();
+		aReceiver.setSendMessage(true);
+		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+		
+		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
+		ConditionChecker<ConnectionProtocol> checker = 
+			new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 50));
+		
+		Condition<ConnectionProtocol> A2B_down_connection = 
+			new ConnectionStateCondition(B_ADDRESS, Down_Empty.class);
+		checker = new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_down_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 50));
+		
+		Condition<ConnectionProtocol> B2A_initial_connection = 
+			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
+		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 50));
+		
+		blocker.getSenderBlocker().setFunctionName(DO_NOT_BLOCK_FUNCTION);
+		blocker.getSenderBlocker().setSequenceNumber(DO_NOT_BLOCK_SEQUENCE);
+		
+		checker = new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 50));
+
+		Condition<ConnectionProtocol> B2A_emp_seqG_connection = 
+			new ConnectionStateCondition(A_ADDRESS, Empty_GreaterThenZero.class);
+		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_emp_seqG_connection);
+		Assert.assertTrue(checker.waitUntilCondition(1000, 50));
+	}
+	
+	private MessageBlocker createBlocker(SystemTestModule module, String recFunc, Long recSeq, String sendFunc, 
+			Long sendSeq) {
+		
 		MessageBlocker protocol = new MessageBlocker(module.getCommuneNetwork());
 		module.addProtocol(protocol);
 		
@@ -164,6 +228,8 @@ public class ConnectionProtocolBlockingTest {
 		senderBlocker.setFunctionName(sendFunc);
 		senderBlocker.setSequenceNumber(sendSeq);
 		protocol.setSenderBlocker(senderBlocker);
+		
+		return protocol;
 	}
 	
 	private SystemTestModule createModule(String container, String user) throws Exception {
