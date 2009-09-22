@@ -34,6 +34,7 @@ import br.edu.ufcg.lsd.commune.network.connection.Empty_GreaterThenZero;
 import br.edu.ufcg.lsd.commune.network.connection.Empty_Zero;
 import br.edu.ufcg.lsd.commune.network.connection.InitialState;
 import br.edu.ufcg.lsd.commune.network.connection.Up_Empty;
+import br.edu.ufcg.lsd.commune.network.connection.Up_GreaterThenZero;
 import br.edu.ufcg.lsd.commune.network.connection.Uping_Empty;
 import br.edu.ufcg.lsd.commune.network.xmpp.XMPPProperties;
 import br.edu.ufcg.lsd.commune.systemtest.BlockerConfiguration;
@@ -46,6 +47,8 @@ import br.edu.ufcg.lsd.commune.systemtest.SystemTestModule;
 public class ConnectionProtocolBlockingTest {
 	
 
+	private static final int VERIFICATION_COUNT = 500;
+	private static final int VERIFICATION_DELAY = 50;
 	private static final String A_APPLICATION_MESSAGE = "message";
 	
 	
@@ -61,8 +64,14 @@ public class ConnectionProtocolBlockingTest {
 	
 	@After
 	public void stopModules() throws Exception {
-		a_module.stop();
-		b_module.stop();
+		
+		if (a_module != null) {
+			a_module.stop();
+		}
+
+		if (b_module != null) {
+			b_module.stop();
+		}
 	}
  	
 
@@ -77,7 +86,7 @@ public class ConnectionProtocolBlockingTest {
 		
 		ConditionChecker<ConnectionProtocol> checker = 
 			new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_down_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 	}
 
 	@Test
@@ -92,11 +101,11 @@ public class ConnectionProtocolBlockingTest {
 			new ConnectionStateCondition(A_ADDRESS, Empty_Zero.class);
 		ConditionChecker<ConnectionProtocol> checker = 
 			new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_emp_seq0_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 
 		Condition<ConnectionProtocol> A2B_uping_connection = new ConnectionStateCondition(B_ADDRESS, Uping_Empty.class);
 		checker = new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_uping_connection);
-		Assert.assertTrue(checker.doNotOccurs(1000, 5));
+		Assert.assertTrue(checker.doNotOccurs(VERIFICATION_DELAY, VERIFICATION_COUNT));
 	}
 
 	@Test
@@ -109,9 +118,9 @@ public class ConnectionProtocolBlockingTest {
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
 			new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 	}
-
+	
 	@Test
 	public void remoteNodeReceiveMessage() throws Exception {
 		AReceiver aReceiver = new AReceiver();
@@ -123,9 +132,48 @@ public class ConnectionProtocolBlockingTest {
 			new ConnectionStateCondition(A_ADDRESS, Empty_GreaterThenZero.class);
 		ConditionChecker<ConnectionProtocol> checker = 
 			new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_emp_seqG_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
+	}
+
+	@Test
+	public void remoteNodeReceiveMessage_Callback() throws Exception {
+		AReceiver aReceiver = new AReceiver();
+		aReceiver.setSendMessage(true);
+		aReceiver.setUseCallback(true);
+		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+
+		Condition<ConnectionProtocol> B2A_up_seqG_connection = 
+			new ConnectionStateCondition(A_ADDRESS, Up_GreaterThenZero.class);
+		ConditionChecker<ConnectionProtocol> checker = 
+			new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_up_seqG_connection);
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 	}
 	
+	@Test
+	public void completeConnection() throws Exception {
+		AReceiver aReceiver = new AReceiver();
+		aReceiver.setSendMessage(true);
+		aReceiver.setUseCallback(true);
+		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		BReceiver bReceiver = new BReceiver();
+		bReceiver.setSendResponse(true);
+		b_module.getContainer().deploy(B_SERVICE, bReceiver);
+
+		Condition<ConnectionProtocol> B2A_up_seqG_connection = 
+			new ConnectionStateCondition(A_ADDRESS, Up_GreaterThenZero.class);
+		ConditionChecker<ConnectionProtocol> checker = 
+			new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_up_seqG_connection);
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
+
+		Condition<ConnectionProtocol> A2B_up_seqG_connection = 
+			new ConnectionStateCondition(B_ADDRESS, Up_GreaterThenZero.class);
+		checker = new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_seqG_connection);
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
+		
+		Assert.assertTrue(aReceiver.isResponseReceived());
+	}
+
 	@Test
 	public void applicationMessageLost() throws Exception {
 		createBlocker(a_module, DO_NOT_BLOCK_FUNCTION, DO_NOT_BLOCK_SEQUENCE, A_APPLICATION_MESSAGE, 1L);
@@ -138,17 +186,48 @@ public class ConnectionProtocolBlockingTest {
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
 			new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		Condition<ConnectionProtocol> A2B_down_connection = 
 			new ConnectionStateCondition(B_ADDRESS, Down_Empty.class);
 		checker = new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_down_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		Condition<ConnectionProtocol> B2A_initial_connection = 
 			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
 		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
+	}
+	
+	@Test
+	public void applicationMessageLost_Callback() throws Exception {
+		createBlocker(a_module, DO_NOT_BLOCK_FUNCTION, DO_NOT_BLOCK_SEQUENCE, A_APPLICATION_MESSAGE, 1L);
+		
+		AReceiver aReceiver = new AReceiver();
+		aReceiver.setSendMessage(true);
+		aReceiver.setUseCallback(true);
+		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+		
+		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
+		ConditionChecker<ConnectionProtocol> checker = 
+			new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_connection);
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
+		
+		Condition<ConnectionProtocol> B2A_up_seqG_connection = 
+			new ConnectionStateCondition(A_ADDRESS, Up_GreaterThenZero.class);
+		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_up_seqG_connection);
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
+
+		Condition<ConnectionProtocol> A2B_down_connection = 
+			new ConnectionStateCondition(B_ADDRESS, Down_Empty.class);
+		checker = new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_down_connection);
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
+		
+		Condition<ConnectionProtocol> B2A_initial_connection = 
+			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
+		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 	}
 	
 	@Test
@@ -164,16 +243,16 @@ public class ConnectionProtocolBlockingTest {
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
 			new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		Condition<ConnectionProtocol> A2B_null_connection = new NullConnectionCondition(B_ADDRESS);
 		checker = new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_null_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		Condition<ConnectionProtocol> B2A_initial_connection = 
 			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
 		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 5));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 	}
 	
 	@Test
@@ -189,28 +268,28 @@ public class ConnectionProtocolBlockingTest {
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
 			new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 50));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		Condition<ConnectionProtocol> A2B_down_connection = 
 			new ConnectionStateCondition(B_ADDRESS, Down_Empty.class);
 		checker = new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_down_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 50));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		Condition<ConnectionProtocol> B2A_initial_connection = 
 			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
 		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 50));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		blocker.getSenderBlocker().setFunctionName(DO_NOT_BLOCK_FUNCTION);
 		blocker.getSenderBlocker().setSequenceNumber(DO_NOT_BLOCK_SEQUENCE);
 		
 		checker = new ConditionChecker<ConnectionProtocol>(a_module.getConnectionProtocol(), A2B_up_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 50));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 
 		Condition<ConnectionProtocol> B2A_emp_seqG_connection = 
 			new ConnectionStateCondition(A_ADDRESS, Empty_GreaterThenZero.class);
 		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_emp_seqG_connection);
-		Assert.assertTrue(checker.waitUntilCondition(1000, 50));
+		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 	}
 	
 	private MessageBlocker createBlocker(SystemTestModule module, String recFunc, Long recSeq, String sendFunc, 

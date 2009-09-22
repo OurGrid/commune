@@ -6,4 +6,6 @@ import br.edu.ufcg.lsd.commune.api.Remote;
 public interface B {
 
 	void message();
+
+	void message(A a);
 }

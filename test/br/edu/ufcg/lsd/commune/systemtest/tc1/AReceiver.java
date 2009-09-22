@@ -11,6 +11,7 @@ public class AReceiver implements A {
 	private boolean sendMessage;
 	private boolean responseReceived;
 	private boolean releaseOnFailure;
+	private boolean useCallback;
 	private ServiceManager serviceManager;
 	
 
@@ -27,7 +28,12 @@ public class AReceiver implements A {
 	@RecoveryNotification
 	public void begin(B b) {
 		if (sendMessage) {
-			b.message();
+			if (useCallback) {
+				b.message(this);
+				
+			} else {
+				b.message();
+			}
 		}
 	}
 	
@@ -49,5 +55,9 @@ public class AReceiver implements A {
 	public void setReleaseOnFailure(boolean releaseOnFailure) {
 		this.releaseOnFailure = releaseOnFailure;
 		
+	}
+
+	public void setUseCallback(boolean useCallback) {
+		this.useCallback = useCallback;
 	}
 }

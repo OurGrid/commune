@@ -91,6 +91,8 @@ public class Empty_Zero extends ConnectionStateAdapter {
 	
 	@Override
 	public void messageWithCallbackOkSessionOkSequence(Connection connection) {
+		connection.setOutgoingSession(generateSessionNumber());
+		connection.setOutgoingSequence(0L);
 		connection.setState(manager.up_greatherThenZero);
 	}
 	
