@@ -125,6 +125,8 @@ public class Up_GreaterThenZero extends ConnectionStateAdapter {
 		connection.setIncomingSession(null);
 		connection.setState(manager.downing_empty);
 		
+		manager.getInterestManager().sendNotifyFailureMessage(connection.getStubReference().getStubServiceID());
+		
 		throw new DiscardMessageException();
 	}
 }

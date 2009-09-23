@@ -259,7 +259,7 @@ public class Message implements Serializable {
 
 	public String toString() {
 		
-		String fromTo = source + "->" + destination;
+		String fromTo = source.getUserName() + "->" + destination.getUserName();
 		String conn = ":" + session + "," + sequence;
 		String params = toString(parameterValues);
 		String call = ":" + functionName + "(" + params + ")";

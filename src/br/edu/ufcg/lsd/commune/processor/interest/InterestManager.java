@@ -231,6 +231,18 @@ public class InterestManager {
 		}		
 	}
 
+	public void sendNotifyFailureMessage(ServiceID key) {
+		try {
+			interestLock.lock();
+
+			Interest interest = interests.get(key);
+			sendNotifyFailureMessage(interest);
+		
+		} finally {
+			interestLock.unlock();
+		}
+	}
+	
 	private void sendNotifyFailureMessage(Interest interest) {
 		ObjectDeployment interested = interest.getInterested();
 		Message message = 

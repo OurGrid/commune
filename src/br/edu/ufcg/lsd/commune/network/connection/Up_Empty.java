@@ -119,6 +119,8 @@ public class Up_Empty extends ConnectionStateAdapter {
 	private void gotoDowningEmpty(Connection connection) throws DiscardMessageException {
 		connection.setState(manager.downing_empty);
 		
+		manager.getInterestManager().sendNotifyFailureMessage(connection.getStubReference().getStubServiceID());
+
 		throw new DiscardMessageException();
 	}
 }

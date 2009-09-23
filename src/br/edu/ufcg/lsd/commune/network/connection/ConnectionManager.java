@@ -35,12 +35,17 @@ import br.edu.ufcg.lsd.commune.message.MessageParameter;
 import br.edu.ufcg.lsd.commune.message.MessageUtil;
 import br.edu.ufcg.lsd.commune.message.StubParameter;
 import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
+import br.edu.ufcg.lsd.commune.processor.interest.InterestManager;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestProcessor;
 import br.edu.ufcg.lsd.commune.processor.interest.MonitorableStatus;
 import br.edu.ufcg.lsd.commune.processor.interest.TimeoutListener;
 import br.edu.ufcg.lsd.commune.processor.objectdeployer.NotificationListener;
 
 public class ConnectionManager implements StubListener, TimeoutListener, NotificationListener {
+	
+	
+	private static long begin = System.currentTimeMillis();
+	
 	
 	private Container container;
 	private ReadWriteLock connectionLock = new ReentrantReadWriteLock(true);
@@ -78,11 +83,15 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			//Do not verify session and sequence numbers for local messages
 			
 		} else {
-			System.err.println(message);
-			receivingRemoteMessage(message);
-			System.out.println(message);
+			System.out.println(time() + message);
+			Connection connection = receivingRemoteMessage(message);
+			System.err.println(time() + message + " -> " + connection.getState().getClass().getSimpleName());
 		}
 
+	}
+	
+	private String time() {
+		return (System.currentTimeMillis() - begin) + "\t";
 	}
 	
 	public void sendingMessage(Message message) {
@@ -123,10 +132,6 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				DeploymentID destinationDeploymentID = (DeploymentID)destination;
 				connection = connections.get(destinationDeploymentID.getServiceID());
 				
-				if (connection.getOutgoingSession() == null) {
-					//TODO send heartbeat to open the connection
-				}
-				
 				connection.incOutgoingSequenceNumber();
 				session = connection.getOutgoingSession();
 				sequence = connection.getOutgoingSequence();
@@ -144,7 +149,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		return InterestProcessor.class.getName().equals(message.getProcessorType());
 	}
 	
-	private void receivingRemoteMessage(Message message) throws DiscardMessageException {
+	private Connection receivingRemoteMessage(Message message) throws DiscardMessageException {
 		try {
 			connectionLock.writeLock().lock();
 		
@@ -179,6 +184,8 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				connection = connections.get(sourceDID.getServiceID());
 				receivingRemoteApplicationMessage(message, connection);
 			}
+			
+			return connection;
 
 		} finally {
 			connectionLock.writeLock().unlock();
@@ -428,5 +435,9 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		} finally {
 			connectionLock.readLock().unlock();
 		}
+	}
+	
+	InterestManager getInterestManager() {
+		return container.getInterestManager();
 	}
 }

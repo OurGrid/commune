@@ -122,6 +122,8 @@ public class Up_Zero extends ConnectionStateAdapter {
 		connection.setIncomingSession(null);
 		connection.setState(manager.downing_empty);
 		
+		manager.getInterestManager().sendNotifyFailureMessage(connection.getStubReference().getStubServiceID());
+
 		throw new DiscardMessageException();
 	}
 }
