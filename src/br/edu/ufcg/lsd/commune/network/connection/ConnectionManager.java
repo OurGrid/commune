@@ -207,7 +207,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		
 		ConnectionState state = connection.getState();
 		
-		if (messageSession.equals(expectedSession)) {
+		if (expectedSession == null || messageSession.equals(expectedSession)) {
 			
 			if(messageSequence == 0) {
 				state.heartbeatOkSessionZeroSequence(connection);
