@@ -6,7 +6,10 @@ import br.edu.ufcg.lsd.commune.processor.interest.InterestProcessor;
 public interface TestConstants {
 	
 	String DEFAULT_SERVER_NAME = "xmpp.ourgrid.org";
-	
+
+	int DETECTION_TIME = 3;
+	int HEARTBEAT_DELAY = 1;
+
 	String HEARTBEAT_FUNCTION_NAME = InterestProcessor.IS_IT_ALIVE_MESSAGE;
 	String UPDATTE_STATUS_FUNCTION_NAME = InterestProcessor.UPDATE_STATUS_MESSAGE;
 

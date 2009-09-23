@@ -216,6 +216,10 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		if (expectedSession == null || messageSession.equals(expectedSession)) {
 			
 			if(messageSequence == 0) {
+				if (expectedSession == null) {
+					connection.setIncomingSession(messageSession);
+				}
+
 				state.heartbeatOkSessionZeroSequence(connection);
 				
 			} else if(messageSequence.equals(expectedSequence)) {

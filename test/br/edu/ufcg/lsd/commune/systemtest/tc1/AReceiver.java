@@ -5,6 +5,8 @@ import br.edu.ufcg.lsd.commune.api.InvokeOnDeploy;
 import br.edu.ufcg.lsd.commune.api.RecoveryNotification;
 import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
 
+import static br.edu.ufcg.lsd.commune.systemtest.tc1.TestConstants.*;
+
 public class AReceiver implements A {
 
 	
@@ -18,7 +20,7 @@ public class AReceiver implements A {
 	@InvokeOnDeploy
 	public void init(ServiceManager serviceManager) {
 		this.serviceManager = serviceManager;
-		serviceManager.registerInterest(TestConstants.A_SERVICE, TestConstants.B_ADDRESS, B.class, 3, 1);
+		serviceManager.registerInterest(A_SERVICE, B_ADDRESS, B.class, DETECTION_TIME, HEARTBEAT_DELAY);
 	}
 	
 	public void response() {
