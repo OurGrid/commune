@@ -52,7 +52,7 @@ public class TestableInterestManager extends InterestManager {
 	}
 	
 	@Override
-	protected void scheduleHBRequest(Interest interest) {
+	protected void scheduleHBRequest(Interest interest, boolean replaced) {
 		createRunnable(interest);
 	}
 	

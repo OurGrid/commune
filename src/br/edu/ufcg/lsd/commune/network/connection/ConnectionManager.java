@@ -78,8 +78,9 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			//Do not verify session and sequence numbers for local messages
 			
 		} else {
+			System.err.println(message);
 			receivingRemoteMessage(message);
-			
+			System.out.println(message);
 		}
 
 	}
@@ -121,6 +122,11 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			
 				DeploymentID destinationDeploymentID = (DeploymentID)destination;
 				connection = connections.get(destinationDeploymentID.getServiceID());
+				
+				if (connection.getOutgoingSession() == null) {
+					//TODO send heartbeat to open the connection
+				}
+				
 				connection.incOutgoingSequenceNumber();
 				session = connection.getOutgoingSession();
 				sequence = connection.getOutgoingSequence();

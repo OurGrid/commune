@@ -152,7 +152,7 @@ public class InterestManager {
 			Interest origInterest = interests.get(stubServiceID);
 			
 			if (origInterest == null || origInterest.getInterested().getDeploymentID() == null) {
-				setNewInterest(interest);
+				setNewInterest(interest, false);
  			
 			} else {
 				DeploymentID origInterestedID = origInterest.getInterested().getDeploymentID();
@@ -160,7 +160,7 @@ public class InterestManager {
 
 				if (!origInterestedID.equals(newInterestedID)) {
 					origInterest.cancelScheduledExecution();
-					setNewInterest(interest);
+					setNewInterest(interest, true);
 				}
  			}
 			return interest;
@@ -170,15 +170,21 @@ public class InterestManager {
 		}
 	}
 
-	private void setNewInterest(Interest interest) {
+	private void setNewInterest(Interest interest, boolean replaced) {
 		interests.put(interest.getStubServiceID(), interest);
-		scheduleHBRequest(interest);
+		scheduleHBRequest(interest, replaced);
 	}
 	
-	protected void scheduleHBRequest(final Interest interest) {
+	protected void scheduleHBRequest(final Interest interest, boolean replaced) {
 		Runnable hbRequest = createRunnable(interest);
 		
-		ScheduledFuture<?> future = executor.scheduleAtFixedRate(hbRequest, DEFAULT_INTEREST_DELAY, interest.getHeartbeatDelay(), 
+		if (!replaced) {
+			interest.setLastHeartbeat();
+			hbRequest.run(); //Send now the first heartbeat
+		}
+		
+		ScheduledFuture<?> future = 
+			executor.scheduleAtFixedRate(hbRequest, DEFAULT_INTEREST_DELAY, interest.getHeartbeatDelay(), 
 				TimeUnit.MILLISECONDS);
 		interest.setScheduledExecution(future);
 	}
@@ -394,13 +400,11 @@ public class InterestManager {
 	public void registerParameterInterest(ObjectDeployment objectDeployment, Method method, int parameterIndex, 
 			Class<?> parameterType, ServiceID stubServiceID) {
 
-		Monitor monitor = null;
-		MonitoredParameter monitoredParameter = null;
-		
 		try {
 			interestLock.lock();
-			monitoredParameter = findMonitoredParameter(objectDeployment.getObject(), method, parameterIndex);
-			monitor = parameter2Monitor.get(monitoredParameter);
+			MonitoredParameter monitoredParameter = 
+				findMonitoredParameter(objectDeployment.getObject(), method, parameterIndex);
+			Monitor monitor = parameter2Monitor.get(monitoredParameter);
 			
 			if (monitor != null) {
 				Interest interest = registerInterest(stubServiceID, monitor, monitoredParameter.getRequirements());
