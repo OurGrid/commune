@@ -44,9 +44,6 @@ import br.edu.ufcg.lsd.commune.processor.objectdeployer.NotificationListener;
 public class ConnectionManager implements StubListener, TimeoutListener, NotificationListener {
 	
 	
-	private static long begin = System.currentTimeMillis();
-	
-	
 	private Container container;
 	private ReadWriteLock connectionLock = new ReentrantReadWriteLock(true);
 	private Map<ServiceID, Connection> connections = new HashMap<ServiceID, Connection>();
@@ -83,15 +80,9 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			//Do not verify session and sequence numbers for local messages
 			
 		} else {
-			System.out.println(time() + message);
-			Connection connection = receivingRemoteMessage(message);
-			System.err.println(time() + message + " -> " + connection.getState().getClass().getSimpleName());
+			receivingRemoteMessage(message);
 		}
 
-	}
-	
-	private String time() {
-		return (System.currentTimeMillis() - begin) + "\t";
 	}
 	
 	public void sendingMessage(Message message) {

@@ -11,10 +11,12 @@ public class AReceiver implements A {
 
 	
 	private boolean sendMessage;
+	private boolean sendSecondMessage;
 	private boolean responseReceived;
 	private boolean releaseOnFailure;
 	private boolean useCallback;
 	private ServiceManager serviceManager;
+	private B b;
 	
 
 	@InvokeOnDeploy
@@ -25,10 +27,16 @@ public class AReceiver implements A {
 	
 	public void response() {
 		responseReceived = true;
+		
+		if (sendSecondMessage) {
+			b.message();
+		}
 	}
 	
 	@RecoveryNotification
 	public void begin(B b) {
+		this.b = b;
+		
 		if (sendMessage) {
 			if (useCallback) {
 				b.message(this);
@@ -48,6 +56,10 @@ public class AReceiver implements A {
 
 	public void setSendMessage(boolean sendMessage) {
 		this.sendMessage = sendMessage;
+	}
+
+	public void setSendSecondMessage(boolean sendSecondMessage) {
+		this.sendSecondMessage = sendSecondMessage;
 	}
 
 	public boolean isResponseReceived() {
