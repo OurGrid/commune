@@ -160,7 +160,7 @@ public class ConnectionProtocolBlockingTest {
 		BReceiver bReceiver = new BReceiver();
 		bReceiver.setSendResponse(true);
 		b_module.getContainer().deploy(B_SERVICE, bReceiver);
-
+		
 		Condition<ConnectionProtocol> B2A_up_seqG_connection = 
 			new ConnectionStateCondition(A_ADDRESS, Up_GreaterThenZero.class);
 		ConditionChecker<ConnectionProtocol> checker = 

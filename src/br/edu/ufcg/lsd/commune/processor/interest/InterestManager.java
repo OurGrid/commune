@@ -159,7 +159,7 @@ public class InterestManager {
 				DeploymentID origInterestedID = origInterest.getInterested().getDeploymentID();
 				DeploymentID newInterestedID = interest.getInterested().getDeploymentID();
 
-				if (!origInterestedID.equals(newInterestedID)) {
+				if (!origInterestedID.equals(newInterestedID) || parameter) {
 					origInterest.cancelScheduledExecution();
 					setNewInterest(interest, parameter);
 				}
@@ -176,10 +176,10 @@ public class InterestManager {
 		scheduleHBRequest(interest, replaced);
 	}
 	
-	protected void scheduleHBRequest(final Interest interest, boolean replaced) {
+	protected void scheduleHBRequest(final Interest interest, boolean parameter) {
 		Runnable hbRequest = createRunnable(interest);
 		
-		if (!replaced) {
+		if (parameter) {
 			interest.setLastHeartbeat();
 			hbRequest.run(); //Send now the first heartbeat
 		}
