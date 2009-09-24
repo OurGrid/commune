@@ -140,10 +140,11 @@ public class InterestManager {
 			InterestRequirements requirements) {
 		
 		Monitor monitor = createMonitor(monitorableType, monitorName);
-		registerInterest(stubServiceID, monitor, requirements);
+		registerInterest(stubServiceID, monitor, requirements, false);
 	}
 
-	private Interest registerInterest(ServiceID stubServiceID, Monitor monitor, InterestRequirements requirements) {
+	private Interest registerInterest(ServiceID stubServiceID, Monitor monitor, InterestRequirements requirements, 
+			boolean parameter) {
 		
 		try {
 			interestLock.lock();
@@ -152,7 +153,7 @@ public class InterestManager {
 			Interest origInterest = interests.get(stubServiceID);
 			
 			if (origInterest == null || origInterest.getInterested().getDeploymentID() == null) {
-				setNewInterest(interest, false);
+				setNewInterest(interest, parameter);
  			
 			} else {
 				DeploymentID origInterestedID = origInterest.getInterested().getDeploymentID();
@@ -160,7 +161,7 @@ public class InterestManager {
 
 				if (!origInterestedID.equals(newInterestedID)) {
 					origInterest.cancelScheduledExecution();
-					setNewInterest(interest, true);
+					setNewInterest(interest, parameter);
 				}
  			}
 			return interest;
@@ -419,7 +420,7 @@ public class InterestManager {
 			Monitor monitor = parameter2Monitor.get(monitoredParameter);
 			
 			if (monitor != null) {
-				Interest interest = registerInterest(stubServiceID, monitor, monitoredParameter.getRequirements());
+				Interest interest = registerInterest(stubServiceID, monitor, monitoredParameter.getRequirements(), true);
 				interest.setLastHeartbeat();
 			}
 			
