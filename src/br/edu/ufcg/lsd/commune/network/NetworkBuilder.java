@@ -67,7 +67,7 @@ public class NetworkBuilder {
     }
 
 	protected ConnectionProtocol createConnectionProtocol() {
-		return new ConnectionProtocol(communeNetwork);
+		return null; //new ConnectionProtocol(communeNetwork);
 	}
 
     protected CertificationProtocol createCertificationProtocol(Container container, CommuneNetwork communeNetwork) {

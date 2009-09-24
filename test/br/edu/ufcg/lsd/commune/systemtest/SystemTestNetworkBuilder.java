@@ -28,7 +28,7 @@ public class SystemTestNetworkBuilder extends NetworkBuilder {
     
     @Override
     protected ConnectionProtocol createConnectionProtocol() {
-    	connectionProtocol = super.createConnectionProtocol();
+    	connectionProtocol = new ConnectionProtocol(communeNetwork);
 		return connectionProtocol;
     }
     
