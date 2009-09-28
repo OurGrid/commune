@@ -63,7 +63,7 @@ public class ServiceProcessor extends AbstractProcessor {
 
 		//TODO validation
 		
-		msgLogger.debug("Before " + message.toString());
+		msgLogger.debug(message.toString() + "\n{");	
 		
 		CommuneAddress destination = message.getDestination();
 		String serviceName = destination.getServiceName();
@@ -116,7 +116,7 @@ public class ServiceProcessor extends AbstractProcessor {
 
 			method.invoke(target, parameterValues);
 			
-			msgLogger.debug("After successful " + message.toString());
+			msgLogger.debug("}");
 			
 		} catch (InvocationTargetException e) {
 			String msg = "Method '" + functionName + "' of object '" + destination + "' has thrown an exception: ";
@@ -125,7 +125,7 @@ public class ServiceProcessor extends AbstractProcessor {
 			
 		} catch (Exception e) {
 			msgLogger.error(e);
-			console.error(e.getMessage());
+			console.error(e.getClass() + ": " + e.getMessage());
 		}		
 	}
 	
@@ -374,5 +374,9 @@ public class ServiceProcessor extends AbstractProcessor {
 		public int hashCode() {
 			return this.o.hashCode();
 		}	
+	}
+	
+	public String getThreadName() {
+		return "SP";
 	}
 }

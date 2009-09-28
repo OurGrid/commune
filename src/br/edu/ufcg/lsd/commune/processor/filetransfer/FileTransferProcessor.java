@@ -105,4 +105,9 @@ public class FileTransferProcessor extends AbstractProcessor {
 		return transferManager;
 	}
 
+
+	public String getThreadName() {
+		return "FT";
+	}
+
 }

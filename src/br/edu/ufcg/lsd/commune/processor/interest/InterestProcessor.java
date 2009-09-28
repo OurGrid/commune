@@ -99,4 +99,9 @@ public class InterestProcessor extends AbstractProcessor {
 		
 		return monitorDeployment;
 	}
+	
+	public String getThreadName() {
+		return "IP";
+	}
+
 }

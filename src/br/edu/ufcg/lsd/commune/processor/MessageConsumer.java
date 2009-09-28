@@ -72,7 +72,7 @@ public class MessageConsumer implements Runnable {
 
 	protected Thread createThread() {
 		Thread thread = new Thread(this);
-		thread.setName("Commune " + messageProcessor.getClass().getSimpleName() + " - " +thread.getId());
+		thread.setName(messageProcessor.getThreadName() + thread.getId());
 		return thread;
 	}
 

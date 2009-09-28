@@ -133,4 +133,6 @@ public abstract class AbstractProcessor implements MessageProcessor {
 	public List<Message> getOutgoingQueueMessages() {
 		return this.outgoingMessageQueue;
 	}
+
+	public abstract String getThreadName();
 }
