@@ -35,6 +35,7 @@ import br.edu.ufcg.lsd.commune.message.MessageParameter;
 import br.edu.ufcg.lsd.commune.message.MessageUtil;
 import br.edu.ufcg.lsd.commune.message.StubParameter;
 import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
+import br.edu.ufcg.lsd.commune.network.loopback.LoopbackRegistry;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestManager;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestProcessor;
 import br.edu.ufcg.lsd.commune.processor.interest.MonitorableStatus;
@@ -42,7 +43,6 @@ import br.edu.ufcg.lsd.commune.processor.interest.TimeoutListener;
 import br.edu.ufcg.lsd.commune.processor.objectdeployer.NotificationListener;
 
 public class ConnectionManager implements StubListener, TimeoutListener, NotificationListener {
-	
 	
 	private Container container;
 	private ReadWriteLock connectionLock = new ReentrantReadWriteLock(true);
@@ -76,8 +76,8 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		
 		CommuneAddress source = message.getSource();
 		
-		if (container.isLocal(source)) {
-			//Do not verify session and sequence numbers for local messages
+		if (LoopbackRegistry.isInLoopback(source.getContainerID())) {
+			//Do not verify session and sequence numbers for loopback messages
 			
 		} else {
 			receivingRemoteMessage(message);
@@ -87,8 +87,8 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	
 	public void sendingMessage(Message message) {
 		
-		if (container.isLocal(message.getDestination().getContainerID())) {
-			//Do not define session and sequence numbers for local messages
+		if (LoopbackRegistry.isInLoopback(message.getDestination().getContainerID())) {
+			//Do not define session and sequence numbers for loopback messages
 			
 		} else {
 			sendingRemoteMessage(message);
@@ -396,6 +396,10 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		try {
 			connectionLock.writeLock().lock();
 
+			if (LoopbackRegistry.isInLoopback(serviceID.getContainerID())) {
+				return;
+			}
+
 			Connection connection = connections.get(serviceID); 
 			connection.getState().notifyFailure(connection);
 			
@@ -407,6 +411,10 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	public void notifyRecovery(ServiceID serviceID) throws DiscardMessageException {
 		try {
 			connectionLock.writeLock().lock();
+			
+			if (LoopbackRegistry.isInLoopback(serviceID.getContainerID())) {
+				return;
+			}
 
 			Connection connection = connections.get(serviceID); 
 			connection.getState().notifyRecovery(connection);

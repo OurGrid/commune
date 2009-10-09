@@ -51,13 +51,13 @@ public class LoopbackRegistry {
 		return objectMap.get(objectLocation);
 	}
 
-	public static void sendMessage( Message event ) throws DiscardMessageException {
+	public static void sendMessage( Message message ) throws DiscardMessageException {
 		synchronized (objectMap) {
 			VirtualMachineLoopbackProtocol protocol = 
-				objectMap.get(event.getDestination().getContainerID().toString()); //TODO nao usar toString 
+				objectMap.get(message.getDestination().getContainerID().toString());
 			if (protocol != null) {
 				try {
-					Message clonedMesage = Cloner.clone( event );
+					Message clonedMesage = Cloner.clone( message );
 					protocol.receiveMessage( clonedMesage );
 				} catch ( CloneNotSupportedException e ) {
 					LOG.error( e.getMessage() );
@@ -66,4 +66,11 @@ public class LoopbackRegistry {
 				throw new DiscardMessageException();
 			}
 		}
-	}}
+	}
+	
+	public static boolean isInLoopback(ContainerID containerID) {
+		synchronized (objectMap) {
+			return objectMap.get(containerID.toString()) != null;
+		}
+	}
+}
