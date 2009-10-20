@@ -516,6 +516,6 @@ public class Container {
 	}
 	
 	public boolean isLocal(CommuneAddress address) {
-		return containerID.equals(address);
+		return containerID.equals(address.getContainerID());
 	}
 }
