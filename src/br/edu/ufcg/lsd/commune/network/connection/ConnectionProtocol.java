@@ -54,7 +54,7 @@ public class ConnectionProtocol extends Protocol {
 	
 	public Connection getConnection(String address) {
 		ServiceID serviceID = ServiceID.parse(address);
-		return connectionManager.getConnection(serviceID);
+		return connectionManager.getConnection(serviceID.getContainerID());
 	}
 	
 }

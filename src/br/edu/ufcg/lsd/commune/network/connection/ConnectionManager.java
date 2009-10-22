@@ -28,6 +28,7 @@ import br.edu.ufcg.lsd.commune.container.Container;
 import br.edu.ufcg.lsd.commune.container.StubListener;
 import br.edu.ufcg.lsd.commune.container.StubReference;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
+import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.message.Message;
@@ -46,7 +47,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	
 	private Container container;
 	private ReadWriteLock connectionLock = new ReentrantReadWriteLock(true);
-	private Map<ServiceID, Connection> connections = new HashMap<ServiceID, Connection>();
+	private Map<ContainerID, Connection> connections = new HashMap<ContainerID, Connection>();
 	
 	//Connection states
 	ConnectionState initialState 			= new InitialState(this);
@@ -110,21 +111,19 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			if (isFailureDetectorMessage(message)) {
 				
 				if (message.getFunctionName().equals(InterestProcessor.IS_IT_ALIVE_MESSAGE)) {
-					connection = connections.get(destination);
+					connection = connections.get(destination.getContainerID());
 					session = connection.getOutgoingSession();
 					sequence = connection.getOutgoingSequence();
 					
 				} else {
-					DeploymentID destinationDeploymentID = (DeploymentID)destination;
-					connection = connections.get(destinationDeploymentID.getServiceID());
+					connection = connections.get(destination.getContainerID());
 					session = connection.getIncomingSession();
 					sequence = connection.getIncomingSequence();
 				}
 				
 			} else {
 			
-				DeploymentID destinationDeploymentID = (DeploymentID)destination;
-				connection = connections.get(destinationDeploymentID.getServiceID());
+				connection = connections.get(destination.getContainerID());
 				
 				connection.incOutgoingSequenceNumber();
 				session = connection.getOutgoingSession();
@@ -156,26 +155,23 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 
 				if (InterestProcessor.IS_IT_ALIVE_MESSAGE.equals(messageName)) {
 
-					DeploymentID sourceDID = (DeploymentID) source; 
-					connection = connections.get(sourceDID.getServiceID());
+					connection = connections.get(source.getContainerID());
 					
 					if (connection == null && isCreatingConnection(message)) {
 						connection = initIncomingConnection(message);
-						connections.put(sourceDID.getServiceID(), connection);
+						connections.put(source.getContainerID(), connection);
 					}
 					
 					receiveHeartbeat(message, connection);
 					
 				} else if (InterestProcessor.UPDATE_STATUS_MESSAGE.equals(messageName)) {
-					DeploymentID sourceDID = (DeploymentID) source; 
-					connection = connections.get(sourceDID.getServiceID());
+					connection = connections.get(source.getContainerID());
 					receiveUpdateStatus(message, connection);
 				}
 
 			} else {
 			
-				DeploymentID sourceDID = (DeploymentID)source;
-				connection = connections.get(sourceDID.getServiceID());
+				connection = connections.get(source.getContainerID());
 				receivingRemoteApplicationMessage(message, connection);
 			}
 			
@@ -341,14 +337,14 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			connectionLock.writeLock().lock();
 
 			ServiceID stubServiceID = stubReference.getStubServiceID();
-			Connection connection = connections.get(stubServiceID);
+			Connection connection = connections.get(stubServiceID.getContainerID());
 
 			ConnectionState state = null;
 			
 			if (connection == null) {
 				state = initialState;
 				connection = initOutgoingConnection(stubReference);
-				connections.put(stubServiceID, connection);
+				connections.put(stubServiceID.getContainerID(), connection);
 
 			} else {
 				state = connection.getState();
@@ -374,7 +370,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		try {
 			connectionLock.writeLock().lock();
 
-			Connection connection = connections.remove(stubServiceID); 
+			Connection connection = connections.remove(stubServiceID.getContainerID()); 
 			connection.getState().release(connection);
 			
 		} finally {
@@ -386,7 +382,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		try {
 			connectionLock.writeLock().lock();
 
-			Connection connection = connections.get(stubServiceID); 
+			Connection connection = connections.get(stubServiceID.getContainerID()); 
 			connection.getState().timeout(connection);
 			
 		} finally {
@@ -403,7 +399,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				return;
 			}
 
-			Connection connection = connections.get(serviceID); 
+			Connection connection = connections.get(serviceID.getContainerID()); 
 			connection.getState().notifyFailure(connection);
 			
 		} finally {
@@ -419,7 +415,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				return;
 			}
 
-			Connection connection = connections.get(serviceID); 
+			Connection connection = connections.get(serviceID.getContainerID()); 
 			connection.getState().notifyRecovery(connection);
 			
 		} finally {
@@ -428,11 +424,11 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	}
 
 
-	public Connection getConnection(ServiceID serviceID) {
+	public Connection getConnection(ContainerID containerID) {
 		try {
 			connectionLock.readLock().lock();
 
-			return connections.get(serviceID); 
+			return connections.get(containerID); 
 			
 		} finally {
 			connectionLock.readLock().unlock();
