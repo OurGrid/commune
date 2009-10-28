@@ -27,9 +27,9 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import sun.security.provider.certpath.X509CertPath;
-import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
-import br.edu.ufcg.lsd.commune.context.ModuleContext; 
+import br.edu.ufcg.lsd.commune.Module;
+import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
@@ -108,7 +108,10 @@ public class Container {
     	this.context = context;
     	this.containerID = createContainerID(containerName);
     	this.objectRepository = new ObjectRepository(this);
-        this.service = createServiceProcessor();
+
+    	this.communeNetwork = networkBuilder.build(this);
+        
+    	this.service = createServiceProcessor();
         this.interest = createInterestProcessor();
         this.fileTransfer = createFileTransferProcessor();
         Map<String,MessageProcessor> processors = new HashMap<String,MessageProcessor>();
@@ -117,8 +120,9 @@ public class Container {
         processors.put(FileTransferProcessor.class.getName(), fileTransfer);
         messageDeliverer = createMessageDeliverer(processors);
         
-        this.communeNetwork = networkBuilder.build(this);
         this.messageSender = this.communeNetwork;
+        
+        networkBuilder.configure(this);
     }
 
 	

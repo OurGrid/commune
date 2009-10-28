@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import sun.security.provider.certpath.X509CertPath;
 import br.edu.ufcg.lsd.commune.network.ProtocolException;
 
@@ -43,6 +45,8 @@ public class CertificationUtils {
 
 	private static final String CERT_EXTENSION = ".cer";
 	private static final String CRL_EXTENSION = ".crl";
+	
+	private static final Logger LOG = Logger.getLogger(CertificationUtils.class);
 	
 	private CertificationUtils() {}
 	
@@ -141,20 +145,25 @@ public class CertificationUtils {
 			return true;
 		}
 		
+		LOG.debug("Checking senderCertificate: " +  getCertificateLogString(senderCertificate));
+		
 		for (CertificateCRLPair cAPair : cAsData) {
 			
 			X509Certificate cACertificate = cAPair.getCertificate();
 			
-			if (senderCertificate.getIssuerX500Principal().getName().equals(
-					cACertificate.getSubjectX500Principal().getName()) || 
-					senderCertificate.getSubjectX500Principal().getName().equals(
-							cACertificate.getSubjectX500Principal().getName())) {
+			LOG.debug("Checking senderCertificate against CA: " +  getCertificateLogString(cACertificate));
+			
+			if (senderCertificate.getIssuerX500Principal().equals(
+					cACertificate.getSubjectX500Principal()) || 
+					senderCertificate.getSubjectX500Principal().equals(
+							cACertificate.getSubjectX500Principal())) {
 				
 				try {
 					senderCertificate.verify(cACertificate.getPublicKey());
 					
 					X509CRL crl = cAPair.getCRL();
 					if (!isCerticateRevoked(senderCertificate, crl)) {
+						LOG.debug("SenderCertificate is issued by " + getCertificateLogString(cACertificate));
 						return true;
 					}
 					
@@ -163,7 +172,14 @@ public class CertificationUtils {
 			}
 		}
 		
+		LOG.debug("SenderCertificate is not issued");
 		return false;
+	}
+
+	private static String getCertificateLogString(X509Certificate cACertificate) {
+		String string = "[Subject: " + cACertificate.getSubjectX500Principal().getName() + ", " +
+				"Issuer: " + (cACertificate.getIssuerX500Principal() == null ? "null" : cACertificate.getIssuerX500Principal().getName()) + "]";
+		return string;
 	}
 	
 	/**
@@ -225,7 +241,12 @@ public class CertificationUtils {
 		
 		Collection<X509Certificate> cAsCertificates = new ArrayList<X509Certificate>();
 		
+		LOG.debug("Loading certificates from directory: " + certificatePath);
+		
 		for (File certFile : listFiles(CERT_EXTENSION, certificatePath)) {
+			
+			LOG.debug("Loading certificate from file: " + certFile.getAbsolutePath());
+			
 			Collection<? extends Certificate> certificates = generateCACertificates(certFile);
 			if (certificates != null) {
 				for (Certificate certificate : certificates) {
@@ -242,7 +263,12 @@ public class CertificationUtils {
 	public static Collection<X509CRL> loadCRLs(String certificatePath) {
 		Collection<X509CRL> cAsCRLs = new ArrayList<X509CRL>();
 		
+		LOG.debug("Loading CRL from directory: " + certificatePath);
+		
 		for (File crlFile : listFiles(CRL_EXTENSION, certificatePath)) {
+			
+			LOG.debug("Loading CRL from file: " + crlFile.getAbsolutePath());
+			
 			X509CRL x509CRL = generateCRL(crlFile);
 			if (x509CRL != null) {
 				cAsCRLs.add(x509CRL);
@@ -289,9 +315,16 @@ public class CertificationUtils {
 		}
 		
 		try {
-			return getCertificateFactory().generateCertificates(
+			Collection<? extends Certificate> generateCertificate = getCertificateFactory().generateCertificates(
 					fileInputStream);
+			
+			LOG.debug("Certificate sucessfully loaded from file: " + certFile);
+			
+			return generateCertificate;
 		} catch (Throwable e) {
+			
+			LOG.error("Error while loading certificate from file: " + certFile, e);
+			
 			return null;
 		} finally {
 			

@@ -91,7 +91,8 @@ public class CommuneMonitorController implements CommuneMonitor {
 		for (OutgoingTransfer transfer : transfers) {
 			OutgoingTransferHandle handle = (OutgoingTransferHandle) transfer.getHandle();
 			
-			transferDatas.add(new TransferData(handle.getDestinationID(), transfer.getListenerID(), transfer.getCurrentStatus(), handle.getFile(), 
+			transferDatas.add(new TransferData(handle.getDestinationID(), transfer.getListenerID(), 
+					transfer.getCurrentStatus(), handle.getLocalFile(), 
 					handle.getId(), handle.getInactivityTimeout(), 0, handle.isReceiveProgressUpdate(), false));
 		}
 		
@@ -101,7 +102,8 @@ public class CommuneMonitorController implements CommuneMonitor {
 
 			OutgoingTransferHandle handle = (OutgoingTransferHandle) queuedTransfer.getHandle();
 			
-			transferDatas.add(new TransferData(handle.getDestinationID(), queuedTransfer.getListenerID(), queuedTransfer.getCurrentStatus(), handle.getFile(), 
+			transferDatas.add(new TransferData(handle.getDestinationID(), queuedTransfer.getListenerID(), 
+					queuedTransfer.getCurrentStatus(), handle.getLocalFile(), 
 					handle.getId(), handle.getInactivityTimeout(), i + 1, handle.isReceiveProgressUpdate(), false));
 			
 		}
@@ -117,7 +119,7 @@ public class CommuneMonitorController implements CommuneMonitor {
 		for (IncomingTransfer transfer : transfers) {
 			IncomingTransferHandle handle = (IncomingTransferHandle) transfer.getHandle();
 			
-			transferDatas.add(new TransferData(null, transfer.getListenerID(), transfer.getCurrentStatus(), handle.getFile(), 
+			transferDatas.add(new TransferData(null, transfer.getListenerID(), transfer.getCurrentStatus(), handle.getLocalFile(), 
 					handle.getId(), handle.getInactivityTimeout(), 0, handle.isReceiveProgressUpdate(), true));
 		}
 		

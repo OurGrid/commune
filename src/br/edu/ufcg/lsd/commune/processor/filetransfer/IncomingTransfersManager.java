@@ -94,7 +94,7 @@ public class IncomingTransfersManager implements FileTransferListener {
 
 	public void accept(IncomingTransferHandle handle, DeploymentID listenerID) {
 		
-		File destination = handle.getFile(); 
+		File destination = handle.getLocalFile(); 
 		long inactivityTimeout = handle.getInactivityTimeout();
 		boolean receiveProgressUpdates = handle.isReceiveProgressUpdate();
 
@@ -177,21 +177,16 @@ public class IncomingTransfersManager implements FileTransferListener {
 			TransferReceiver receiver = receiverListeners.get(receiverID);
 			if (receiver != null) {
 				String transferDescription = null;
-				String destinationFileName = null;
 				
 				if (d.length > 2) {
 					transferDescription = d[2];
-				}
-				
-				if (d.length > 3) {
-					destinationFileName = d[3];
 				}
 				
 				long id = Long.parseLong(d[0]);
 				ContainerID senderID = ContainerID.parse(ftr.getRequestor());
 				
 				IncomingTransferHandle handle = 
-					new IncomingTransferHandle(id, ftr.getFileName(), ftr.getFileSize(), destinationFileName, transferDescription, senderID);
+					new IncomingTransferHandle(id, ftr.getFileName(), transferDescription, ftr.getFileSize(), senderID);
 				
 				handlersRequestMap.put(handle, ftr);
 				

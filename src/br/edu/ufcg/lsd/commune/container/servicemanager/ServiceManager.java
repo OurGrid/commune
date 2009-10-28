@@ -19,14 +19,15 @@
  */
 package br.edu.ufcg.lsd.commune.container.servicemanager;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import sun.security.provider.certpath.X509CertPath;
-import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.InvalidMonitoringException;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.container.logging.CommuneLogger;
@@ -311,8 +312,8 @@ public class ServiceManager implements Serializable {
 		return this.objDeployment.getDeploymentID();
 	}
 	
-	public void acceptTransfer(IncomingTransferHandle handle, TransferReceiver frl) {
-		this.getFileTransferManager().acceptTransfer(handle, frl);
+	public void acceptTransfer(IncomingTransferHandle handle, TransferReceiver frl, File localFile) {
+		this.getFileTransferManager().acceptTransfer(handle, frl, localFile);
 	}
 
 	public void rejectTransfer(IncomingTransferHandle handle) {

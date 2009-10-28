@@ -97,7 +97,7 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 
 		try {
 			createAccount( login, password );
-			connection.login( login, password, resource, true );
+			connection.login( login, password, resource );
 		} catch ( XMPPException e ) {
 			throw new CommuneNetworkException( "Error logging in to XMPP server with user name: '" + login +
 					"'. Check XMPP user name and password. " + e.getMessage() , e );

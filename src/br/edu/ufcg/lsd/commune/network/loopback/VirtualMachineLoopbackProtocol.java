@@ -22,8 +22,8 @@ package br.edu.ufcg.lsd.commune.network.loopback;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.network.CommuneNetwork;
-import br.edu.ufcg.lsd.commune.network.Protocol;
 import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
+import br.edu.ufcg.lsd.commune.network.Protocol;
 
 public class VirtualMachineLoopbackProtocol extends Protocol {
 

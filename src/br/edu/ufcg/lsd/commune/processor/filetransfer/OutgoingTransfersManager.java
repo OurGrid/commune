@@ -81,9 +81,8 @@ public class OutgoingTransfersManager {
 
 	public void startTransfer(OutgoingTransferHandle handle, DeploymentID listenerID, Container container) {
 
-		File file = handle.getFile();
+		File file = handle.getLocalFile();
 		DeploymentID destination = handle.getDestinationID();
-		String destinationFileName = handle.getDestinationFileName();
 		long inactivityTimeout = handle.getInactivityTimeout();
 		boolean receiveProgressUpdates = handle.isReceiveProgressUpdate();
 		String transferDescription = handle.getDescription();
@@ -91,7 +90,7 @@ public class OutgoingTransfersManager {
 		final OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer( destination.getContainerID().toString() );
  
 		OutgoingTransfer fileTransfer = new OutgoingTransfer(container, listenerID, handle, transfer, file, 
-				destination.toString(), destinationFileName, inactivityTimeout, receiveProgressUpdates, transferDescription);
+				destination.toString(), inactivityTimeout, receiveProgressUpdates, transferDescription);
 
 		if ( receiveProgressUpdates ) {
 			TransferProgress transferProgress = 

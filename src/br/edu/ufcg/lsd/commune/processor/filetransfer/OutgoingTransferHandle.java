@@ -19,6 +19,8 @@
  */
 package br.edu.ufcg.lsd.commune.processor.filetransfer;
 
+import java.io.File;
+
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 
@@ -32,16 +34,17 @@ public class OutgoingTransferHandle extends TransferHandle {
 	private final DeploymentID destinationID;
 
 
-	public OutgoingTransferHandle(long id, String fileName, String destinationFileName,
+	public OutgoingTransferHandle(long id, String logicalFileName, File localFile, 
 			String description, DeploymentID destinationID) {
-		super(id, fileName, destinationFileName, description);
+		super(id, logicalFileName, localFile.length(), description);
 		this.destinationID = destinationID;
+		this.setLocalFile(localFile);
 		
 	}
 	
-	public OutgoingTransferHandle(String fileName, String destinationFileName,
+	public OutgoingTransferHandle(String logicalFileName, File localFile, 
 			String description, DeploymentID destinationID) {
-		this(randomID(), fileName, destinationFileName, description, destinationID);
+		this(randomID(), logicalFileName, localFile, description, destinationID);
 	}
 
 	public DeploymentID getDestinationID() {

@@ -32,6 +32,7 @@ import br.edu.ufcg.lsd.commune.network.xmpp.XMPPProtocol;
 public class NetworkBuilder {
 
     protected CommuneNetwork communeNetwork;
+	private ConnectionProtocol connectionProtocol;
 
     public CommuneNetwork build(Container container) {
         ModuleContext context = container.getContext();
@@ -47,7 +48,7 @@ public class NetworkBuilder {
             communeNetwork.addProtocol(virtualMachineLoopbackProtocol);
         }
         
-        ConnectionProtocol connectionProtocol = createConnectionProtocol();
+        connectionProtocol = createConnectionProtocol();
         if (connectionProtocol != null) {
             communeNetwork.addProtocol(connectionProtocol);
         }
@@ -67,7 +68,7 @@ public class NetworkBuilder {
     }
 
 	protected ConnectionProtocol createConnectionProtocol() {
-		return null; //new ConnectionProtocol(communeNetwork);
+		return new ConnectionProtocol(communeNetwork);
 	}
 
     protected CertificationProtocol createCertificationProtocol(Container container, CommuneNetwork communeNetwork) {
@@ -91,5 +92,11 @@ public class NetworkBuilder {
             new XMPPProtocol(communeNetwork, container.getContainerID(), container.getContext());
         return xmppProtocol;
     }
+
+	public void configure(Container container) {
+		if (connectionProtocol != null) {
+			connectionProtocol.configure(container);
+		}
+	}
 
 }

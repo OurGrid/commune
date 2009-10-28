@@ -82,7 +82,7 @@ public class TransferManager {
 		handle.setInactivityTimeout(context.parseLongProperty(TransferProperties.PROP_FILE_TRANSFER_TIMEOUT) * 1000);
 		handle.setReceiveProgressUpdate(context.isEnabled(TransferProperties.PROP_FILE_TRANSFER_NOTIFY_PROGRESS));
 		
-		LOG.debug( "Destination file: " + handle.getFile() + ", handle: " + handle.getId() + 
+		LOG.debug( "Destination file: " + handle.getLocalFile() + ", handle: " + handle.getId() + 
 				", timeout: " + handle.getInactivityTimeout() );
 		incomingManager.accept(handle, listenerID);
 	}
@@ -98,7 +98,7 @@ public class TransferManager {
 	}
 	
 	public void startTransfer(OutgoingTransferHandle handle, DeploymentID listenerID, Container container) {
-		File file = handle.getFile();
+		File file = handle.getLocalFile();
 		DeploymentID destination = handle.getDestinationID();
 		
 		handle.setInactivityTimeout(context.parseLongProperty(TransferProperties.PROP_FILE_TRANSFER_TIMEOUT) * 1000);

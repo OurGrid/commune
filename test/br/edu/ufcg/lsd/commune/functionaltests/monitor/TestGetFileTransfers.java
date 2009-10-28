@@ -37,6 +37,7 @@ import br.edu.ufcg.lsd.commune.processor.filetransfer.OutgoingTransferHandle;
 
 public class TestGetFileTransfers extends TestWithTestableCommuneContainer {
 	
+	public static final String TRANSFER_FILE_LOG_NAME = "transferFile";
 	public static final String TRANSFER_FILE = "tests" + separator + "monitor" + separator + "transferFile";
 	
 	private TestDeployMonitorUtil deployMonitorUtil = new TestDeployMonitorUtil();
@@ -59,8 +60,8 @@ public class TestGetFileTransfers extends TestWithTestableCommuneContainer {
 		DeploymentID destinationID = testGetFileTransfersUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
 		DeploymentID listenerID = testGetFileTransfersUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
 		
-		OutgoingTransferHandle handle = new OutgoingTransferHandle(TRANSFER_FILE, "",
-				TRANSFER_FILE, destinationID);
+		OutgoingTransferHandle handle = new OutgoingTransferHandle(TRANSFER_FILE_LOG_NAME, 
+				new File(TRANSFER_FILE), "", destinationID);
 		
 		Message message = new Message(listenerID, destinationID, "sendFile");
 		message.addParameter(OutgoingTransferHandle.class, handle);
@@ -85,8 +86,8 @@ public class TestGetFileTransfers extends TestWithTestableCommuneContainer {
 		DeploymentID destinationID = testGetFileTransfersUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
 		DeploymentID listenerID = testGetFileTransfersUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
 		
-		OutgoingTransferHandle handle = new OutgoingTransferHandle(TRANSFER_FILE, "",
-				TRANSFER_FILE, destinationID);
+		OutgoingTransferHandle handle = new OutgoingTransferHandle(TRANSFER_FILE_LOG_NAME, 
+				new File(TRANSFER_FILE), "", destinationID);
 		
 		Message message = new Message(listenerID, destinationID, "sendFile");
 		message.addParameter(OutgoingTransferHandle.class, handle);

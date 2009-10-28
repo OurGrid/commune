@@ -1,5 +1,6 @@
 package br.edu.ufcg.lsd.commune.container.servicemanager;
 
+import java.io.File;
 import java.io.Serializable;
 
 import br.edu.ufcg.lsd.commune.Module;
@@ -22,7 +23,8 @@ public class FileTransferManager implements Serializable {
 	}
 	
 	
-	public void acceptTransfer(IncomingTransferHandle handle, TransferReceiver frl) {
+	public void acceptTransfer(IncomingTransferHandle handle, TransferReceiver frl, File localFile) {
+		handle.setLocalFile(localFile);
 		this.application.getContainer().acceptTransfer(handle, frl);
 	}
 

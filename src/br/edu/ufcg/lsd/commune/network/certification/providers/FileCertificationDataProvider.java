@@ -29,7 +29,6 @@ import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
 
 import sun.security.provider.certpath.X509CertPath;
-import br.edu.ufcg.lsd.commune.ModuleProperties;
 import br.edu.ufcg.lsd.commune.context.ContainerContextUtils;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
 

@@ -36,18 +36,16 @@ public class OutgoingTransfer extends AbstractTransfer {
 	
 	private OutgoingFileTransfer transfer;
 	private final String destinationObjectID;
-	private final String destinationFileName;
 	private final String transferDescription;
 
 
 	public OutgoingTransfer(Container container, DeploymentID listenerID, TransferHandle handle, OutgoingFileTransfer transfer,
-									File file, String destinationObjectID, String destinationFileName, long inactivityTimeout, 
+									File file, String destinationObjectID, long inactivityTimeout, 
 									boolean notifyProgress, String transferDescription) {
 
 		super(container, listenerID, inactivityTimeout, handle, file, file.length(), notifyProgress);
 		this.transfer = transfer;
 		this.destinationObjectID = destinationObjectID;
-		this.destinationFileName = destinationFileName;
 		this.transferDescription = transferDescription;
 	}
 
@@ -63,12 +61,9 @@ public class OutgoingTransfer extends AbstractTransfer {
 			if (transferDescription != null) {
 				messageToSend += " " + transferDescription;
 			}
-			if (destinationFileName != null) {
-				messageToSend += " " + destinationFileName;
-			}
 			transfer.sendFile( getFile(), messageToSend );
 			return true;
-		} catch ( IllegalArgumentException e ) {
+		} catch ( Exception e ) {
 			handleTransferError( e );
 		}
 		return false;

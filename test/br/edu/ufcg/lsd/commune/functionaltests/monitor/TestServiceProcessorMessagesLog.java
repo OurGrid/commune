@@ -13,7 +13,6 @@ import br.edu.ufcg.lsd.commune.functionaltests.util.TestWithTestableCommuneConta
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.message.Message;
-import br.edu.ufcg.lsd.commune.processor.interest.InterestProcessor;
 
 
 public class TestServiceProcessorMessagesLog extends TestWithTestableCommuneContainer {

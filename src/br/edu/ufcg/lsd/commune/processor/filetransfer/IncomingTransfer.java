@@ -21,6 +21,7 @@ package br.edu.ufcg.lsd.commune.processor.filetransfer;
 
 import java.io.File;
 
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 
@@ -53,7 +54,11 @@ public class IncomingTransfer extends AbstractTransfer {
 	public boolean start() {
 		super.start();
 		setCurrentStatus( transfer.getStatus() );
-		transfer.recieveFile( getFile() );
+		try {
+			transfer.recieveFile( getFile() );
+		} catch (XMPPException e) {
+			throw new RuntimeException(e);
+		}
 		return true;
 	}
 
@@ -80,7 +85,7 @@ public class IncomingTransfer extends AbstractTransfer {
 
 		if (newStatus == Status.complete) {
 			
-			boolean fileComplete = getHandle().getFile().length() == transfer.getAmountWritten();
+			boolean fileComplete = getHandle().getLocalFile().length() == transfer.getAmountWritten();
 			if (fileComplete) {
 				Message message = new Message(container.getContainerID(), listenerID, "incomingTransferCompleted");
 				message.addParameter(IncomingTransferHandle.class, getHandle());

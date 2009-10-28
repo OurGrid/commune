@@ -27,27 +27,18 @@ public class IncomingTransferHandle extends TransferHandle {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final long fileSize;
 	private ContainerID senderID;
 
-	public IncomingTransferHandle(long id, String fileName, 
-			long fileSize, String destinationFileName, String description, ContainerID senderID) {
-		
-		super(id, fileName, destinationFileName, description);
-		this.fileSize = fileSize;
+	public IncomingTransferHandle(long id, String logicalFileName, String description, 
+			long fileSize, ContainerID senderID) {
+		super(id, logicalFileName, fileSize, description);
 		this.senderID = senderID;
 		
 	}
 	
 	
-	public IncomingTransferHandle(String fileName, long fileSize, String destinationFileName, String description) {
-		super(randomID(), fileName, destinationFileName, description);
-		
-		this.fileSize = fileSize;
-	}
-
-	public long getFileSize() {
-		return fileSize;
+	public IncomingTransferHandle(String logicalFileName, String description, long fileSize, ContainerID senderID) {
+		this(randomID(), logicalFileName, description, fileSize, senderID);
 	}
 
 	/**

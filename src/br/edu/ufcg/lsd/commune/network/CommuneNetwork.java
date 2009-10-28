@@ -25,8 +25,6 @@ import java.util.List;
 
 import br.edu.ufcg.lsd.commune.container.Container;
 import br.edu.ufcg.lsd.commune.container.IMessageSender;
-import br.edu.ufcg.lsd.commune.container.ObjectRepository;
-import br.edu.ufcg.lsd.commune.container.StubRepository;
 import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.network.xmpp.XMPPProtocol;

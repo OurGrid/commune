@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Set;
 
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
-
 import br.edu.ufcg.lsd.commune.api.Remote;
 
 //TODO refactoring

@@ -29,48 +29,25 @@ public abstract class TransferHandle implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	
 	private final long id;
-	private final String localFileName;
-	private final String destinationFileName;
-	private final String description;
-	private long inactivityTimeout; //TODO synchronize
-	private boolean receiveProgressUpdate; //TODO synchronize
-	private File file; //TODO synchronize
-
-
-	public TransferHandle(long id, String localFileName, 
-			String destinationFileName, String description) {
-		this.id = id;
-		this.localFileName = localFileName;
-		this.destinationFileName = destinationFileName;
 	
-		this.description = description;
-		
-		if (localFileName != null && localFileName.length() > 0) {
-			this.setFile(new File(localFileName));
-		}
-	}
+	private final String logicalFileName;
+	private final String description;
+	private final long fileSize;
 
+	private File localFile;
+	private boolean receiveProgressUpdate; //TODO synchronize
+	private long inactivityTimeout; //TODO synchronize
+
+	public TransferHandle(long id, String logicalFileName, long fileSize, String description) {
+		this.id = id;
+		this.logicalFileName = logicalFileName;
+		this.description = description;
+		this.fileSize = fileSize;
+	}
 
 	public long getId() {
 		return id;
-	}
-
-	public File getFile() {
-		return file;
-	}
-
-	public void setFile(File file) {
-		this.file = file;
-	}
-
-	public String getLocalFileName() {
-		return localFileName;
-	}
-	
-	public String getDestinationFileName() {
-		return destinationFileName;
 	}
 
 	public String getDescription() {
@@ -120,5 +97,21 @@ public abstract class TransferHandle implements Serializable {
 		return (long) (Math.random() * Long.MAX_VALUE);
 	}
 	
-	public abstract ContainerID getOppositeID(); 
+	public abstract ContainerID getOppositeID();
+
+	public String getLogicalFileName() {
+		return logicalFileName;
+	}
+
+	public void setLocalFile(File localFile) {
+		this.localFile = localFile;
+	}
+
+	public File getLocalFile() {
+		return localFile;
+	}
+
+	public long getFileSize() {
+		return fileSize;
+	} 
 }

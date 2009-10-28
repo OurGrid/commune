@@ -67,9 +67,6 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	
 	public ConnectionManager(Container container) {
 		this.container = container;
-		container.getStubRepository().addListener(this);
-		container.getInterestManager().addListener(this);
-		container.getServiceProcessor().addListener(this);
 	}
 
 	
@@ -437,5 +434,12 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	
 	InterestManager getInterestManager() {
 		return container.getInterestManager();
+	}
+
+
+	public void configure(Container container) {
+		container.getStubRepository().addListener(this);
+		container.getInterestManager().addListener(this);
+		container.getServiceProcessor().addListener(this);
 	}
 }
