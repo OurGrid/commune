@@ -25,6 +25,7 @@ import br.edu.ufcg.lsd.commune.systemtest.tft.conditions.TransferFinishedConditi
 public class FileTransferProcessorTest {
 
 	
+	private static final String RECEIVED_FILES_DIR = "tests\\filetransfer\\received";
 	private static final int VERIFICATION_COUNT = 5000;
 	private static final int VERIFICATION_DELAY = 10;
 	
@@ -60,7 +61,7 @@ public class FileTransferProcessorTest {
 	}
 	
 	private void cleanReceivedFiles() {
-		for (File file : new File("tests\\filetransfer\\received").listFiles()) {
+		for (File file : new File(RECEIVED_FILES_DIR).listFiles()) {
 			file.delete();
 		}
 		
@@ -84,6 +85,10 @@ public class FileTransferProcessorTest {
 		ConditionChecker<List<TransferDestinationReceiver>> checker = createCondition(transfersToCreate, transferDestRec);
 		
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
+		
+		for (File eachFile : new File(RECEIVED_FILES_DIR).listFiles()) {
+			Assert.assertEquals(0, eachFile.length());
+		}
 	}
 	
 	@Test
@@ -103,7 +108,11 @@ public class FileTransferProcessorTest {
 		
 		ConditionChecker<List<TransferDestinationReceiver>> checker = createCondition(transfersToCreate, transferDestRec);
 		
-		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
+		Assert.assertTrue(checker.waitUntilCondition((int)(VERIFICATION_DELAY * 1.5), VERIFICATION_COUNT));
+		
+		for (File eachFile : new File(RECEIVED_FILES_DIR).listFiles()) {
+			Assert.assertEquals(fileToSend.length(), eachFile.length());
+		}
 	}
 
 	@Test
@@ -124,6 +133,10 @@ public class FileTransferProcessorTest {
 		ConditionChecker<List<TransferDestinationReceiver>> checker = createCondition(transfersToCreate, transferDestRec);
 		
 		Assert.assertTrue(checker.waitUntilCondition((int)(VERIFICATION_DELAY * 1.5), VERIFICATION_COUNT));
+		
+		for (File eachFile : new File(RECEIVED_FILES_DIR).listFiles()) {
+			Assert.assertEquals(fileToSend.length(), eachFile.length());
+		}
 	}
 	
 	@Test
@@ -144,6 +157,10 @@ public class FileTransferProcessorTest {
 		ConditionChecker<List<TransferDestinationReceiver>> checker = createCondition(transfersToCreate, transferDestRec);
 		
 		Assert.assertTrue(checker.waitUntilCondition((int) (VERIFICATION_DELAY * 2.5), VERIFICATION_COUNT));
+		
+		for (File eachFile : new File(RECEIVED_FILES_DIR).listFiles()) {
+			Assert.assertEquals(fileToSend.length(), eachFile.length());
+		}
 	}
 	
 	@Test
@@ -164,6 +181,10 @@ public class FileTransferProcessorTest {
 		ConditionChecker<List<TransferDestinationReceiver>> checker = createCondition(transfersToCreate, transferDestRec);
 		
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
+		
+		for (File eachFile : new File(RECEIVED_FILES_DIR).listFiles()) {
+			Assert.assertEquals(fileToSend.length(), eachFile.length());
+		}
 	}
 	
 	@Test
@@ -189,6 +210,10 @@ public class FileTransferProcessorTest {
 				transferDestRecA, transferDestRecB);
 		
 		Assert.assertTrue(checker.waitUntilCondition((int) (VERIFICATION_DELAY*2.5), VERIFICATION_COUNT));
+		
+		for (File eachFile : new File(RECEIVED_FILES_DIR).listFiles()) {
+			Assert.assertEquals(fileToSend.length(), eachFile.length());
+		}
 	}
 	
 	@Test
@@ -214,6 +239,10 @@ public class FileTransferProcessorTest {
 				transferDestRecA, transferDestRecB);
 		
 		Assert.assertTrue(checker.waitUntilCondition((int) (VERIFICATION_DELAY*2.5), VERIFICATION_COUNT));
+		
+		for (File eachFile : new File(RECEIVED_FILES_DIR).listFiles()) {
+			Assert.assertEquals(fileToSend.length(), eachFile.length());
+		}
 	}
 	
 	private ConditionChecker<List<TransferDestinationReceiver>> createCondition(

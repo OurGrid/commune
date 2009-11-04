@@ -79,7 +79,6 @@ public class IncomingTransfersManager implements FileTransferListener {
 
 
 	public void start(XMPPConnection connection) {
-		manager = new FileTransferManager(connection);
 		manager.addFileTransferListener(this);
 		new Thread(transferStateMonitor).start();
 	}
