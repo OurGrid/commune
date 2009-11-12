@@ -40,10 +40,6 @@ public abstract class Protocol {
 	public final void sendMessage(Message message) {
 		synchronized (Protocol.lock) {
             try {
-            	String name = getClass().getCanonicalName();
-                name = name.substring(name.lastIndexOf('.'));
-                System.err.println("Send: " + name + "\t" + message);
-            
                 onSend(message);
                 callNext(message);
             } catch (ProtocolException protocolException) {
@@ -55,10 +51,6 @@ public abstract class Protocol {
 	public final void receiveMessage(Message message) {
 		synchronized (Protocol.lock) {
             try {
-            	String name = getClass().getCanonicalName();
-                name = name.substring(name.lastIndexOf('.'));
-				System.err.println("Rece: " + name + "\t" + message);
-                
 				onReceive(message);
                 callPrevious(message);
             } catch (ProtocolException protocolException) {
