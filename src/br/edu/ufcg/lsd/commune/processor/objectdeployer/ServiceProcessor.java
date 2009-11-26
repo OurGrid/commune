@@ -125,7 +125,8 @@ public class ServiceProcessor extends AbstractProcessor {
 			
 		} catch (Exception e) {
 			msgLogger.error(e);
-			console.error(e.getClass() + ": " + e.getMessage());
+			e.printStackTrace();
+//			console.error(e.getClass() + ": " + e.getMessage());
 		}		
 	}
 	

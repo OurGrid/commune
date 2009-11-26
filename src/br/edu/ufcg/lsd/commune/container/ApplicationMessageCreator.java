@@ -22,7 +22,6 @@ package br.edu.ufcg.lsd.commune.container;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import br.edu.ufcg.lsd.commune.container.logging.CommuneLoggerFactory;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.message.Message;
@@ -94,8 +93,6 @@ public class ApplicationMessageCreator implements InvocationHandler {
         			}
         		}
         	}
-        	
-        	CommuneLoggerFactory.getInstance().getMessagesLogger().debug("Sending " + message);
         	
         	this.myContainer.sendMessage(message);
         	

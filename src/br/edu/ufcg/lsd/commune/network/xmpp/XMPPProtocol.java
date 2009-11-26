@@ -32,6 +32,7 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.util.StringUtils;
 
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
+import br.edu.ufcg.lsd.commune.container.logging.CommuneLoggerFactory;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.InvalidIdentificationException;
@@ -196,6 +197,8 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 			chat = nextID();
 			this.chats.put( destinationModule, chat );
 		}
+
+		CommuneLoggerFactory.getInstance().getMessagesLogger().debug("Sending " + message);
 
 		Message[] messages;
 		
