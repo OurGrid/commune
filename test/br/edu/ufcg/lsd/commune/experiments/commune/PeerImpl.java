@@ -57,6 +57,11 @@ public class PeerImpl implements Peer {
 	public void updateList(List<String> newPeers) {
 		for (String newPeer : newPeers) {
 			if (!otherPeers.contains(newPeer)) {
+				
+				if (newPeer.equals(serviceManager.getMyDeploymentID().getServiceID().toString())) {
+					continue;
+				}
+				
 				serviceManager.registerInterest(Peer.PEER_SERVICE, newPeer, Peer.class, 600, 300);
 				otherPeers.add(newPeer);
 			}
@@ -72,10 +77,6 @@ public class PeerImpl implements Peer {
 		ServiceID serviceID = senderDID.getServiceID();
 		String senderID = serviceID.toString();
 		
-		if (serviceID.getUserName().equals(serviceManager.getMyDeploymentID().getUserName())) {
-			return;
-		}
-
 		try {
 			peersLock.lock();
 			
