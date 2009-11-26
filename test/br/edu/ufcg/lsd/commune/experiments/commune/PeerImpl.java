@@ -30,6 +30,8 @@ public class PeerImpl implements Peer {
 	private Lock peersLock = new ReentrantLock();
 	private Registry registry;
 	
+	private int counter = 0;
+	
 	
 	@InvokeOnDeploy
 	public void init(ServiceManager serviceManager) {
@@ -130,7 +132,7 @@ public class PeerImpl implements Peer {
 
 			Long elapsed = finish - begin;
 			
-			System.out.println(size + "\t:" + elapsed);
+			System.out.println(counter++ + ";" + size + ";" + elapsed);
 			
 		} finally {
 			peersLock.unlock();
