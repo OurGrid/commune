@@ -1,9 +1,9 @@
 package br.edu.ufcg.lsd.commune.experiments.commune.scale;
 
 import br.edu.ufcg.lsd.commune.Module;
+import br.edu.ufcg.lsd.commune.experiments.Util;
 import br.edu.ufcg.lsd.commune.experiments.commune.Peer;
 import br.edu.ufcg.lsd.commune.experiments.commune.PeerImpl;
-import br.edu.ufcg.lsd.commune.experiments.commune.Util;
 
 public class PeerMain {
 

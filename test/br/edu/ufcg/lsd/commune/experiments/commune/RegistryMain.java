@@ -1,6 +1,7 @@
 package br.edu.ufcg.lsd.commune.experiments.commune;
 
 import br.edu.ufcg.lsd.commune.Module;
+import br.edu.ufcg.lsd.commune.experiments.Util;
 
 public class RegistryMain {
 

@@ -8,6 +8,7 @@ import br.edu.ufcg.lsd.commune.api.InvokeOnDeploy;
 import br.edu.ufcg.lsd.commune.api.MonitoredBy;
 import br.edu.ufcg.lsd.commune.api.RecoveryNotification;
 import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
+import br.edu.ufcg.lsd.commune.experiments.Util;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 
 public class RegistryImpl implements Registry {
@@ -22,7 +23,6 @@ public class RegistryImpl implements Registry {
 		this.serviceManager = serviceManager;
 	}
 	
-	@Override
 	public void getPeerList(@MonitoredBy(value=REGISTRY_SERVICE) Peer peer) {
 		ServiceID senderServiceID = serviceManager.getSenderServiceID();
 		String peerID = senderServiceID.toString();

@@ -17,6 +17,7 @@ import br.edu.ufcg.lsd.commune.api.InvokeOnDeploy;
 import br.edu.ufcg.lsd.commune.api.MonitoredBy;
 import br.edu.ufcg.lsd.commune.api.RecoveryNotification;
 import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
+import br.edu.ufcg.lsd.commune.experiments.Util;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 

@@ -1,4 +1,4 @@
-package br.edu.ufcg.lsd.commune.experiments.commune;
+package br.edu.ufcg.lsd.commune.experiments;
 
 import java.io.File;
 import java.util.HashMap;
