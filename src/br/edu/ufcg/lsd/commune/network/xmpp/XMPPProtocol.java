@@ -165,6 +165,7 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 
 	@Override
 	protected void onReceive( br.edu.ufcg.lsd.commune.message.Message message ) {
+		CommuneLoggerFactory.getInstance().getMessagesLogger().debug("X >>> " + message);
 	}
 	
 	public static void showMessageData(byte[] signature, br.edu.ufcg.lsd.commune.message.Message message) {
@@ -198,7 +199,7 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 			this.chats.put( destinationModule, chat );
 		}
 
-		CommuneLoggerFactory.getInstance().getMessagesLogger().debug("Sending " + message);
+		CommuneLoggerFactory.getInstance().getMessagesLogger().debug("X <<< " + message);
 
 		Message[] messages;
 		

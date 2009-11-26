@@ -116,7 +116,7 @@ public class ServiceProcessor extends AbstractProcessor {
 
 			method.invoke(target, parameterValues);
 			
-			msgLogger.debug("}");
+			msgLogger.debug("\n}");
 			
 		} catch (InvocationTargetException e) {
 			String msg = "Method '" + functionName + "' of object '" + destination + "' has thrown an exception: ";
