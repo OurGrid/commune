@@ -11,7 +11,7 @@ public interface Peer {
 	public static final String PEER_CONTAINER = "PEER";
 	public static final String PEER_USERNAME = "peer_experiment_commune";
 	public static final String PEER_SERVICE = "PEER_IMPL";
-	public static final int MESSAGES_PER_MINUTE = 3;
+	public static final int MESSAGES_PER_MINUTE = 30;
 
 	void ping(Peer otherPeer);
 	

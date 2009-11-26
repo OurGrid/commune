@@ -9,10 +9,9 @@ public class PeerMain {
 
 	public static void main(String[] args) throws Exception {
 		String server = args[0];
-		String jvmNumber = "_" + args[1];
 		
 		String container = Peer.PEER_CONTAINER;
-		String user = Peer.PEER_USERNAME + jvmNumber;
+		String user = Peer.PEER_USERNAME;
 		
 		Module module = Util.createModule(container, user, server);
 		module.getContainer().deploy(Peer.PEER_SERVICE, new PeerImpl());
