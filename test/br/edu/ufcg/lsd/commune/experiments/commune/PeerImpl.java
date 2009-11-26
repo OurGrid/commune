@@ -145,7 +145,7 @@ public class PeerImpl implements Peer {
 				while(true) {
 					choosePeerAndSendPing();
 					sleep();
-					Util.log(getMyName() + "->run()");
+					//Util.log(getMyName() + "->run()");
 				}
 			}
 		};
@@ -186,6 +186,8 @@ public class PeerImpl implements Peer {
 	private void sleep() {
 		try {
 			Thread.sleep((60 * 1000) / Peer.MESSAGES_PER_MINUTE);
-		} catch (InterruptedException e) {}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	}
 }
