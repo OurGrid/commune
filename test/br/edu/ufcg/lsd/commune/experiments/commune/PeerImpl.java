@@ -174,6 +174,9 @@ public class PeerImpl implements Peer {
 			
 			peer.ping(this);
 			
+		} catch (Throwable t) {
+			t.printStackTrace();
+			
 		} finally {
 			peersLock.unlock();
 		}
