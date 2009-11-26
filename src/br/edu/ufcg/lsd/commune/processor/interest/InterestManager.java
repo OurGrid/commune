@@ -50,7 +50,7 @@ import br.edu.ufcg.lsd.commune.message.StubParameter;
 public class InterestManager {
 
 	
-	private static final int DEFAULT_INTEREST_DELAY = 1000;
+	private static final int DEFAULT_INTEREST_DELAY = 1270;
 	private static final int THREAD_POOL_SIZE = 10;
 	private static final long DEFAULT_TIMEOUT = 1000;
 
@@ -208,7 +208,7 @@ public class InterestManager {
 				fireTimeout(interest.getStubServiceID());
 			}
 			
-			if (!interestProcessor.getContainer().isStubUp(interest.getStubServiceID())) {
+			if (isStubDown(interest)) {
 				sendIsItAliveMessage(interest);
 				
 			} else {
@@ -334,7 +334,7 @@ public class InterestManager {
 			
 			interest.setInterestCertPath(certPath);
 			
-			if (!interestProcessor.getContainer().isStubUp(interest.getStubServiceID())) {
+			if (isStubDown(interest)) {
 				
 				interestProcessor.getContainer().setStubDeploymentID(targetDeploymentID);
 				sendNotifyRecoveryMessage(interest);
@@ -346,6 +346,11 @@ public class InterestManager {
 		} finally {
 			interestLock.unlock();
 		}
+	}
+
+
+	private boolean isStubDown(Interest interest) {
+		return !interestProcessor.getContainer().isStubUp(interest.getStubServiceID());
 	}
 	
 	private void sendNotifyRecoveryMessage(Interest interest) {
