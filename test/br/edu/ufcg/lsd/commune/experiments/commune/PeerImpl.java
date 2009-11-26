@@ -71,6 +71,10 @@ public class PeerImpl implements Peer {
 	public void otherPeerIsUp(Peer peer, DeploymentID senderDID) {
 		ServiceID serviceID = senderDID.getServiceID();
 		String senderID = serviceID.toString();
+		
+		if (serviceID.getUserName().equals(serviceManager.getMyDeploymentID().getUserName())) {
+			return;
+		}
 
 		try {
 			peersLock.lock();
