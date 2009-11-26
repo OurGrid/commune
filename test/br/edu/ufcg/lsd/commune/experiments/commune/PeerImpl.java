@@ -28,7 +28,6 @@ public class PeerImpl implements Peer {
 	private Map<String,Long> upPeersCounter = new HashMap<String,Long>();
 	private Map<String,Peer> upPeers = new HashMap<String,Peer>();
 	private Lock peersLock = new ReentrantLock();
-	private Registry registry;
 	
 	private int counter = 0;
 	
@@ -45,7 +44,6 @@ public class PeerImpl implements Peer {
 
 	@RecoveryNotification
 	public void registryIsUp(Registry registry) {
-		this.registry = registry;
 		registry.getPeerList(this);
 		new Thread(createRunnable()).start();
 		Util.log(getMyName() + "->registryIsUp");
@@ -143,11 +141,9 @@ public class PeerImpl implements Peer {
 	protected Runnable createRunnable() {
 		return new Runnable() {
 			public void run() {
-				int i = 0;
 				while(true) {
 					choosePeerAndSendPing();
 					sleep();
-					updateList(i++);
 					Util.log(getMyName() + "->run()");
 				}
 			}
@@ -188,11 +184,4 @@ public class PeerImpl implements Peer {
 			Thread.sleep((60 * 1000) / Peer.MESSAGES_PER_MINUTE);
 		} catch (InterruptedException e) {}
 	}
-	
-	private void updateList(int i) {
-		if (i % 300 == 0) {
-			registry.getPeerList(this);
-		}
-	}
-
 }
