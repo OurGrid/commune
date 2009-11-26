@@ -142,10 +142,15 @@ public class PeerImpl implements Peer {
 	protected Runnable createRunnable() {
 		return new Runnable() {
 			public void run() {
-				while(true) {
-					choosePeerAndSendPing();
-					sleep();
-					//Util.log(getMyName() + "->run()");
+				
+				try {
+					while(true) {
+						choosePeerAndSendPing();
+						sleep();
+						Util.log(getMyName() + "->run()");
+					}
+				} catch (Throwable t) {
+					t.printStackTrace();
 				}
 			}
 		};
@@ -175,9 +180,6 @@ public class PeerImpl implements Peer {
 			
 			peer.ping(this);
 			
-		} catch (Throwable t) {
-			t.printStackTrace();
-			
 		} finally {
 			peersLock.unlock();
 		}
@@ -186,7 +188,7 @@ public class PeerImpl implements Peer {
 	private void sleep() {
 		try {
 			Thread.sleep((60 * 1000) / Peer.MESSAGES_PER_MINUTE);
-		} catch (Throwable e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
