@@ -50,7 +50,7 @@ import br.edu.ufcg.lsd.commune.message.StubParameter;
 public class InterestManager {
 
 	
-	private static final int DEFAULT_INTEREST_DELAY = 1270;
+	private static final int DEFAULT_INTEREST_DELAY = 1000;
 	private static final int THREAD_POOL_SIZE = 10;
 	private static final long DEFAULT_TIMEOUT = 1000;
 
