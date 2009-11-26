@@ -91,7 +91,20 @@ public class PeerImpl implements Peer {
 	}
 	
 	@FailureNotification
-	public void otherPeerIsDown(Peer peer) {}
+	public void otherPeerIsDown(Peer peer, DeploymentID senderDID) {
+		ServiceID serviceID = senderDID.getServiceID();
+		String senderID = serviceID.toString();
+		
+		try {
+			peersLock.lock();
+			
+			upPeers.remove(senderID);
+
+		} finally {
+			peersLock.unlock();
+		}
+		Util.log(getMyName() + "->otherPeerIsDown(" + serviceID.getUserName() + ")");
+	}
 
 
 	public void ping(@MonitoredBy(Peer.PEER_SERVICE) Peer otherPeer) {
