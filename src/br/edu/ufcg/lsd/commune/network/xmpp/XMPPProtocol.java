@@ -43,6 +43,7 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 	
 	private static String prefix = StringUtils.randomString( 5 );
 	private static long id = 0;
+	private static Object packetLock = new Object();
 	private static transient final org.apache.log4j.Logger LOG = 
 		org.apache.log4j.Logger.getLogger( XMPPProtocol.class );
 
@@ -142,13 +143,16 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 
 			Message message = (Message) packet;
 
-			String chatDestination = message.getFrom();
-			String chat = this.chats.get( chatDestination );
-			if ( chat == null ) {
-				chat = nextID();
-				this.chats.put( chatDestination, chat );
+			synchronized (XMPPProtocol.packetLock) {
+				
+				String chatDestination = message.getFrom();
+				String chat = this.chats.get( chatDestination );
+				if ( chat == null ) {
+					chat = nextID();
+					this.chats.put( chatDestination, chat );
+				}
+				this.fm.receiveMessage( message );
 			}
-			this.fm.receiveMessage( message );
 		}
 	}
 
