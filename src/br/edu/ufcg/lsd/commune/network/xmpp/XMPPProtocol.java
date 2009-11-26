@@ -199,7 +199,7 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 			this.chats.put( destinationModule, chat );
 		}
 
-		CommuneLoggerFactory.getInstance().getMessagesLogger().debug("X <<< " + message);
+		CommuneLoggerFactory.getInstance().getMessagesLogger().debug(">>> X " + message);
 
 		Message[] messages;
 		
