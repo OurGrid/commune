@@ -63,7 +63,7 @@ public class PeerImpl implements Peer {
 					continue;
 				}
 				
-				serviceManager.registerInterest(Peer.PEER_SERVICE, newPeer, Peer.class, 600, 300);
+				serviceManager.registerInterest(Peer.PEER_SERVICE, newPeer, Peer.class, 60, 30);
 				otherPeers.add(newPeer);
 			}
 		}
