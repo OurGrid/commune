@@ -225,7 +225,7 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 		
 		//TODO alternative solution to the openfire bug JM-835
 		try {
-			Thread.sleep(20);
+			Thread.sleep(5);
 		} catch (InterruptedException e) {}
 	}
 }
