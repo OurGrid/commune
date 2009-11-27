@@ -34,6 +34,6 @@ public class Util {
 
 
 	public static void log(String msg) {
-		System.err.println(System.currentTimeMillis() + "\t" + msg);
+//		System.err.println(System.currentTimeMillis() + "\t" + msg);
 	}
 }
