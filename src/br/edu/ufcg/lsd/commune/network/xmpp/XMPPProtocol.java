@@ -222,5 +222,10 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 				connection.sendPacket( messages[i] );
 			} catch (IllegalStateException ise) {}
 		}
+		
+		//TODO alternative solution to the openfire bug JM-835
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {}
 	}
 }
