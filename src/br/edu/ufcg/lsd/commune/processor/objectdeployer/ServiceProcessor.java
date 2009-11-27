@@ -118,6 +118,10 @@ public class ServiceProcessor extends AbstractProcessor {
 			
 			msgLogger.debug("\n}");
 			
+		} catch (DiscardMessageException e) {
+			String msg = "Method '" + functionName + "' of object '" + destination + "' was discarted: ";
+			msgLogger.debug(msg);
+			
 		} catch (InvocationTargetException e) {
 			String msg = "Method '" + functionName + "' of object '" + destination + "' has thrown an exception: ";
 			msgLogger.fatal(msg, e.getCause());
