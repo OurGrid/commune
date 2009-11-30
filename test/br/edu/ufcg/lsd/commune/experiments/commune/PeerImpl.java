@@ -111,7 +111,7 @@ public class PeerImpl implements Peer {
 			
 			Peer otherPeer = upPeers.get(otherNumber);
 			
-			if (otherNumber != null) {
+			if (otherPeer != null) {
 				otherPeer.pong();
 			}
 			
