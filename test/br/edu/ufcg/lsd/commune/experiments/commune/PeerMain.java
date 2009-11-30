@@ -1,11 +1,9 @@
-package br.edu.ufcg.lsd.commune.experiments.commune.point2point;
+package br.edu.ufcg.lsd.commune.experiments.commune;
 
 import java.util.Map;
 
 import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.experiments.Util;
-import br.edu.ufcg.lsd.commune.experiments.commune.Peer;
-import br.edu.ufcg.lsd.commune.experiments.commune.PeerImpl;
 
 public class PeerMain {
 
