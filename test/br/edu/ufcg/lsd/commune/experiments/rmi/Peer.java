@@ -1,4 +1,4 @@
-package br.edu.ufcg.lsd.commune.experiments.rmi.point2point;
+package br.edu.ufcg.lsd.commune.experiments.rmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

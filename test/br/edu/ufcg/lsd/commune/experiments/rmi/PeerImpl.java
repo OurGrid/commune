@@ -1,4 +1,4 @@
-package br.edu.ufcg.lsd.commune.experiments.rmi.point2point;
+package br.edu.ufcg.lsd.commune.experiments.rmi;
 
 import java.io.Serializable;
 import java.rmi.Naming;
@@ -25,7 +25,7 @@ public class PeerImpl implements Peer, Serializable {
 	
 	public void init() throws RemoteException {
 		try {
-			otherPeer = (Peer) Naming.lookup(Registry.REGISTRY_SERVERNAME + otherPeerName);
+//TODO			otherPeer = (Peer) Naming.lookup(Registry.REGISTRY_SERVERNAME + otherPeerName);
 		} catch (Exception e) {}
 		new Thread(createRunnable()).start();
 	}
