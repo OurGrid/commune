@@ -49,7 +49,8 @@ public class PeerImpl implements Peer {
 				otherPeers.put(otherNumber, Boolean.FALSE);
 			}
 		}
-
+		
+		new Thread(createRunnable()).start();
 	}
 
 	private String getMyName() {
