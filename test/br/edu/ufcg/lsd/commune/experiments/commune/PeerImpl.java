@@ -1,10 +1,5 @@
 package br.edu.ufcg.lsd.commune.experiments.commune;
 
-import static br.edu.ufcg.lsd.commune.experiments.commune.Registry.REGISTRY_CONTAINER;
-import static br.edu.ufcg.lsd.commune.experiments.commune.Registry.REGISTRY_SERVERNAME;
-import static br.edu.ufcg.lsd.commune.experiments.commune.Registry.REGISTRY_SERVICE;
-import static br.edu.ufcg.lsd.commune.experiments.commune.Registry.REGISTRY_USERNAME;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +9,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import br.edu.ufcg.lsd.commune.api.FailureNotification;
 import br.edu.ufcg.lsd.commune.api.InvokeOnDeploy;
-import br.edu.ufcg.lsd.commune.api.MonitoredBy;
 import br.edu.ufcg.lsd.commune.api.RecoveryNotification;
 import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
 import br.edu.ufcg.lsd.commune.experiments.Util;
@@ -25,69 +19,69 @@ public class PeerImpl implements Peer {
 
 	
 	private ServiceManager serviceManager;
-	private List<String> otherPeers = new ArrayList<String>();
-	private Map<String,Long> upPeersCounter = new HashMap<String,Long>();
-	private Map<String,Peer> upPeers = new HashMap<String,Peer>();
+	private Map<Integer,Boolean> otherPeers = new HashMap<Integer,Boolean>();
+	private Map<Integer,Long> upPeersCounter = new HashMap<Integer,Long>();
+	private Map<Integer,Peer> upPeers = new HashMap<Integer,Peer>();
 	private Lock peersLock = new ReentrantLock();
 	
 	private int counter = 0;
+	private final Map<Integer, String> properties;
+	private final Integer myNumber;
 	
 	
+	public PeerImpl(Integer myNumber, Map<Integer, String> properties) {
+		this.myNumber = myNumber;
+		this.properties = properties;
+	}
+
+
 	@InvokeOnDeploy
 	public void init(ServiceManager serviceManager) {
 		this.serviceManager = serviceManager;
-		
-		String monitorableAddress = 
-			REGISTRY_USERNAME + "@" + REGISTRY_SERVERNAME + "/" + REGISTRY_CONTAINER + "/" + REGISTRY_SERVICE;
-		serviceManager.registerInterest(Peer.PEER_SERVICE, monitorableAddress, Registry.class, 300, 150);
+
+		for (Integer otherNumber : properties.keySet()) {
+			if (!otherNumber.equals(myNumber) && !otherPeers.keySet().contains(otherNumber)) {
+				String otherServer = properties.get(otherNumber);
+				String otherAddress = 
+					Peer.PEER_USERNAME + otherNumber + "@" + otherServer + "/" + Peer.PEER_CONTAINER + "/" + 
+					Peer.PEER_SERVICE; 
+				serviceManager.registerInterest(Peer.PEER_SERVICE, otherAddress, Peer.class, 60, 30);
+				otherPeers.put(otherNumber, Boolean.FALSE);
+			}
+		}
+
 	}
-
-
-	@RecoveryNotification
-	public void registryIsUp(Registry registry) {
-		registry.getPeerList(this);
-		new Thread(createRunnable()).start();
-		Util.log(getMyName() + "->registryIsUp");
-	}
-
 
 	private String getMyName() {
 		return serviceManager.getApplication().getContainer().getContainerID().getUserName();
 	}
 
-	public void updateList(List<String> newPeers) {
-		for (String newPeer : newPeers) {
-			if (!otherPeers.contains(newPeer)) {
-				
-				if (newPeer.equals(serviceManager.getMyDeploymentID().getServiceID().toString())) {
-					continue;
-				}
-				
-				serviceManager.registerInterest(Peer.PEER_SERVICE, newPeer, Peer.class, 60, 30);
-				otherPeers.add(newPeer);
-			}
-		}
-		Util.log(getMyName() + "->updateList");
-	}
-
-	@FailureNotification
-	public void registryIsDown(Registry registry) {}
-	
 	@RecoveryNotification
-	public void otherPeerIsUp(Peer peer, DeploymentID senderDID) {
-		ServiceID serviceID = senderDID.getServiceID();
-		String senderID = serviceID.toString();
+	public void otherPeerIsUp(Peer otherPeer, DeploymentID senderDID) {
+		ServiceID otherServiceID = senderDID.getServiceID();
+		
+		Integer otherNumber = getPeerNumber(otherServiceID);
 		
 		try {
 			peersLock.lock();
 			
-			upPeers.put(senderID, peer);
-			//upPeersCounter.put(senderID, null);
+			upPeers.put(otherNumber, otherPeer);
+			
+			Boolean otherHasPing = otherPeers.get(otherNumber);
+			if (otherHasPing) {
+				otherPeer.pong();
+			}
 
 		} finally {
 			peersLock.unlock();
 		}
-		Util.log(getMyName() + "->otherPeerIsUp(" + serviceID.getUserName() + ")");
+		Util.log(getMyName() + "->otherPeerIsUp(" + otherServiceID.getUserName() + ")");
+	}
+
+
+	private Integer getPeerNumber(ServiceID serviceID) {
+		String otherNumberStr = serviceID.getUserName().replace(Peer.PEER_USERNAME, "");
+		return new Integer(otherNumberStr);
 	}
 	
 	@FailureNotification
@@ -107,40 +101,45 @@ public class PeerImpl implements Peer {
 	}
 
 
-	public void ping(@MonitoredBy(Peer.PEER_SERVICE) Peer otherPeer) {
+	public void ping() {
 		ServiceID serviceID = serviceManager.getSenderServiceID();
-		String senderID = serviceID.toString();
+		Integer otherNumber = getPeerNumber(serviceID);
 
 		try {
 			peersLock.lock();
 			
-			upPeers.put(senderID, otherPeer);
-			//upPeersCounter.put(senderID, null);
+			Peer otherPeer = upPeers.get(otherNumber);
+			
+			if (otherNumber != null) {
+				otherPeer.pong();
+			}
+			
+			otherPeers.put(otherNumber, Boolean.TRUE);
 
 		} finally {
 			peersLock.unlock();
 		}
 		
-		otherPeer.pong();
 		Util.log(getMyName() + "->ping()");
 	}
 
 	public void pong() {
-		String senderID = serviceManager.getSenderServiceID().toString();
+		ServiceID otherServiceID = serviceManager.getSenderServiceID();
+		Integer otherNumber = getPeerNumber(otherServiceID);
 
 		try {
 			peersLock.lock();
 			
 			int size = upPeers.size();
 			
-			Long begin = upPeersCounter.get(senderID);
+			Long begin = upPeersCounter.get(otherNumber);
 			
 			if (begin == null) {
 				return;
 			}
 			
 			Long finish = System.currentTimeMillis();
-			upPeersCounter.put(senderID, null);
+			upPeersCounter.put(otherNumber, null);
 
 			Long elapsed = finish - begin;
 			
@@ -181,8 +180,8 @@ public class PeerImpl implements Peer {
 			
 			int i = (int) (Math.random() * size);
 			
-			List<String> keyList = new ArrayList<String>(upPeers.keySet());
-			String key = keyList.get(i);
+			List<Integer> keyList = new ArrayList<Integer>(upPeers.keySet());
+			Integer key = keyList.get(i);
 			Peer peer = upPeers.get(key);
 
 			Long counter = upPeersCounter.get(key);
@@ -191,7 +190,7 @@ public class PeerImpl implements Peer {
 			}
 			upPeersCounter.put(key, counter);
 			
-			peer.ping(this);
+			peer.ping();
 			
 		} finally {
 			peersLock.unlock();

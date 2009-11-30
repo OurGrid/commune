@@ -1,7 +1,5 @@
 package br.edu.ufcg.lsd.commune.experiments.commune;
 
-import java.util.List;
-
 import br.edu.ufcg.lsd.commune.api.Remote;
 
 @Remote
@@ -13,9 +11,8 @@ public interface Peer {
 	public static final String PEER_SERVICE = "PEER_IMPL";
 	public static final int MESSAGES_PER_MINUTE = 30;
 
-	void ping(Peer otherPeer);
+	void ping();
 	
 	void pong(); 
 	
-	void updateList(List<String> otherPeers);
 }
