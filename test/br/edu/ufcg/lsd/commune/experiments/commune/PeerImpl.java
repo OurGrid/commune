@@ -60,7 +60,6 @@ public class PeerImpl implements Peer {
 	@RecoveryNotification
 	public void otherPeerIsUp(Peer otherPeer, DeploymentID senderDID) {
 		ServiceID otherServiceID = senderDID.getServiceID();
-		
 		Integer otherNumber = getPeerNumber(otherServiceID);
 		
 		try {
@@ -87,18 +86,18 @@ public class PeerImpl implements Peer {
 	
 	@FailureNotification
 	public void otherPeerIsDown(Peer peer, DeploymentID senderDID) {
-		ServiceID serviceID = senderDID.getServiceID();
-		String senderID = serviceID.toString();
+		ServiceID otherServiceID = senderDID.getServiceID();
+		Integer otherNumber = getPeerNumber(otherServiceID);
 		
 		try {
 			peersLock.lock();
 			
-			upPeers.remove(senderID);
+			upPeers.remove(otherNumber);
 
 		} finally {
 			peersLock.unlock();
 		}
-		Util.log(getMyName() + "->otherPeerIsDown(" + serviceID.getUserName() + ")");
+		Util.log(getMyName() + "->otherPeerIsDown(" + otherServiceID.getUserName() + ")");
 	}
 
 
