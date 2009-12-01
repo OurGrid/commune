@@ -39,12 +39,16 @@ public class PeerImpl implements Peer, Serializable {
 			
 			String otherIP = properties.get(otherNumber);
 			
-			String otherAddress = Peer.PEER_IP_PREFIX + otherIP + Peer.PEER_SERVICE_PREFIX + otherNumber;
+			String otherAddress = 
+				Peer.PEER_IP_PREFIX + otherIP + Peer.PEER_IP_SUFIX + Peer.PEER_SERVICE_PREFIX + otherNumber;
 			
 			Peer otherPeer = null;
 			while (otherPeer == null) {
 				
 				try {
+					
+					sleep();
+					
 					otherPeer = (Peer) Naming.lookup(otherAddress);
 
 					try {
@@ -55,7 +59,9 @@ public class PeerImpl implements Peer, Serializable {
 						peersLock.unlock();
 					}
 						
-				} catch (Exception e) {}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
