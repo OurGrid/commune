@@ -5,7 +5,6 @@ import br.edu.ufcg.lsd.commune.api.Remote;
 @Remote
 public interface Peer {
 
-	public static final int INSTANCES_PER_JVM = 10;
 	public static final String PEER_CONTAINER = "PEER";
 	public static final String PEER_USERNAME = "peer_experiment_commune";
 	public static final String PEER_SERVICE = "PEER_IMPL";

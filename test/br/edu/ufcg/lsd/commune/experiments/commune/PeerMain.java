@@ -19,7 +19,18 @@ public class PeerMain {
 			
 			Module module = Util.createModule(myContainer, myUser, myServer);
 			module.getContainer().deploy(Peer.PEER_SERVICE, new PeerImpl(myNumber, properties));
+			
+			sleep();
 		}
 		
 	}
+	
+	private static void sleep() {
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

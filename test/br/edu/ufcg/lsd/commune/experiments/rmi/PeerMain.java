@@ -9,10 +9,6 @@ import br.edu.ufcg.lsd.commune.experiments.Util;
 public class PeerMain {
 	
 	
-	public static final String REGISTER = "-r";
-	public static final String INIT = "-i";
-
-
 	public static void main(String[] args) throws Exception {
 		
 		Map<Integer, String> properties = Util.parseExperimentProperties();

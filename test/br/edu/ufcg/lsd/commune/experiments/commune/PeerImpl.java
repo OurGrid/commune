@@ -45,7 +45,7 @@ public class PeerImpl implements Peer {
 				String otherAddress = 
 					Peer.PEER_USERNAME + otherNumber + "@" + otherServer + "/" + Peer.PEER_CONTAINER + "/" + 
 					Peer.PEER_SERVICE; 
-				serviceManager.registerInterest(Peer.PEER_SERVICE, otherAddress, Peer.class, 60, 30);
+				serviceManager.registerInterest(Peer.PEER_SERVICE, otherAddress, Peer.class, 600, 120);
 				otherPeers.put(otherNumber, Boolean.FALSE);
 			}
 		}
@@ -93,6 +93,7 @@ public class PeerImpl implements Peer {
 			peersLock.lock();
 			
 			upPeers.remove(otherNumber);
+			upPeersCounter.put(otherNumber, null);
 
 		} finally {
 			peersLock.unlock();
@@ -126,6 +127,7 @@ public class PeerImpl implements Peer {
 	public void pong() {
 		ServiceID otherServiceID = serviceManager.getSenderServiceID();
 		Integer otherNumber = getPeerNumber(otherServiceID);
+		counter++;
 
 		try {
 			peersLock.lock();
@@ -143,7 +145,7 @@ public class PeerImpl implements Peer {
 
 			Long elapsed = finish - begin;
 			
-			System.out.println(counter++ + ";" + size + ";" + elapsed);
+			System.out.println(myNumber + ";" + counter + ";" + size + ";" + elapsed);
 			
 		} finally {
 			peersLock.unlock();
@@ -162,7 +164,7 @@ public class PeerImpl implements Peer {
 						Util.log(getMyName() + "->run()");
 					}
 				} catch (Throwable t) {
-					t.printStackTrace();
+					System.err.println("Throwable: " + t);
 				}
 			}
 		};
@@ -191,6 +193,9 @@ public class PeerImpl implements Peer {
 			upPeersCounter.put(key, counter);
 			
 			peer.ping();
+			
+		} catch (Exception e) {
+			System.err.println("Exception: " + e);
 			
 		} finally {
 			peersLock.unlock();
