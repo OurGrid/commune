@@ -1,6 +1,9 @@
 package br.edu.ufcg.lsd.commune.experiments.rmi;
 
 import java.rmi.Naming;
+import java.util.Map;
+
+import br.edu.ufcg.lsd.commune.experiments.Util;
 
 
 public class PeerMain {
@@ -12,27 +15,15 @@ public class PeerMain {
 
 	public static void main(String[] args) throws Exception {
 		
-		if (REGISTER.equals(args[0])) {
+		Map<Integer, String> properties = Util.parseExperimentProperties();
+		
+		for (int i = 0; i < args.length; i++) {
+			Integer myNumber = new Integer(args[0]);
 			
-			if (Peer.PEER_1.equals(args[1])) {
-				PeerImpl peer1 = new PeerImpl(Peer.PEER_1, Peer.PEER_2);
-				Naming.rebind(Peer.PEER1_SERVERNAME + Peer.PEER_1, peer1);
-				
-			} else if (Peer.PEER_2.equals(args[1])) {
-				PeerImpl peer2 = new PeerImpl(Peer.PEER_2, Peer.PEER_1);
-				Naming.rebind(Peer.PEER2_SERVERNAME + Peer.PEER_2, peer2);
-			} 
+			String myService = Peer.PEER_SERVICE_PREFIX + myNumber;
 			
-		} else if (INIT.equals(args[0])) {
-
-			if (Peer.PEER_1.equals(args[1])) {
-				Peer peer = (Peer) Naming.lookup(Peer.PEER1_SERVERNAME + Peer.PEER_1);
-				peer.init();
-				
-			} else if (Peer.PEER_2.equals(args[1])) {
-				Peer peer = (Peer) Naming.lookup(Peer.PEER2_SERVERNAME + Peer.PEER_2);
-				peer.init();
-			} 
+			PeerImpl peer1 = new PeerImpl(myNumber, properties);
+			Naming.rebind(myService, peer1);
 		}
 	}
 }
