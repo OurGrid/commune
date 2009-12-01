@@ -118,9 +118,9 @@ public class PeerImpl implements Peer, Serializable {
 			Integer key = keyList.get(i);
 			Peer peer = upPeers.get(key);
 
-			long begin = System.currentTimeMillis();
+			long begin = System.nanoTime();
 			peer.ping();
-			long end = System.currentTimeMillis();
+			long end = System.nanoTime();
 
 			System.out.println(counter + ";" + size + ";" + (end - begin));
 			
