@@ -28,7 +28,6 @@ public class PeerImpl implements Peer, Serializable {
 	public PeerImpl(Integer myNumber, Map<Integer, String> properties) {
 		this.myNumber = myNumber;
 		this.properties = properties;
-		init();
 	}
 
 

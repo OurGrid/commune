@@ -18,8 +18,9 @@ public class PeerMain {
 			
 			String myService = Peer.PEER_SERVICE_PREFIX + myNumber;
 			
-			PeerImpl peer1 = new PeerImpl(myNumber, properties);
-			Naming.rebind(myService, peer1);
+			PeerImpl peer = new PeerImpl(myNumber, properties);
+			Naming.rebind(myService, peer);
+			peer.init();
 		}
 	}
 }
