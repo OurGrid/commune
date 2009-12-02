@@ -1,6 +1,9 @@
 package br.edu.ufcg.lsd.commune.experiments.commune;
 
+import br.edu.ufcg.lsd.commune.api.FailureNotification;
 import br.edu.ufcg.lsd.commune.api.InvokeOnDeploy;
+import br.edu.ufcg.lsd.commune.api.MonitoredBy;
+import br.edu.ufcg.lsd.commune.api.RecoveryNotification;
 import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
 import br.edu.ufcg.lsd.commune.experiments.Util;
 
@@ -14,9 +17,16 @@ public class ReactorImpl implements Reactor {
 		this.serviceManager = serviceManager;
 	}
 
-	public void ping(Actor actor) {
+	public void ping(@MonitoredBy(REACTOR_SERVICE)Actor actor) {
 		actor.pong();
 		serviceManager.release(actor);
 		Util.log("ping()");
 	}
+	
+	@RecoveryNotification
+	public void actorIsUp(Actor actor) {}
+
+	@FailureNotification
+	public void actorIsDown(Actor actor) {}
+	
 }
