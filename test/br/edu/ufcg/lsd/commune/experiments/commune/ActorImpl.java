@@ -40,7 +40,7 @@ public class ActorImpl implements Actor {
 			String reactorAddress = 
 				Reactor.REACTOR_USERNAME + reactorNumber + "@" + reactorServer + "/" + Reactor.REACTOR_CONTAINER + "/"
 				+ Reactor.REACTOR_SERVICE; 
-			serviceManager.registerInterest(Actor.ACTOR_SERVICE, reactorAddress, Reactor.class, 600, 300);
+			serviceManager.registerInterest(Actor.ACTOR_SERVICE, reactorAddress, Reactor.class, 600, 60);
 		}
 		
 		new Thread(createRunnable()).start();
