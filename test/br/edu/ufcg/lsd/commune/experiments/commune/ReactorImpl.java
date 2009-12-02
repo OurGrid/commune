@@ -19,7 +19,6 @@ public class ReactorImpl implements Reactor {
 
 	public void ping(@MonitoredBy(REACTOR_SERVICE)Actor actor) {
 		actor.pong();
-		serviceManager.release(actor);
 		Util.log("ping()");
 	}
 	
@@ -27,6 +26,7 @@ public class ReactorImpl implements Reactor {
 	public void actorIsUp(Actor actor) {}
 
 	@FailureNotification
-	public void actorIsDown(Actor actor) {}
-	
+	public void actorIsDown(Actor actor) {
+		serviceManager.release(actor);
+	}	
 }
