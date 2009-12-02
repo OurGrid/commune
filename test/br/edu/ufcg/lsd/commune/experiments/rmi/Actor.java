@@ -3,6 +3,7 @@ package br.edu.ufcg.lsd.commune.experiments.rmi;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,11 @@ public class Actor {
 		new Thread(createRunnable()).start();
 
 		Set<Integer> reactorsNumbers = properties.keySet();
-		for (Integer reactorNumber : reactorsNumbers) {
+		
+		List<Integer> list = new ArrayList<Integer>(reactorsNumbers);
+		Collections.sort(list);
+		
+		for (Integer reactorNumber : list) {
 			
 			String reactorIP = properties.get(reactorNumber);
 			
