@@ -1,6 +1,5 @@
 package br.edu.ufcg.lsd.commune.experiments.rmi;
 
-import java.io.Serializable;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -13,20 +12,15 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import br.edu.ufcg.lsd.commune.experiments.Util;
 
-public class PeerImpl implements Peer, Serializable {
+public class Actor {
 
 	
-	private static final long serialVersionUID = 1L;
-	
-	
-	private final Integer myNumber;
 	private final Map<Integer, String> properties;
-	private Map<Integer,Peer> upPeers = new HashMap<Integer,Peer>();
-	private Lock peersLock = new ReentrantLock();
+	private Map<Integer,Reactor> upReactors = new HashMap<Integer,Reactor>();
+	private Lock reactorsLock = new ReentrantLock();
 
 	
-	public PeerImpl(Integer myNumber, Map<Integer, String> properties) {
-		this.myNumber = myNumber;
+	public Actor(Map<Integer, String> properties) {
 		this.properties = properties;
 	}
 
@@ -34,34 +28,34 @@ public class PeerImpl implements Peer, Serializable {
 	public void init() {
 		new Thread(createRunnable()).start();
 
-		Set<Integer> peersNumbers = properties.keySet();
-		for (Integer otherNumber : peersNumbers) {
+		Set<Integer> reactorsNumbers = properties.keySet();
+		for (Integer reactorNumber : reactorsNumbers) {
 			
-			String otherIP = properties.get(otherNumber);
+			String reactorIP = properties.get(reactorNumber);
 			
-			String otherAddress = 
-				Peer.PEER_IP_PREFIX + otherIP + Peer.PEER_IP_SUFIX + Peer.PEER_SERVICE_PREFIX + otherNumber;
+			String reactorAddress = 
+				Reactor.REACTOR_IP_PREFIX + reactorIP + Reactor.REACTOR_IP_SUFIX + Reactor.REACTOR_SERVICE_PREFIX + reactorNumber;
 			
-			Peer otherPeer = null;
-			while (otherPeer == null) {
+			Reactor reactor = null;
+			while (reactor == null) {
 				
 				try {
 					
-					sleep();
-					
-					otherPeer = (Peer) Naming.lookup(otherAddress);
+					reactor = (Reactor) Naming.lookup(reactorAddress);
 
 					try {
-						peersLock.lock();
+						reactorsLock.lock();
 						
-						upPeers.put(otherNumber, otherPeer);
+						upReactors.put(reactorNumber, reactor);
 					} finally {
-						peersLock.unlock();
+						reactorsLock.unlock();
 					}
 						
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
+				Util.sleep(30 * 1000);
 			}
 		}
 	}
@@ -78,15 +72,6 @@ public class PeerImpl implements Peer, Serializable {
 		};
 	}
 
-	private String getMyName() {
-		return Peer.PEER_SERVICE_PREFIX + myNumber;
-	}
-
-	public String ping() throws RemoteException{
-		Util.log(getMyName() + "->ping()");
-		return "pong";
-	}
-
 	public void sendPings() {
 		try {
 			int i = 0;
@@ -95,8 +80,8 @@ public class PeerImpl implements Peer, Serializable {
 				
 				choosePeerAndSendPing(i++);
 				
-				sleep();
-				Util.log(getMyName() + "->sendPing()");
+				Util.sleep(1000 / Reactor.MESSAGES_PER_SECOND);
+				Util.log("choosePeerAndSendPing()");
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -105,8 +90,8 @@ public class PeerImpl implements Peer, Serializable {
 
 	private void choosePeerAndSendPing(int counter) {
 		try {
-			peersLock.lock();
-			int size = upPeers.size();
+			reactorsLock.lock();
+			int size = upReactors.size();
 			
 			if (size == 0) {
 				return;
@@ -114,9 +99,9 @@ public class PeerImpl implements Peer, Serializable {
 			
 			int i = (int) (Math.random() * size);
 			
-			List<Integer> keyList = new ArrayList<Integer>(upPeers.keySet());
+			List<Integer> keyList = new ArrayList<Integer>(upReactors.keySet());
 			Integer key = keyList.get(i);
-			Peer peer = upPeers.get(key);
+			Reactor peer = upReactors.get(key);
 
 			long begin = System.nanoTime();
 			peer.ping();
@@ -125,17 +110,10 @@ public class PeerImpl implements Peer, Serializable {
 			System.out.println(counter + ";" + size + ";" + (end - begin));
 			
 		} catch (RemoteException e) {
-		} finally {
-			peersLock.unlock();
-		}
-	}
-
-
-	private void sleep() {
-		try {
-			Thread.sleep((60 * 1000) / Peer.MESSAGES_PER_MINUTE);
-		} catch (InterruptedException e) {
 			e.printStackTrace();
+			
+		} finally {
+			reactorsLock.unlock();
 		}
 	}
 }
