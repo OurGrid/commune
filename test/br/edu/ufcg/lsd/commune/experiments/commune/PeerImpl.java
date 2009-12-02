@@ -140,7 +140,7 @@ public class PeerImpl implements Peer {
 				return;
 			}
 			
-			Long finish = System.currentTimeMillis();
+			Long finish = System.nanoTime();
 			upPeersCounter.put(otherNumber, null);
 
 			Long elapsed = finish - begin;
@@ -188,7 +188,7 @@ public class PeerImpl implements Peer {
 
 			Long counter = upPeersCounter.get(key);
 			if (counter == null) {
-				counter = System.currentTimeMillis();
+				counter = System.nanoTime();
 			}
 			upPeersCounter.put(key, counter);
 			
