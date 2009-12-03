@@ -10,9 +10,14 @@ public class ReactorMain {
 		
 		Integer myNumber = new Integer(args[0]);
 			
-		String myService = Reactor.REACTOR_SERVICE_PREFIX + myNumber;
+		String myService = getReactorUrl(Reactor.LOCALHOST, myNumber);
 		
 		ReactorImpl peer = new ReactorImpl();
 		Naming.rebind(myService, peer);
+	}
+
+	public static String getReactorUrl(String ip, Integer myNumber) {
+		return Reactor.REBIND_PREFIX + ip + ":" + (Reactor.DEFAULT_PORT + myNumber) + "/" + 
+			Reactor.REACTOR_SERVICE_PREFIX + myNumber;
 	}
 }

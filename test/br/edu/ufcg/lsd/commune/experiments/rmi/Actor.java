@@ -38,8 +38,7 @@ public class Actor {
 			
 			String reactorIP = properties.get(reactorNumber);
 			
-			String reactorAddress = 
-				Reactor.REACTOR_IP_PREFIX + reactorIP + Reactor.REACTOR_IP_SUFIX + Reactor.REACTOR_SERVICE_PREFIX + reactorNumber;
+			String reactorAddress = ReactorMain.getReactorUrl(reactorIP, reactorNumber);
 			
 			Reactor reactor = null;
 			while (reactor == null) {
