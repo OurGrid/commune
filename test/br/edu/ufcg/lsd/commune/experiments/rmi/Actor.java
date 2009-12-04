@@ -1,7 +1,8 @@
 package br.edu.ufcg.lsd.commune.experiments.rmi;
 
-import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -45,7 +46,10 @@ public class Actor {
 				
 				try {
 					
-					reactor = (Reactor) Naming.lookup(reactorAddress);
+					Registry registry = LocateRegistry.getRegistry(reactorIP, 1099 + reactorNumber);
+					
+					
+					reactor = (Reactor) registry.lookup(reactorAddress);
 
 					try {
 						reactorsLock.lock();
@@ -108,10 +112,12 @@ public class Actor {
 			Reactor peer = upReactors.get(key);
 
 			long begin = System.nanoTime();
-			peer.ping();
-			long end = System.nanoTime();
+			String s = "[";
+			s += peer.ping();
+			s += "]"; 
+			long estimated = System.nanoTime() - begin;
 
-			System.out.println(counter + ";" + size + ";" + (end - begin));
+			System.out.println(s + counter + ";" + size + ";" + estimated);
 			
 		} catch (RemoteException e) {
 			e.printStackTrace();

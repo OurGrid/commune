@@ -1,6 +1,9 @@
 package br.edu.ufcg.lsd.commune.experiments.rmi;
 
-import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
 
 
 public class ReactorMain {
@@ -13,7 +16,10 @@ public class ReactorMain {
 		String myService = getReactorUrl(Reactor.LOCALHOST, myNumber);
 		
 		ReactorImpl peer = new ReactorImpl();
-		Naming.rebind(myService, peer);
+		
+		Reactor reactor = (Reactor) UnicastRemoteObject.exportObject(peer);
+		Registry registry = LocateRegistry.getRegistry();
+		registry.rebind(myService, reactor);
 	}
 
 	public static String getReactorUrl(String ip, Integer myNumber) {

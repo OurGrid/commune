@@ -9,7 +9,7 @@ public class ActorMain {
 	
 	
 	public static void main(String[] args) throws Exception {
-		
+
 		Map<Integer, String> properties = Util.parseExperimentProperties();
 		
 		Actor actor = new Actor(properties);
