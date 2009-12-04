@@ -59,7 +59,7 @@ public class Actor {
 					e.printStackTrace();
 				}
 				
-				Util.sleep(30 * 1000);
+				Util.sleep(10 * 1000);
 			}
 		}
 	}
