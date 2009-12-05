@@ -46,6 +46,7 @@
 	</target>
 
 	<target name="jar" depends="clean, init, build">
+		<rmic classname="br.edu.ufcg.lsd.commune.experiments.rmi.ReactorImpl" base="${dir.build}"/>
 		<jar destfile="${dir.dist}/${jar.file}" >
 			<zipfileset dir="${dir.build}" />
 			<fileset dir="${basedir}">

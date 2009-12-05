@@ -10,15 +10,18 @@ public class ReactorMain {
 	
 	
 	public static void main(String[] args) throws Exception {
-		
-		Integer myNumber = new Integer(args[0]);
-		String myService = getName(myNumber);
-		
-		ReactorImpl reactor = new ReactorImpl();
-		Reactor stub = (Reactor) UnicastRemoteObject.exportObject(reactor, 0);
-		
 		Registry registry = LocateRegistry.getRegistry();
-		registry.rebind(myService, stub);
+		
+		for (String arg : args) {
+			Integer myNumber = new Integer(arg);
+			String myService = getName(myNumber);
+			
+			ReactorImpl reactor = new ReactorImpl();
+			Reactor stub = (Reactor) UnicastRemoteObject.exportObject(reactor, 0);
+			
+			registry.rebind(myService, stub);
+			System.out.println("Bound: " + stub + " with name " + myService);
+		} 
 	}
 
 	public static String getName(Integer myNumber) {
