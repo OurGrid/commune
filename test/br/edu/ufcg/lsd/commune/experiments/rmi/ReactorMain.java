@@ -12,18 +12,17 @@ public class ReactorMain {
 	public static void main(String[] args) throws Exception {
 		
 		Integer myNumber = new Integer(args[0]);
-			
-		String myService = getReactorUrl(Reactor.LOCALHOST, myNumber);
+		String myService = getName(myNumber);
 		
-		ReactorImpl peer = new ReactorImpl();
+		ReactorImpl reactor = new ReactorImpl();
+		Reactor stub = (Reactor) UnicastRemoteObject.exportObject(reactor, 0);
 		
-		Reactor reactor = (Reactor) UnicastRemoteObject.exportObject(peer);
 		Registry registry = LocateRegistry.getRegistry();
-		registry.rebind(myService, reactor);
+		registry.rebind(myService, stub);
 	}
 
-	public static String getReactorUrl(String ip, Integer myNumber) {
-		return Reactor.REBIND_PREFIX + ip + ":" + (Reactor.DEFAULT_PORT + myNumber) + "/" + 
-			Reactor.REACTOR_SERVICE_PREFIX + myNumber;
+	public static String getName(Integer myNumber) {
+		return Reactor.REACTOR_SERVICE_PREFIX + myNumber;
 	}
+		
 }

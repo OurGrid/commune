@@ -9,5 +9,5 @@ do
     rmiregistry $RMI_PORT &
     cd .. 
     sleep 30 
-    javaw -cp lib\cglib.jar:lib\commons-codec-1.3.jar:lib\commons-io-1.3.2.jar:lib\log4j.jar:lib\smack.jar:lib\smackx-mod.jar:bin br.edu.ufcg.lsd.commune.experiments.rmi.ReactorMain $COUNTER > output$i
+    javaw -cp lib\cglib.jar:lib\commons-codec-1.3.jar:lib\commons-io-1.3.2.jar:lib\log4j.jar:lib\smack.jar:lib\smackx-mod.jar:dist/commune-0.1.jar br.edu.ufcg.lsd.commune.experiments.rmi.ReactorMain $COUNTER
 done

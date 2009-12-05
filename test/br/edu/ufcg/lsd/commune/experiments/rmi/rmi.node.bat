@@ -9,7 +9,7 @@ FOR %%A IN (0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 
     start /b rmiregistry !RMI_PORT!
     cd .. 
     sleep 30 
-    start /b javaw -cp lib\cglib.jar;lib\commons-codec-1.3.jar;lib\commons-io-1.3.2.jar;lib\log4j.jar;lib\smack.jar;lib\smackx-mod.jar;bin br.edu.ufcg.lsd.commune.experiments.rmi.ReactorMain !COUNTER!
+    start /b javaw -cp lib\cglib.jar;lib\commons-codec-1.3.jar;lib\commons-io-1.3.2.jar;lib\log4j.jar;lib\smack.jar;lib\smackx-mod.jar;dist\commune-0.1.jar br.edu.ufcg.lsd.commune.experiments.rmi.ReactorMain !COUNTER!
 )
 
 EndLocal 

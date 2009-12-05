@@ -39,8 +39,6 @@ public class Actor {
 			
 			String reactorIP = properties.get(reactorNumber);
 			
-			String reactorAddress = ReactorMain.getReactorUrl(reactorIP, reactorNumber);
-			
 			Reactor reactor = null;
 			while (reactor == null) {
 				
@@ -112,12 +110,10 @@ public class Actor {
 			Reactor peer = upReactors.get(key);
 
 			long begin = System.nanoTime();
-			String s = "[";
-			s += peer.ping();
-			s += "]"; 
+			peer.ping();
 			long estimated = System.nanoTime() - begin;
 
-			System.out.println(s + counter + ";" + size + ";" + estimated);
+			System.out.println(counter + ";" + size + ";" + estimated);
 			
 		} catch (RemoteException e) {
 			e.printStackTrace();
