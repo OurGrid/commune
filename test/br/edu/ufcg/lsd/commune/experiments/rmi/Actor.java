@@ -49,7 +49,7 @@ public class Actor {
 					Registry registry = LocateRegistry.getRegistry(reactorIP, 1099 + reactorNumber);
 					
 					
-					reactor = (Reactor) registry.lookup(reactorAddress);
+					reactor = (Reactor) registry.lookup(Reactor.REACTOR_SERVICE_PREFIX + reactorNumber);
 
 					try {
 						reactorsLock.lock();
