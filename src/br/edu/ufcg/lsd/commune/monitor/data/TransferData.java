@@ -23,11 +23,12 @@ import java.io.File;
 
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 
+import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 
 public class TransferData {
 	
-	private DeploymentID destinationID;
+	private ContainerID destinationID;
 	
 	private DeploymentID listenerID;
 	
@@ -45,7 +46,7 @@ public class TransferData {
 	
 	private boolean isIncoming;
 	
-	public TransferData(DeploymentID destinationID, DeploymentID listenerID, Status status, File file, long id,
+	public TransferData(ContainerID destinationID, DeploymentID listenerID, Status status, File file, long id,
 			long inactivityTimeout, int queuePosition, boolean receiveProgressUpdate, boolean isIncoming) {
 		
 		this.destinationID = destinationID;
@@ -59,11 +60,11 @@ public class TransferData {
 		this.isIncoming = isIncoming;
 	}
 
-	public DeploymentID getDestinationID() {
+	public ContainerID getDestinationID() {
 		return destinationID;
 	}
 
-	public void setDestinationID(DeploymentID destinationID) {
+	public void setDestinationID(ContainerID destinationID) {
 		this.destinationID = destinationID;
 	}
 

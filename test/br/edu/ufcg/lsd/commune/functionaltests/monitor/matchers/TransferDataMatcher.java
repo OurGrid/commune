@@ -28,6 +28,7 @@ import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 
+import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.monitor.data.TransferData;
 
@@ -39,7 +40,7 @@ public class TransferDataMatcher implements IArgumentMatcher {
 		this.transferDatas = transferDatas;
 	}
 	
-	public TransferDataMatcher(DeploymentID destinationID, DeploymentID listenerID, Status status, File file, 
+	public TransferDataMatcher(ContainerID destinationID, DeploymentID listenerID, Status status, File file, 
 			int queuePosition, boolean isIncoming) {
 		Collection<TransferData> transferDatas = new ArrayList<TransferData>();
 		transferDatas.add(new TransferData(destinationID, listenerID, status, file, 0, 0,
@@ -98,7 +99,7 @@ public class TransferDataMatcher implements IArgumentMatcher {
 			transferData.getQueuePosition() == otherTransferData.getQueuePosition();
 	}
 
-	public static Collection<TransferData> eqMatcher(DeploymentID destinationID, DeploymentID listenerID, Status status, File file,
+	public static Collection<TransferData> eqMatcher(ContainerID destinationID, DeploymentID listenerID, Status status, File file,
 			int queuePosition, boolean isIncoming) {
 		EasyMock.reportMatcher(new TransferDataMatcher(destinationID, listenerID, status, file, queuePosition, isIncoming));
 		return null;

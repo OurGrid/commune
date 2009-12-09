@@ -34,6 +34,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 
 import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.message.Message;
 
@@ -82,7 +83,7 @@ public class OutgoingTransfersManager {
 	public void startTransfer(OutgoingTransferHandle handle, DeploymentID listenerID, Container container) {
 
 		File file = handle.getLocalFile();
-		DeploymentID destination = handle.getDestinationID();
+		ContainerID destination = handle.getDestinationID();
 		long inactivityTimeout = handle.getInactivityTimeout();
 		boolean receiveProgressUpdates = handle.isReceiveProgressUpdate();
 		String transferDescription = handle.getDescription();
