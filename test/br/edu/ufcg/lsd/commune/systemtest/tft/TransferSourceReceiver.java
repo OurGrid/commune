@@ -75,7 +75,7 @@ public class TransferSourceReceiver implements TransferSource {
 		for (int i = 0; i < transfersToCreate; i++) {
 			OutgoingTransferHandle oth = new OutgoingTransferHandle(
 					localFile.getName(), localFile, "", 
-					serviceManager.getStubDeploymentID(dest));
+					serviceManager.getStubDeploymentID(dest).getContainerID());
 			
 			serviceManager.startTransfer(oth, this);
 		}
