@@ -495,6 +495,11 @@ public class Container {
 		this.stubRepository.removeStub(stub);
 	}
 
+	public void release(ServiceID serviceID) {
+		getInterestManager().removeInterest(serviceID);
+		getStubRepository().removeStub(serviceID);
+	}
+	
 	public boolean isStubUp(ServiceID stubServiceID) {
 		return this.stubRepository.isStubUp(stubServiceID);
 	}
@@ -522,4 +527,5 @@ public class Container {
 	public boolean isLocal(CommuneAddress address) {
 		return containerID.equals(address.getContainerID());
 	}
+
 }

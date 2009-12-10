@@ -89,6 +89,10 @@ public class ServiceManager implements Serializable {
 		
 		this.application.getContainer().releaseStub(object);
 	}
+	
+	public void release(ServiceID serviceID) {
+		this.application.getContainer().release(serviceID);
+	}
 
 	public <T> T registerInterest(String monitorName, String monitorableAddress, Class<T> monitorableType, 
 			int detectionTime, int heartbeatDelay) {
@@ -300,7 +304,11 @@ public class ServiceManager implements Serializable {
 	}
 	
 	public DeploymentID getStubDeploymentID(ServiceID serviceID, Class<?> clazz) {
-		return application.getContainer().getStubDeploymentID(getStub(serviceID, clazz));
+		Object stub = getStub(serviceID, clazz);
+		if (stub == null) {
+			return null;
+		}
+		return application.getContainer().getStubDeploymentID(stub);
 	}
 	
 	@SuppressWarnings("unchecked")

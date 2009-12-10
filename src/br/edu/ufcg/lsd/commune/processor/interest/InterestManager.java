@@ -465,6 +465,22 @@ public class InterestManager {
 			interestLock.unlock();
 		}
 	}
+	
+	public void removeInterest(ServiceID stubServiceID) {
+		try {
+			interestLock.lock();
+
+			Interest removedInterest = interests.remove(stubServiceID);
+			if(removedInterest != null){
+				removedInterest.cancelScheduledExecution();
+			}
+			
+			
+		} finally {
+			interestLock.unlock();
+		}
+		
+	}
 
 	public boolean isInterested(DeploymentID interestedID, ServiceID monitorableID) {
 		try {
@@ -493,4 +509,5 @@ public class InterestManager {
 			interestLock.unlock();
 		}
 	}
+
 }

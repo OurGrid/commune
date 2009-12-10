@@ -209,12 +209,7 @@ public class StubRepository {
 			stubLock.writeLock().lock();
 			
 			ServiceID stubServiceID = getStubServiceID(stub);
-			StubReference stubReference = stubsPerId.remove(stubServiceID);
-			
-			if (stubReference != null) {
-				stubReference.invalidate(); 
-				fireStubReleased(stubServiceID);
-			}
+			removeAndInvalidateStub(stubServiceID);
 			
 		} finally {
 			stubLock.writeLock().unlock();
@@ -222,6 +217,25 @@ public class StubRepository {
 	}
 
 
+	public void removeStub(ServiceID stubServiceID) {
+		try {
+			stubLock.writeLock().lock();
+			
+			removeAndInvalidateStub(stubServiceID);
+			
+		} finally {
+			stubLock.writeLock().unlock();
+		}
+	}
+
+	private void removeAndInvalidateStub(ServiceID stubServiceID) {
+		StubReference stubReference = stubsPerId.remove(stubServiceID);
+		
+		if (stubReference != null) {
+			stubReference.invalidate(); 
+			fireStubReleased(stubServiceID);
+		}
+	}
 
 	public void setStubDown(Object stub) {
 		try {
