@@ -61,7 +61,7 @@ public class TestGetFileTransfers extends TestWithTestableCommuneContainer {
 		DeploymentID listenerID = testGetFileTransfersUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
 		
 		OutgoingTransferHandle handle = new OutgoingTransferHandle(TRANSFER_FILE_LOG_NAME, 
-				new File(TRANSFER_FILE), "", destinationID.getContainerID());
+				new File(TRANSFER_FILE), "", destinationID);
 		
 		Message message = new Message(listenerID, destinationID, "sendFile");
 		message.addParameter(OutgoingTransferHandle.class, handle);
@@ -73,7 +73,7 @@ public class TestGetFileTransfers extends TestWithTestableCommuneContainer {
 
 		application.getContainer().getFileTransferConsumer().consumeMessage();
 		
-		testGetFileTransfersUtil.getFileTransfers(application, destinationID.getContainerID(), 
+		testGetFileTransfersUtil.getFileTransfers(application, destinationID, 
 				listenerID, null, new File(TRANSFER_FILE), 0, false);
 	}
 	
@@ -88,7 +88,7 @@ public class TestGetFileTransfers extends TestWithTestableCommuneContainer {
 		DeploymentID listenerID = testGetFileTransfersUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
 		
 		OutgoingTransferHandle handle = new OutgoingTransferHandle(TRANSFER_FILE_LOG_NAME, 
-				new File(TRANSFER_FILE), "", destinationID.getContainerID());
+				new File(TRANSFER_FILE), "", destinationID);
 		
 		Message message = new Message(listenerID, destinationID, "sendFile");
 		message.addParameter(OutgoingTransferHandle.class, handle);
@@ -100,13 +100,13 @@ public class TestGetFileTransfers extends TestWithTestableCommuneContainer {
 
 		application.getContainer().getFileTransferConsumer().consumeMessage();
 		
-		testGetFileTransfersUtil.getFileTransfers(application, destinationID.getContainerID(), 
+		testGetFileTransfersUtil.getFileTransfers(application, destinationID, 
 				listenerID, null, new File(TRANSFER_FILE), 0, false);
 		
 		TestableFileTransferProcessor fileTransferProcessor = (TestableFileTransferProcessor) application.getContainer().getFileTransferProcessor();
 		fileTransferProcessor.setOutgoingTransferStatus(handle, Status.initial);
 		
-		testGetFileTransfersUtil.getFileTransfers(application, destinationID.getContainerID(), 
+		testGetFileTransfersUtil.getFileTransfers(application, destinationID, 
 				listenerID, Status.initial, new File(TRANSFER_FILE), 0, false);
 	}
 }

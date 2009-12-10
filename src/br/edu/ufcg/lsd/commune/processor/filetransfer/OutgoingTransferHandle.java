@@ -22,6 +22,7 @@ package br.edu.ufcg.lsd.commune.processor.filetransfer;
 import java.io.File;
 
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
+import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 
 
 public class OutgoingTransferHandle extends TransferHandle {
@@ -29,10 +30,10 @@ public class OutgoingTransferHandle extends TransferHandle {
 	
 	private static final long serialVersionUID = 1L;
 
-	private final ContainerID destinationID;
+	private final DeploymentID destinationID;
 
 	public OutgoingTransferHandle(long id, String logicalFileName, File localFile, 
-			String description, ContainerID destinationID) {
+			String description, DeploymentID destinationID) {
 		super(id, logicalFileName, localFile.length(), description);
 		this.destinationID = destinationID;
 		this.setLocalFile(localFile);
@@ -40,11 +41,11 @@ public class OutgoingTransferHandle extends TransferHandle {
 	}
 	
 	public OutgoingTransferHandle(String logicalFileName, File localFile, 
-			String description, ContainerID destinationID) {
+			String description, DeploymentID destinationID) {
 		this(randomID(), logicalFileName, localFile, description, destinationID);
 	}
 
-	public ContainerID getDestinationID() {
+	public DeploymentID getDestinationID() {
 		return destinationID;
 	}
 

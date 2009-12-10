@@ -38,7 +38,7 @@ public class TestFileTransferMessagesLog extends TestWithTestableCommuneContaine
 		DeploymentID listenerID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
 		
 		OutgoingTransferHandle handle = new OutgoingTransferHandle(TestGetFileTransfers.TRANSFER_FILE_LOG_NAME,
-				new File(TestGetFileTransfers.TRANSFER_FILE), "", destinationID.getContainerID());
+				new File(TestGetFileTransfers.TRANSFER_FILE), "", destinationID);
 		
 		Message message = new Message(listenerID, destinationID, "sendFile", FileTransferProcessor.class.getName());
 		message.addParameter(OutgoingTransferHandle.class, handle);
@@ -62,7 +62,7 @@ public class TestFileTransferMessagesLog extends TestWithTestableCommuneContaine
 		DeploymentID listenerID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
 		
 		OutgoingTransferHandle handle = new OutgoingTransferHandle(TestGetFileTransfers.TRANSFER_FILE_LOG_NAME, 
-				new File(TestGetFileTransfers.TRANSFER_FILE), "", destinationID.getContainerID());
+				new File(TestGetFileTransfers.TRANSFER_FILE), "", destinationID);
 
 		//message to be removed
 		Message message = new Message(listenerID, destinationID, "sendFile", FileTransferProcessor.class.getName());

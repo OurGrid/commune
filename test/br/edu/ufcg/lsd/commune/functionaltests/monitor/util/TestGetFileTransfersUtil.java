@@ -9,7 +9,6 @@ import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.MonitorAcceptanceUtil;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.matchers.TransferDataMatcher;
-import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.monitor.CommuneMonitor;
 import br.edu.ufcg.lsd.commune.monitor.CommuneMonitorClient;
@@ -29,7 +28,7 @@ public class TestGetFileTransfersUtil extends MonitorAcceptanceUtil {
 		EasyMock.verify(client);		
 	}
 	
-	public void getFileTransfers(Module application, ContainerID destinationID, DeploymentID listenerID, Status status, File file,
+	public void getFileTransfers(Module application, DeploymentID destinationID, DeploymentID listenerID, Status status, File file,
 			int queuePosition, boolean isIncoming) {
 		CommuneMonitor monitor = getMonitorController(application);
 		
