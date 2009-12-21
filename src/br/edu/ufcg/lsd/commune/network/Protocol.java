@@ -40,7 +40,6 @@ public abstract class Protocol {
 	public final void sendMessage(Message message) {
 		synchronized (Protocol.lock) {
             try {
-            	System.out.println(System.currentTimeMillis() + " " + getClass().getSimpleName() + " [SND] " + message);
                 onSend(message);
                 callNext(message);
             } catch (ProtocolException protocolException) {
@@ -52,7 +51,6 @@ public abstract class Protocol {
 	public final void receiveMessage(Message message) {
 		synchronized (Protocol.lock) {
             try {
-            	System.out.println(System.currentTimeMillis() + " " + getClass().getSimpleName() + " [RCV] " + message);
 				onReceive(message);
                 callPrevious(message);
             } catch (ProtocolException protocolException) {
