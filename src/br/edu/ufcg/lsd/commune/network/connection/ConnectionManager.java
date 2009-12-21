@@ -74,7 +74,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		
 		CommuneAddress source = message.getSource();
 		
-		if (LoopbackRegistry.isInLoopback(source.getContainerID()) || container.isLocal(source)) {
+		if (container.isLocal(source)) {
 			//Do not verify session and sequence numbers for loopback messages
 			
 		} else {
@@ -87,8 +87,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		
 		CommuneAddress destination = message.getDestination();
 		
-		if (LoopbackRegistry.isInLoopback(message.getDestination().getContainerID()) || 
-				container.isLocal(destination)) {
+		if (container.isLocal(destination)) {
 			//Do not define session and sequence numbers for loopback messages
 			
 		} else {

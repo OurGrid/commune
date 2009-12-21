@@ -41,16 +41,16 @@ public class NetworkBuilder {
         Protocol xmppProtocol = createXMPPProtocol(container, communeNetwork);
         Protocol applicationProtocol = createApplicationProtocol(container, communeNetwork);
         communeNetwork.init(applicationProtocol, xmppProtocol);
+        
+        connectionProtocol = createConnectionProtocol();
+        if (connectionProtocol != null) {
+        	communeNetwork.addProtocol(connectionProtocol);
+        }
 
         VirtualMachineLoopbackProtocol virtualMachineLoopbackProtocol = 
             createLoopbackProtocol(container, communeNetwork);
         if (virtualMachineLoopbackProtocol != null) {
             communeNetwork.addProtocol(virtualMachineLoopbackProtocol);
-        }
-        
-        connectionProtocol = createConnectionProtocol();
-        if (connectionProtocol != null) {
-            communeNetwork.addProtocol(connectionProtocol);
         }
         
         String privateKey = context.getProperty(SignatureProperties.PROP_PRIVATE_KEY);
