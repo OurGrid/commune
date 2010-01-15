@@ -58,7 +58,7 @@ public class CommuneLogger{
 		logger.error(msg);
 	}
 
-	public void error(Object msg, Exception e){
+	public void error(Object msg, Throwable e){
 		logger.error(msg, e);
 	}
 	

@@ -34,9 +34,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import sun.security.provider.certpath.X509CertPath;
+import br.edu.ufcg.lsd.commune.container.logging.CommuneLogger;
+import br.edu.ufcg.lsd.commune.container.logging.CommuneLoggerFactory;
 import br.edu.ufcg.lsd.commune.network.ProtocolException;
 
 /**
@@ -46,7 +46,8 @@ public class CertificationUtils {
 	private static final String CERT_EXTENSION = ".cer";
 	private static final String CRL_EXTENSION = ".crl";
 	
-	private static final Logger LOG = Logger.getLogger(CertificationUtils.class);
+	private static final CommuneLogger LOG = CommuneLoggerFactory.getInstance().gimmeALogger(
+			CertificationUtils.class);
 	
 	private CertificationUtils() {}
 	
