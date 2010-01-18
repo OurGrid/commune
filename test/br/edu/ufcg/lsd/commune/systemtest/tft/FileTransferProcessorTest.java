@@ -37,9 +37,12 @@ public class FileTransferProcessorTest {
 	
 	@Before
 	public void startModules() throws Exception {
-		source_module = createModule(FileTransferTestConstants.SOURCE_CONTAINER, FileTransferTestConstants.SOURCE_USER);
-		dest_a_module = createModule(FileTransferTestConstants.DEST_CONTAINER, FileTransferTestConstants.DEST_USER_A);
-		dest_b_module = createModule(FileTransferTestConstants.DEST_CONTAINER, FileTransferTestConstants.DEST_USER_B);
+		source_module = createModule(FileTransferTestConstants.SOURCE_CONTAINER, 
+				FileTransferTestConstants.SOURCE_USER);
+		dest_a_module = createModule(FileTransferTestConstants.DEST_CONTAINER, 
+				FileTransferTestConstants.DEST_USER_A);
+		dest_b_module = createModule(FileTransferTestConstants.DEST_CONTAINER, 
+				FileTransferTestConstants.DEST_USER_B);
 	}
 	
 	@After

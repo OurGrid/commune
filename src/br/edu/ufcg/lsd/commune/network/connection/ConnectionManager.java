@@ -344,6 +344,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 
 			} else {
 				state = connection.getState();
+				connection.setStubReference(stubReference);
 			}
 
 			if (stubReference.getStubDeploymentID() == null) {

@@ -79,6 +79,7 @@ public class SyncManagerClient<T extends ServerModuleManager> extends ManagerCli
 	public void controlIsDown(T control) {
 		ClientModule<T, ManagerClientService<T>> containerClient = getApplicationClient();
 		containerClient.setManager(null);
+		getServiceManager().release(control);
 	}
 	
 }
