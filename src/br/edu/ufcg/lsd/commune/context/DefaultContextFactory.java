@@ -73,12 +73,12 @@ public class DefaultContextFactory implements ContextFactory {
 		
 		properties.put( XMPPProperties.PROP_XMPP_SERVERPORT, "5222" );
 		properties.put( XMPPProperties.PROP_XMPP_SERVER_SECURE_PORT, "5223" );
-		properties.put( InterestProperties.PROP_WAN_HEARTBEAT_DELAY, "15" );
-		properties.put( InterestProperties.PROP_WAN_DETECTION_TIME, "120" );
-		properties.put( InterestProperties.PROP_LAN_HEARTBEAT_DELAY, "3" );
-		properties.put( InterestProperties.PROP_LAN_DETECTION_TIME, "30" );
-		properties.put( InterestProperties.PROP_LOCAL_HEARTBEAT_DELAY, "1" );
-		properties.put( InterestProperties.PROP_LOCAL_DETECTION_TIME, "10" );
+		properties.put( InterestProperties.PROP_WAN_HEARTBEAT_DELAY, "60" );
+		properties.put( InterestProperties.PROP_WAN_DETECTION_TIME, "300" );
+		properties.put( InterestProperties.PROP_LAN_HEARTBEAT_DELAY, "15" );
+		properties.put( InterestProperties.PROP_LAN_DETECTION_TIME, "180" );
+		properties.put( InterestProperties.PROP_LOCAL_HEARTBEAT_DELAY, "5" );
+		properties.put( InterestProperties.PROP_LOCAL_DETECTION_TIME, "60" );
 		properties.put( TransferProperties.PROP_FILE_TRANSFER_TIMEOUT, 
 				TransferProperties.DEFAULT_FILE_TRANSFER_TIMEOUT );
 		properties.put( TransferProperties.PROP_FILE_TRANSFER_MAX_OUT, 
