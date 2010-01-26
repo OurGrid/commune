@@ -367,8 +367,10 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		try {
 			connectionLock.writeLock().lock();
 
-			Connection connection = connections.remove(stubServiceID.getContainerID()); 
-			connection.getState().release(connection);
+			Connection connection = connections.remove(stubServiceID.getContainerID());
+			if (connection != null) {
+				connection.getState().release(connection);
+			}
 			
 		} finally {
 			connectionLock.writeLock().unlock();
