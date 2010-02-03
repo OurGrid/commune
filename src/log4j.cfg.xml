@@ -12,9 +12,8 @@
     </appender>
     <appender class="org.apache.log4j.DailyRollingFileAppender" name="LOGFILE">
         <param name="File" value="logs/log"/>
-        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d [%t] %c %5p: %m%n"/>
+            <param name="ConversionPattern" value="[%t] %c %5p: %m%n"/>
         </layout>
     </appender>
     
