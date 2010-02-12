@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.jivesoftware.smack.packet.Message;
 
+import br.edu.ufcg.lsd.commune.container.logging.CommuneLoggerFactory;
 import br.edu.ufcg.lsd.commune.network.Protocol;
 
 public class FragmentationManager {
@@ -79,7 +80,7 @@ public class FragmentationManager {
 				fe.receiveFragment( frag, fragID );
 				protocol.receiveMessage(fe.getMessage());
 			} catch ( IOException e ) {
-				e.printStackTrace();
+				CommuneLoggerFactory.getInstance().gimmeALogger(FragmentationManager.class).error("Fragmentation error", e);
 			}
 			
 		} else {

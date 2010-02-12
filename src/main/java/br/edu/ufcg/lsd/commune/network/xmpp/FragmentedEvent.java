@@ -22,9 +22,11 @@ package br.edu.ufcg.lsd.commune.network.xmpp;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import br.edu.ufcg.lsd.commune.container.logging.CommuneLoggerFactory;
 import br.edu.ufcg.lsd.commune.message.Message;
 
 public class FragmentedEvent {
@@ -112,6 +114,9 @@ public class FragmentedEvent {
 		try {
 			return (Message) ois.readObject();
 		} catch (ClassNotFoundException e) {
+			throw new IOException(e.getMessage());
+		} catch (InvalidClassException e) {
+			CommuneLoggerFactory.getInstance().getLogger("Compatibility").warn("Receiving a incompatible message");
 			throw new IOException(e.getMessage());
 		}
 	}
