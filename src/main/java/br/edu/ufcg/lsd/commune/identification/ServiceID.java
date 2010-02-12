@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ServiceID implements Serializable, CommuneAddress {
+public class ServiceID implements Serializable, CommuneAddress, Comparable<ServiceID> {
 
 	private static final long serialVersionUID = 3L;
 
@@ -123,5 +123,9 @@ public class ServiceID implements Serializable, CommuneAddress {
 		
 		ContainerID containerID = ContainerID.parse(split[0] + CommuneAddress.RESOURCE_SEPARATOR + split[1]);
 		return new ServiceID(containerID, split[2]);
+	}
+
+	public int compareTo(ServiceID o) {
+		return toString().compareTo(o.toString());
 	}
 }

@@ -24,7 +24,7 @@ import java.io.Serializable;
 
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 
-public abstract class TransferHandle implements Serializable {
+public abstract class TransferHandle implements Serializable, Comparable<TransferHandle> {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -114,4 +114,8 @@ public abstract class TransferHandle implements Serializable {
 	public long getFileSize() {
 		return fileSize;
 	} 
+	
+	public int compareTo(TransferHandle h) {
+		return (int)(id - h.id);
+	}
 }

@@ -80,7 +80,7 @@ public class FragmentationManager {
 				fe.receiveFragment( frag, fragID );
 				protocol.receiveMessage(fe.getMessage());
 			} catch ( IOException e ) {
-				CommuneLoggerFactory.getInstance().gimmeALogger(FragmentationManager.class).error("Fragmentation error", e);
+				CommuneLoggerFactory.getInstance().gimmeALogger(FragmentationManager.class).error("Fragmentation error");
 			}
 			
 		} else {
