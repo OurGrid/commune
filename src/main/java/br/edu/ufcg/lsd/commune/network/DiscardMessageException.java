@@ -26,5 +26,11 @@ package br.edu.ufcg.lsd.commune.network;
 public class DiscardMessageException extends ProtocolException {
 
 	private static final long serialVersionUID = 1L;
+	
+	public DiscardMessageException() {}
+	
+	public DiscardMessageException(String msg) {
+		super(msg);
+	}
 
 }

@@ -83,7 +83,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 
 	}
 	
-	public void sendingMessage(Message message) {
+	public void sendingMessage(Message message) throws DiscardMessageException {
 		
 		CommuneAddress destination = message.getDestination();
 		
@@ -95,7 +95,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		}
 	}
 
-	public void sendingRemoteMessage(Message message) {
+	public void sendingRemoteMessage(Message message) throws DiscardMessageException {
 		try {
 			connectionLock.writeLock().lock();
 		
@@ -108,11 +108,17 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				
 				if (message.getFunctionName().equals(InterestProcessor.IS_IT_ALIVE_MESSAGE)) {
 					connection = connections.get(destination.getContainerID());
+					
+					validateOnSend(connection, message);
+					
 					session = connection.getOutgoingSession();
 					sequence = connection.getOutgoingSequence();
 					
 				} else {
 					connection = connections.get(destination.getContainerID());
+					
+					validateOnSend(connection, message);
+					
 					session = connection.getIncomingSession();
 					sequence = connection.getIncomingSequence();
 				}
@@ -120,6 +126,8 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			} else {
 			
 				connection = connections.get(destination.getContainerID());
+				
+				validateOnSend(connection, message);
 				
 				connection.incOutgoingSequenceNumber();
 				session = connection.getOutgoingSession();
@@ -131,6 +139,18 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		
 		} finally {
 			connectionLock.writeLock().unlock();
+		}
+	}
+
+	private void validateOnSend(Communication connection, Message message) throws DiscardMessageException {
+		if (connection == null) {
+			throw new DiscardMessageException("Null connection while sending " + message.toString());
+		}
+	}
+
+	private void validateOnReceive(Communication connection, Message message) throws DiscardMessageException {
+		if (connection == null) {
+			throw new DiscardMessageException("Null connection while receiving " + message.toString());
 		}
 	}
 
@@ -162,12 +182,18 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 					
 				} else if (InterestProcessor.UPDATE_STATUS_MESSAGE.equals(messageName)) {
 					connection = connections.get(source.getContainerID());
+					
+					validateOnReceive(connection, message);
+					
 					receiveUpdateStatus(message, connection);
 				}
 
 			} else {
 			
 				connection = connections.get(source.getContainerID());
+				
+				validateOnReceive(connection, message);
+				
 				receivingRemoteApplicationMessage(message, connection);
 			}
 			
@@ -184,7 +210,6 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			&& message.getSequence() == 0; 
 	}
 
-
 	private Communication initIncomingConnection(Message message) {
 		Communication connection = new Communication();
 		connection.setIncomingSequence(0L);
@@ -192,8 +217,6 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		connection.setState(empty_empty);
 		return connection;
 	}
-
-
 
 	private void receiveHeartbeat(Message message, Communication connection) throws DiscardMessageException {
 		Long expectedSession = connection.getIncomingSession();
