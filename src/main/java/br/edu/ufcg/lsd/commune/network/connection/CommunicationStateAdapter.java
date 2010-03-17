@@ -29,79 +29,79 @@ import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
  * TODO Drop the ignored messages
  * 
  */
-public class ConnectionStateAdapter implements ConnectionState {
+public class CommunicationStateAdapter implements CommunicationState {
 	
 
 	protected final ConnectionManager manager;
 
-	public ConnectionStateAdapter(ConnectionManager connectionManager) {
+	public CommunicationStateAdapter(ConnectionManager connectionManager) {
 		this.manager = connectionManager;
 	}
 
 
-	public void heartbeatNonSessionNonSequence(Connection connection) throws DiscardMessageException {
+	public void heartbeatNonSessionNonSequence(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void heartbeatNonSessionOkSequence(Connection connection) throws DiscardMessageException {
+	public void heartbeatNonSessionOkSequence(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void heartbeatNonSessionZeroSequence(Connection connection) throws DiscardMessageException {
+	public void heartbeatNonSessionZeroSequence(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void heartbeatOkSessionNonSequence(Connection connection) throws DiscardMessageException {
+	public void heartbeatOkSessionNonSequence(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void heartbeatOkSessionOkSequence(Connection connection) throws DiscardMessageException {
+	public void heartbeatOkSessionOkSequence(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void heartbeatOkSessionZeroSequence(Connection connection) throws DiscardMessageException {
+	public void heartbeatOkSessionZeroSequence(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void messageWithCallbackOkSessionOkSequence(Connection connection) throws DiscardMessageException {
+	public void messageWithCallbackOkSessionOkSequence(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void registerInterest(Connection connection) {}
+	public void registerInterest(Communication connection) {}
 
-	public void release(Connection connection) {}
+	public void release(Communication connection) {}
 
-	public void updateStatusDown(Connection connection) throws DiscardMessageException {
+	public void updateStatusDown(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void updateStatusNonSession(Connection connection) throws DiscardMessageException {
+	public void updateStatusNonSession(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void updateStatusUp(Connection connection) throws DiscardMessageException {
+	public void updateStatusUp(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void messageNonSequence(Connection connection) throws DiscardMessageException {
+	public void messageNonSequence(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void messageNonSession(Connection connection) throws DiscardMessageException {
+	public void messageNonSession(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void messageOkSessionOkSequence(Connection connection) throws DiscardMessageException {
+	public void messageOkSessionOkSequence(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void timeout(Connection connection) {}
+	public void timeout(Communication connection) {}
 
-	public void notifyFailure(Connection connection) throws DiscardMessageException {
+	public void notifyFailure(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 
-	public void notifyRecovery(Connection connection) throws DiscardMessageException {
+	public void notifyRecovery(Communication connection) throws DiscardMessageException {
 		throw new DiscardMessageException();
 	}
 

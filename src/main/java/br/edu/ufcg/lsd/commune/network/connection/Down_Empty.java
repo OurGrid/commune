@@ -23,7 +23,7 @@ package br.edu.ufcg.lsd.commune.network.connection;
  * In this state, the outgoing connection is down and the incoming connection
  * is empty.  
  */
-public class Down_Empty extends ConnectionStateAdapter {
+public class Down_Empty extends CommunicationStateAdapter {
 
 	
 	public Down_Empty(ConnectionManager connectionManager) {
@@ -32,35 +32,35 @@ public class Down_Empty extends ConnectionStateAdapter {
 
 	
 	@Override
-	public void registerInterest(Connection connection) {
+	public void registerInterest(Communication connection) {
 		// Maintain state
 	}
 	
 	@Override
-	public void release(Connection connection) {
+	public void release(Communication connection) {
 		connection.setOutgoingSequence(null);
 		connection.setOutgoingSession(null);
-		connection.setState(manager.initialState);
+		connection.setState(manager.empty_empty);
 	}
 	
 	@Override
-	public void heartbeatOkSessionZeroSequence(Connection connection) {
+	public void heartbeatOkSessionZeroSequence(Communication connection) {
 		connection.setIncomingSequence(0L);
 		connection.setState(manager.down_zero);
 	}
 	
 	@Override
-	public void updateStatusUp(Connection connection) {
+	public void updateStatusUp(Communication connection) {
 		connection.setState(manager.uping_empty);
 	}
 	
 	@Override
-	public void updateStatusDown(Connection connection) {
+	public void updateStatusDown(Communication connection) {
 		// Maintain state
 	}
 	
 	@Override
-	public void timeout(Connection connection) {
+	public void timeout(Communication connection) {
 		// Maintain state
 	}
 }

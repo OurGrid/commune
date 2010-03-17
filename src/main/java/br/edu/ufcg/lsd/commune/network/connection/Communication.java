@@ -21,13 +21,13 @@ package br.edu.ufcg.lsd.commune.network.connection;
 
 import br.edu.ufcg.lsd.commune.container.StubReference;
 
-public class Connection {
+public class Communication {
 
 	private Long incomingSession;
 	private Long incomingSequence;
 	private Long outgoingSession;
 	private Long outgoingSequence;
-	private ConnectionState state;
+	private CommunicationState state;
 	private StubReference stubReference;
 	
 
@@ -76,15 +76,15 @@ public class Connection {
 		this.incomingSequence++;
 	}
 
-	public void incOutgoingSequenceNumber() {
+	public void incOutcoingSequenceNumber() {
 		this.outgoingSequence++;
 	}
 
-	public ConnectionState getState() {
+	public CommunicationState getState() {
 		return state;
 	}
 
-	public void setState(ConnectionState state) {
+	public void setState(CommunicationState state) {
 		this.state = state;
 	}
 }

@@ -23,7 +23,7 @@ package br.edu.ufcg.lsd.commune.network.connection;
  * In this state, the outgoing connection is downing and the incoming connection
  * is empty.  
  */
-public class Downing_Empty extends ConnectionStateAdapter {
+public class Downing_Empty extends CommunicationStateAdapter {
 
 
 	public Downing_Empty(ConnectionManager connectionManager) {
@@ -32,19 +32,19 @@ public class Downing_Empty extends ConnectionStateAdapter {
 
 	
 	@Override
-	public void registerInterest(Connection connection) {
+	public void registerInterest(Communication connection) {
 		// Maintain state
 	}
 
 	@Override
-	public void release(Connection connection) {
+	public void release(Communication connection) {
 		connection.setOutgoingSequence(null);
 		connection.setOutgoingSession(null);
-		connection.setState(manager.initialState);
+		connection.setState(manager.empty_empty);
 	}
 
 	@Override
-	public void notifyFailure(Connection connection) {
+	public void notifyFailure(Communication connection) {
 		connection.setOutgoingSession(generateSessionNumber());
 		connection.setOutgoingSequence(0L);
 		connection.setState(manager.down_empty);

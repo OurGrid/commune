@@ -24,22 +24,22 @@ package br.edu.ufcg.lsd.commune.network.connection;
  * In this state, the outgoing connection is empty and the incoming connection
  * is also empty.  
  */
-public class InitialState extends ConnectionStateAdapter {
+public class Empty_Empty extends CommunicationStateAdapter {
 
 
-	public InitialState(ConnectionManager connectionManager) {
+	public Empty_Empty(ConnectionManager connectionManager) {
 		super(connectionManager);
 	}
 
 	@Override
-	public void registerInterest(Connection connection) {
+	public void registerInterest(Communication connection) {
 		connection.setOutgoingSession(generateSessionNumber());
 		connection.setOutgoingSequence(0L);
 		connection.setState(manager.down_empty);
 	}
 
 	@Override
-	public void heartbeatOkSessionZeroSequence(Connection connection) {
+	public void heartbeatOkSessionZeroSequence(Communication connection) {
 		connection.setIncomingSequence(0L);
 		connection.setState(manager.empty_zero);
 	}

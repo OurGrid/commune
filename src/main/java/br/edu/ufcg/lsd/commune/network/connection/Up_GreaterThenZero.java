@@ -25,7 +25,7 @@ import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
  * In this state, the outgoing connection is up and the incoming connection
  * has a sequence number greater then zero.  
  */
-public class Up_GreaterThenZero extends ConnectionStateAdapter {
+public class Up_GreaterThenZero extends CommunicationStateAdapter {
 
 	
 	public Up_GreaterThenZero(ConnectionManager connectionManager) {
@@ -34,98 +34,96 @@ public class Up_GreaterThenZero extends ConnectionStateAdapter {
 
 	
 	@Override
-	public void registerInterest(Connection connection) {
+	public void registerInterest(Communication connection) {
 		// Maintain state
 	}
 	
 	@Override
-	public void release(Connection connection) {
+	public void release(Communication connection) {
 		connection.setOutgoingSequence(null);
 		connection.setOutgoingSession(null);
 		connection.setIncomingSequence(null);
 		connection.setIncomingSession(null);
-		connection.setState(manager.initialState);
+		connection.setState(manager.empty_empty);
 	}
 	
 	@Override
-	public void heartbeatOkSessionZeroSequence(Connection connection) throws DiscardMessageException {
+	public void heartbeatOkSessionZeroSequence(Communication connection) throws DiscardMessageException {
 		gotoDowningEmpty(connection);
 	}
 	
 	@Override
-	public void heartbeatOkSessionOkSequence(Connection connection) {
+	public void heartbeatOkSessionOkSequence(Communication connection) {
 		// Maintain state
 	}
 
 	@Override
-	public void heartbeatOkSessionNonSequence(Connection connection) throws DiscardMessageException {
+	public void heartbeatOkSessionNonSequence(Communication connection) throws DiscardMessageException {
 		gotoDowningEmpty(connection);
 	}
 	
 	@Override
-	public void heartbeatNonSessionZeroSequence(Connection connection) throws DiscardMessageException {
+	public void heartbeatNonSessionZeroSequence(Communication connection) throws DiscardMessageException {
 		gotoDowningEmpty(connection);
 	}
 	
 	@Override
-	public void heartbeatNonSessionOkSequence(Connection connection) throws DiscardMessageException {
+	public void heartbeatNonSessionOkSequence(Communication connection) throws DiscardMessageException {
 		gotoDowningEmpty(connection);
 	}
 	
 	@Override
-	public void heartbeatNonSessionNonSequence(Connection connection) throws DiscardMessageException {
+	public void heartbeatNonSessionNonSequence(Communication connection) throws DiscardMessageException {
 		gotoDowningEmpty(connection);
 	}
 
 	@Override
-	public void updateStatusUp(Connection connection) {
+	public void updateStatusUp(Communication connection) {
 		// Maintain state
 	}
 	
 	@Override
-	public void updateStatusDown(Connection connection) throws DiscardMessageException {
+	public void updateStatusDown(Communication connection) throws DiscardMessageException {
 		gotoDowningEmpty(connection);
 	}
 	
 	@Override
-	public void updateStatusNonSession(Connection connection) throws DiscardMessageException {
+	public void updateStatusNonSession(Communication connection) throws DiscardMessageException {
 		gotoDowningEmpty(connection);
 	}
 	
 	@Override
-	public void timeout(Connection connection) {
+	public void timeout(Communication connection) {
 		connection.setIncomingSequence(null);
 		connection.setIncomingSession(null);
 		connection.setState(manager.downing_empty);
 	}
 	
 	@Override
-	public void messageOkSessionOkSequence(Connection connection) {
+	public void messageOkSessionOkSequence(Communication connection) {
 		// Maintain state
 	}
 	
 	@Override
-	public void messageWithCallbackOkSessionOkSequence(Connection connection) {
+	public void messageWithCallbackOkSessionOkSequence(Communication connection) {
 		// Maintain state
 	}
 	
 	@Override
-	public void messageNonSequence(Connection connection) throws DiscardMessageException {
+	public void messageNonSequence(Communication connection) throws DiscardMessageException {
 		gotoDowningEmpty(connection);
 	}
 	
 	@Override
-	public void messageNonSession(Connection connection) throws DiscardMessageException {
+	public void messageNonSession(Communication connection) throws DiscardMessageException {
 		gotoDowningEmpty(connection);
 	}
 
 	
-	private void gotoDowningEmpty(Connection connection) throws DiscardMessageException {
+	private void gotoDowningEmpty(Communication connection) throws DiscardMessageException {
 		connection.setIncomingSequence(null);
 		connection.setIncomingSession(null);
 		connection.setState(manager.downing_empty);
-		
-		manager.getInterestManager().sendNotifyFailureMessage(connection.getStubReference().getStubServiceID());
 		
 		throw new DiscardMessageException();
 	}
