@@ -28,6 +28,7 @@ import br.edu.ufcg.lsd.commune.container.Container;
 import br.edu.ufcg.lsd.commune.container.StubListener;
 import br.edu.ufcg.lsd.commune.container.StubReference;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
+import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.message.Message;
@@ -35,6 +36,8 @@ import br.edu.ufcg.lsd.commune.message.MessageParameter;
 import br.edu.ufcg.lsd.commune.message.MessageUtil;
 import br.edu.ufcg.lsd.commune.message.StubParameter;
 import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
+import br.edu.ufcg.lsd.commune.network.loopback.LoopbackRegistry;
+import br.edu.ufcg.lsd.commune.processor.interest.InterestManager;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestProcessor;
 import br.edu.ufcg.lsd.commune.processor.interest.MonitorableStatus;
 import br.edu.ufcg.lsd.commune.processor.interest.TimeoutListener;
@@ -44,10 +47,10 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	
 	private Container container;
 	private ReadWriteLock connectionLock = new ReentrantReadWriteLock(true);
-	private Map<ServiceID, Communication> communications = new HashMap<ServiceID, Communication>();
+	private Map<ContainerID, Communication> connections = new HashMap<ContainerID, Communication>();
 	
-	//Connection states
-	CommunicationState empty_empty 				= new Empty_Empty(this);
+	//Communication states
+	CommunicationState empty_empty 			= new Empty_Empty(this);
 	CommunicationState empty_zero 				= new Empty_Zero(this);
 	CommunicationState empty_greatherThenZero 	= new Empty_GreaterThenZero(this);
 	CommunicationState down_empty 				= new Down_Empty(this);
@@ -72,19 +75,20 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		CommuneAddress source = message.getSource();
 		
 		if (container.isLocal(source)) {
-			//Do not verify session and sequence numbers for local messages
+			//Do not verify session and sequence numbers for loopback messages
 			
 		} else {
 			receivingRemoteMessage(message);
-			
 		}
 
 	}
 	
 	public void sendingMessage(Message message) {
 		
-		if (container.isLocal(message.getDestination())) {
-			//Do not define session and sequence numbers for local messages
+		CommuneAddress destination = message.getDestination();
+		
+		if (container.isLocal(destination)) {
+			//Do not define session and sequence numbers for loopback messages
 			
 		} else {
 			sendingRemoteMessage(message);
@@ -96,30 +100,35 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			connectionLock.writeLock().lock();
 		
 			CommuneAddress destination = message.getDestination();
-			Communication communication = null;
+			Communication connection = null;
+			Long session = null;
+			Long sequence = null;
 			
 			if (isFailureDetectorMessage(message)) {
 				
-				communication = communications.get(destination);
-				
-				if (isIsItAlive(message)) { //Outgoing
-					message.setSequence(communication.getOutgoingSequence());
-					message.setSession(communication.getOutgoingSession());
+				if (message.getFunctionName().equals(InterestProcessor.IS_IT_ALIVE_MESSAGE)) {
+					connection = connections.get(destination.getContainerID());
+					session = connection.getOutgoingSession();
+					sequence = connection.getOutgoingSequence();
 					
-				} else { //Update status - Incoming 
-					message.setSequence(communication.getIncomingSequence());
-					message.setSession(communication.getIncomingSession());
+				} else {
+					connection = connections.get(destination.getContainerID());
+					session = connection.getIncomingSession();
+					sequence = connection.getIncomingSequence();
 				}
 				
-			} else { //Application message - Outgoing
-				DeploymentID destinationDeploymentID = (DeploymentID)destination;
-				communication = communications.get(destinationDeploymentID.getServiceID());
+			} else {
+			
+				connection = connections.get(destination.getContainerID());
 				
-				communication.incOutcoingSequenceNumber();
-				message.setSequence(communication.getOutgoingSequence());
-				message.setSession(communication.getOutgoingSession());
+				connection.incOutgoingSequenceNumber();
+				session = connection.getOutgoingSession();
+				sequence = connection.getOutgoingSequence();
 			}
 			
+			message.setSequence(sequence);
+			message.setSession(session);
+		
 		} finally {
 			connectionLock.writeLock().unlock();
 		}
@@ -129,36 +138,40 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		return InterestProcessor.class.getName().equals(message.getProcessorType());
 	}
 	
-	private static boolean isIsItAlive(Message message) {
-		return InterestProcessor.IS_IT_ALIVE_MESSAGE.equals(message.getFunctionName());
-	}
-
-	private void receivingRemoteMessage(Message message) throws DiscardMessageException {
+	private Communication receivingRemoteMessage(Message message) throws DiscardMessageException {
 		try {
 			connectionLock.writeLock().lock();
 		
-			CommuneAddress destination = message.getDestination();
-			Communication communication = null;
+			CommuneAddress source = message.getSource();
+			Communication connection = null;
 			
 			if (isFailureDetectorMessage(message)) {
 				
-				communication = communications.get(destination);
-				
-				if (communication == null && isCreatingConnection(message)) {
-					communication = initIncomingConnection(message);
-					communications.put((ServiceID) destination, communication);
+				String messageName = message.getFunctionName();
+
+				if (InterestProcessor.IS_IT_ALIVE_MESSAGE.equals(messageName)) {
+
+					connection = connections.get(source.getContainerID());
+					
+					if (connection == null && isCreatingConnection(message)) {
+						connection = initIncomingConnection(message);
+						connections.put(source.getContainerID(), connection);
+					}
+					
+					receiveHeartbeat(message, connection);
+					
+				} else if (InterestProcessor.UPDATE_STATUS_MESSAGE.equals(messageName)) {
+					connection = connections.get(source.getContainerID());
+					receiveUpdateStatus(message, connection);
 				}
-				
-				receivingRemoteControlMessage(message, communication);
-				
-				
+
 			} else {
 			
-				DeploymentID destinationDeploymentID = (DeploymentID)destination;
-				communication = communications.get(destinationDeploymentID.getServiceID());
-				
-				receivingRemoteApplicationMessage(message, communication);
+				connection = connections.get(source.getContainerID());
+				receivingRemoteApplicationMessage(message, connection);
 			}
+			
+			return connection;
 
 		} finally {
 			connectionLock.writeLock().unlock();
@@ -167,7 +180,8 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	}
 
 	private static boolean isCreatingConnection(Message message) {
-		return isIsItAlive(message) && message.getSequence() == 0; 
+		return InterestProcessor.IS_IT_ALIVE_MESSAGE.equals(message.getFunctionName())
+			&& message.getSequence() == 0; 
 	}
 
 
@@ -179,33 +193,29 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		return connection;
 	}
 
-	private void receivingRemoteControlMessage(Message message, Communication connection) throws DiscardMessageException {
-		String messageName = message.getFunctionName();
 
-		if (InterestProcessor.IS_IT_ALIVE_MESSAGE.equals(messageName)) {
-			
-			receiveHeartbeat(message, connection);
-			
-		} else if (InterestProcessor.UPDATE_STATUS_MESSAGE.equals(messageName)) {
-			receiveUpdateStatus(message, connection);
-		}
-	}
 
-	private void receiveHeartbeat(Message message, Communication connection) throws DiscardMessageException { //Incoming
+	private void receiveHeartbeat(Message message, Communication connection) throws DiscardMessageException {
 		Long expectedSession = connection.getIncomingSession();
 		Long expectedSequence = connection.getIncomingSequence();
 
-		long messageSession = message.getSession();
-		long messageSequence = message.getSequence();
+		Long messageSession = message.getSession();
+		Long messageSequence = message.getSequence();
+		
+		validate(messageSession, messageSequence);
 		
 		CommunicationState state = connection.getState();
 		
-		if (expectedSession == messageSession) {
+		if (expectedSession == null || messageSession.equals(expectedSession)) {
 			
 			if(messageSequence == 0) {
+				if (expectedSession == null) {
+					connection.setIncomingSession(messageSession);
+				}
+
 				state.heartbeatOkSessionZeroSequence(connection);
 				
-			} else if(expectedSequence == messageSequence) {
+			} else if(messageSequence.equals(expectedSequence)) {
 				state.heartbeatOkSessionOkSequence(connection);
 				
 			} else {
@@ -217,7 +227,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				connection.setIncomingSession(message.getSession());
 				state.heartbeatNonSessionZeroSequence(connection);
 				
-			} else if(expectedSequence == messageSequence) {
+			} else if(messageSequence.equals(expectedSequence)) {
 				state.heartbeatNonSessionOkSequence(connection);
 				
 			} else {
@@ -227,12 +237,25 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	}
 
 
-	private void receiveUpdateStatus(Message message, Communication connection) throws DiscardMessageException { //Outgoing
+	private void validate(Long messageSession, Long messageSequence) throws DiscardMessageException {
+		if (messageSession == null || messageSequence == null) {
+			throw new DiscardMessageException();
+		}
+	}
+
+	private void validate(Long messageSession) throws DiscardMessageException {
+		if (messageSession == null) {
+			throw new DiscardMessageException();
+		}
+	}
+
+	private void receiveUpdateStatus(Message message, Communication connection) throws DiscardMessageException {
 		Long expectedSession = connection.getOutgoingSession();
-		long messageSession = message.getSession();
+		Long messageSession = message.getSession();
+		validate(messageSession);
 		CommunicationState state = connection.getState();
 		
-		if (expectedSession == messageSession) {
+		if (expectedSession.equals(messageSession)) {
 
 			if (message.getParameterValues().length == 1) {
 				
@@ -251,19 +274,20 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	}
 
 
-	private void receivingRemoteApplicationMessage(Message message, Communication connection) throws DiscardMessageException { //Incoming
+	private void receivingRemoteApplicationMessage(Message message, Communication connection) throws DiscardMessageException {
 		Long expectedSession = connection.getIncomingSession();
 		connection.incIncomingSequenceNumber();
 		Long expectedSequence = connection.getIncomingSequence();
 
-		long messageSession = message.getSession();
-		long messageSequence = message.getSequence();
+		Long messageSession = message.getSession();
+		Long messageSequence = message.getSequence();
+		validate(messageSession, messageSequence);
 		
 		CommunicationState state = connection.getState();
 		
-		if (expectedSession == messageSession) {
+		if (expectedSession.equals(messageSession)) {
 			
-			if(messageSequence == expectedSequence) {
+			if(messageSequence.equals(expectedSequence)) {
 				
 				if(hasCallback(message)) {
 					state.messageWithCallbackOkSessionOkSequence(connection);
@@ -309,14 +333,14 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			connectionLock.writeLock().lock();
 
 			ServiceID stubServiceID = stubReference.getStubServiceID();
-			Communication connection = communications.get(stubServiceID);
+			Communication connection = connections.get(stubServiceID.getContainerID());
 
 			CommunicationState state = null;
 			
 			if (connection == null) {
 				state = empty_empty;
 				connection = initOutgoingConnection(stubReference);
-				communications.put(stubServiceID, connection);
+				connections.put(stubServiceID.getContainerID(), connection);
 
 			} else {
 				state = connection.getState();
@@ -343,7 +367,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		try {
 			connectionLock.writeLock().lock();
 
-			Communication connection = communications.remove(stubServiceID.getContainerID());
+			Communication connection = connections.remove(stubServiceID.getContainerID());
 			if (connection != null) {
 				connection.getState().release(connection);
 			}
@@ -357,7 +381,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		try {
 			connectionLock.writeLock().lock();
 
-			Communication connection = communications.get(stubServiceID); 
+			Communication connection = connections.get(stubServiceID.getContainerID()); 
 			connection.getState().timeout(connection);
 			
 		} finally {
@@ -370,7 +394,11 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		try {
 			connectionLock.writeLock().lock();
 
-			Communication connection = communications.get(serviceID); 
+			if (LoopbackRegistry.isInLoopback(serviceID.getContainerID())) {
+				return;
+			}
+
+			Communication connection = connections.get(serviceID.getContainerID()); 
 			connection.getState().notifyFailure(connection);
 			
 		} finally {
@@ -381,15 +409,36 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	public void notifyRecovery(ServiceID serviceID) throws DiscardMessageException {
 		try {
 			connectionLock.writeLock().lock();
+			
+			if (LoopbackRegistry.isInLoopback(serviceID.getContainerID())) {
+				return;
+			}
 
-			Communication connection = communications.get(serviceID); 
+			Communication connection = connections.get(serviceID.getContainerID()); 
 			connection.getState().notifyRecovery(connection);
 			
 		} finally {
 			connectionLock.writeLock().unlock();
 		}
 	}
+
+
+	public Communication getConnection(ContainerID containerID) {
+		try {
+			connectionLock.readLock().lock();
+
+			return connections.get(containerID); 
+			
+		} finally {
+			connectionLock.readLock().unlock();
+		}
+	}
 	
+	InterestManager getInterestManager() {
+		return container.getInterestManager();
+	}
+
+
 	public void configure(Container container) {
 		container.getStubRepository().addListener(this);
 		container.getInterestManager().addListener(this);

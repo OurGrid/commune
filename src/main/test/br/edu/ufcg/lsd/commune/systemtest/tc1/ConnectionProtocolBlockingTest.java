@@ -32,7 +32,7 @@ import br.edu.ufcg.lsd.commune.network.connection.ConnectionProtocol;
 import br.edu.ufcg.lsd.commune.network.connection.Down_Empty;
 import br.edu.ufcg.lsd.commune.network.connection.Empty_GreaterThenZero;
 import br.edu.ufcg.lsd.commune.network.connection.Empty_Zero;
-import br.edu.ufcg.lsd.commune.network.connection.InitialState;
+import br.edu.ufcg.lsd.commune.network.connection.Empty_Empty;
 import br.edu.ufcg.lsd.commune.network.connection.Up_Empty;
 import br.edu.ufcg.lsd.commune.network.connection.Up_GreaterThenZero;
 import br.edu.ufcg.lsd.commune.network.connection.Uping_Empty;
@@ -195,7 +195,7 @@ public class ConnectionProtocolBlockingTest {
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		Condition<ConnectionProtocol> B2A_initial_connection = 
-			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
+			new ConnectionStateCondition(A_ADDRESS, Empty_Empty.class);
 		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 	}
@@ -221,7 +221,7 @@ public class ConnectionProtocolBlockingTest {
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		Condition<ConnectionProtocol> B2A_initial_connection = 
-			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
+			new ConnectionStateCondition(A_ADDRESS, Empty_Empty.class);
 		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 	}
@@ -277,7 +277,7 @@ public class ConnectionProtocolBlockingTest {
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		Condition<ConnectionProtocol> B2A_initial_connection = 
-			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
+			new ConnectionStateCondition(A_ADDRESS, Empty_Empty.class);
 		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 	}
@@ -305,7 +305,7 @@ public class ConnectionProtocolBlockingTest {
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		Condition<ConnectionProtocol> B2A_initial_connection = 
-			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
+			new ConnectionStateCondition(A_ADDRESS, Empty_Empty.class);
 		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 	}
@@ -430,7 +430,7 @@ public class ConnectionProtocolBlockingTest {
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		Condition<ConnectionProtocol> B2A_initial_connection = 
-			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
+			new ConnectionStateCondition(A_ADDRESS, Empty_Empty.class);
 		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
@@ -470,7 +470,7 @@ public class ConnectionProtocolBlockingTest {
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		
 		Condition<ConnectionProtocol> B2A_initial_connection = 
-			new ConnectionStateCondition(A_ADDRESS, InitialState.class);
+			new ConnectionStateCondition(A_ADDRESS, Empty_Empty.class);
 		checker = new ConditionChecker<ConnectionProtocol>(b_module.getConnectionProtocol(), B2A_initial_connection);
 		Assert.assertTrue(checker.waitUntilCondition(VERIFICATION_DELAY, VERIFICATION_COUNT));
 		

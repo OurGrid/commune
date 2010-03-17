@@ -76,7 +76,7 @@ public class Communication {
 		this.incomingSequence++;
 	}
 
-	public void incOutcoingSequenceNumber() {
+	public void incOutgoingSequenceNumber() {
 		this.outgoingSequence++;
 	}
 

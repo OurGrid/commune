@@ -1,6 +1,6 @@
 package br.edu.ufcg.lsd.commune.systemtest.tc1;
 
-import br.edu.ufcg.lsd.commune.network.connection.Connection;
+import br.edu.ufcg.lsd.commune.network.connection.Communication;
 import br.edu.ufcg.lsd.commune.network.connection.ConnectionProtocol;
 import br.edu.ufcg.lsd.commune.systemtest.Condition;
 
@@ -16,7 +16,7 @@ public class ConnectionStateCondition implements Condition<ConnectionProtocol> {
 	}
 
 	public boolean test(ConnectionProtocol protocol) {
-		Connection connection = protocol.getConnection(remoteAddress);
+		Communication connection = protocol.getCommunication(remoteAddress);
 		return connection != null && (state.isInstance(connection.getState()));
 	}
 

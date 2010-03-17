@@ -20,6 +20,7 @@
 package br.edu.ufcg.lsd.commune.network.connection;
 
 import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.network.CommuneNetwork;
 import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
@@ -52,6 +53,10 @@ public class ConnectionProtocol extends Protocol {
 
 	}
 
+	public Communication getCommunication(String address) {
+		ServiceID serviceID = ServiceID.parse(address);
+		return connectionManager.getConnection(serviceID.getContainerID());
+	}
 	public void configure(Container container) {
 		connectionManager.configure(container);
 		
