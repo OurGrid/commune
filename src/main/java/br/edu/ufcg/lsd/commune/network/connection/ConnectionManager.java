@@ -106,7 +106,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			
 			if (isFailureDetectorMessage(message)) {
 				
-				if (message.getFunctionName().equals(InterestProcessor.IS_IT_ALIVE_MESSAGE)) {
+				if (message.getFunctionName().equals(InterestProcessor.IS_IT_ALIVE_MESSAGE)) { //Outgoing
 					connection = connections.get(destination.getContainerID());
 					
 					validateOnSend(connection, message);
@@ -114,7 +114,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 					session = connection.getOutgoingSession();
 					sequence = connection.getOutgoingSequence();
 					
-				} else {
+				} else { //Incoming
 					connection = connections.get(destination.getContainerID());
 					
 					validateOnSend(connection, message);
@@ -123,7 +123,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 					sequence = connection.getIncomingSequence();
 				}
 				
-			} else {
+			} else { //Outgoing
 			
 				connection = connections.get(destination.getContainerID());
 				
@@ -169,7 +169,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				
 				String messageName = message.getFunctionName();
 
-				if (InterestProcessor.IS_IT_ALIVE_MESSAGE.equals(messageName)) {
+				if (InterestProcessor.IS_IT_ALIVE_MESSAGE.equals(messageName)) { //Incoming
 
 					connection = connections.get(source.getContainerID());
 					
@@ -178,9 +178,11 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 						connections.put(source.getContainerID(), connection);
 					}
 					
+					validateOnReceive(connection, message);
+					
 					receiveHeartbeat(message, connection);
 					
-				} else if (InterestProcessor.UPDATE_STATUS_MESSAGE.equals(messageName)) {
+				} else if (InterestProcessor.UPDATE_STATUS_MESSAGE.equals(messageName)) { //Outgoing
 					connection = connections.get(source.getContainerID());
 					
 					validateOnReceive(connection, message);
@@ -188,7 +190,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 					receiveUpdateStatus(message, connection);
 				}
 
-			} else {
+			} else { //Incoming
 			
 				connection = connections.get(source.getContainerID());
 				
