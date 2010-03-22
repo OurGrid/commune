@@ -306,6 +306,10 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 
 	private void receivingRemoteApplicationMessage(Message message, Communication connection) throws DiscardMessageException {
 		Long expectedSession = connection.getIncomingSession();
+		
+		if (connection.getIncomingSequence() == null) {
+			connection.setIncomingSequence(0L);
+		}
 		connection.incIncomingSequenceNumber();
 		Long expectedSequence = connection.getIncomingSequence();
 
@@ -315,7 +319,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		
 		CommunicationState state = connection.getState();
 		
-		if (expectedSession.equals(messageSession)) {
+		if (messageSession.equals(expectedSession)) {
 			
 			if(messageSequence.equals(expectedSequence)) {
 				
