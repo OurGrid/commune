@@ -129,6 +129,11 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				
 				validateOnSend(connection, message);
 				
+				if (connection.getOutgoingSession() == null || connection.getOutgoingSequence() == null) { //TODO gambiarra
+					connection.setOutgoingSession(CommunicationStateAdapter.generateSessionNumber());
+					connection.setOutgoingSequence(0L);
+				}
+
 				connection.incOutgoingSequenceNumber();
 				session = connection.getOutgoingSession();
 				sequence = connection.getOutgoingSequence();
@@ -374,6 +379,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 
 			if (stubReference.getStubDeploymentID() == null) {
 				state.registerInterest(connection);
+			
 			} 
 			
 		} finally {
