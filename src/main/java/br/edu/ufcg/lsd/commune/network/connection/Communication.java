@@ -87,4 +87,29 @@ public class Communication {
 	public void setState(CommunicationState state) {
 		this.state = state;
 	}
+	
+	public void invalidate() {
+		incomingSession = null;
+		incomingSequence = null;
+		outgoingSession = null;
+		outgoingSequence = null;
+	}
+	
+	public boolean isValidOutgoing() {
+		return outgoingSession != null;
+	}
+
+	public boolean isValidIncoming() {
+		return incomingSession != null;
+	}
+
+	public String toString() {
+		String stub = "";
+		if (stubReference != null) {
+			stub = stubReference.toString();
+		}
+		
+		return stub + ":" + state +":>" + incomingSession + "," + incomingSequence + "< <" + outgoingSession + "," + 
+			outgoingSequence + ">";
+	}
 }

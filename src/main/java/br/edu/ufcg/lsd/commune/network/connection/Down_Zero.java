@@ -33,96 +33,90 @@ public class Down_Zero extends CommunicationStateAdapter {
 
 	
 	@Override
-	public void registerInterest(Communication connection) {
+	public void registerInterest(Communication communication) {
 		// Maintain state
 	}
 
 	@Override
-	public void release(Communication connection) {
-		connection.setOutgoingSequence(null);
-		connection.setOutgoingSession(null);
-		connection.setIncomingSequence(null);
-		connection.setIncomingSession(null);
-		connection.setState(manager.empty_empty);
+	public void release(Communication communication) {
+		communication.invalidate();
+		communication.setState(manager.empty_empty);
 	}
 
 	@Override
-	public void heartbeatOkSessionZeroSequence(Communication connection) {
+	public void heartbeatOkSessionZeroSequence(Communication communication) {
 		// Maintain state
 	}
 	
 	@Override
-	public void heartbeatOkSessionOkSequence(Communication connection) throws DiscardMessageException {
-		gotoDownEmpty(connection);
+	public void heartbeatOkSessionOkSequence(Communication communication) throws DiscardMessageException {
+		gotoDownEmpty(communication);
 	}
 	
 	@Override
-	public void heartbeatOkSessionNonSequence(Communication connection) throws DiscardMessageException {
-		gotoDownEmpty(connection);
+	public void heartbeatOkSessionNonSequence(Communication communication) throws DiscardMessageException {
+		gotoDownEmpty(communication);
 	}
 	
 	@Override
-	public void heartbeatNonSessionZeroSequence(Communication connection) throws DiscardMessageException {
-		gotoDownEmpty(connection);
+	public void heartbeatNonSessionZeroSequence(Communication communication) throws DiscardMessageException {
+		gotoDownEmpty(communication);
 	}
 	
 	@Override
-	public void heartbeatNonSessionOkSequence(Communication connection) throws DiscardMessageException {
-		gotoDownEmpty(connection);
+	public void heartbeatNonSessionOkSequence(Communication communication) throws DiscardMessageException {
+		gotoDownEmpty(communication);
 	}
 	
 	@Override
-	public void heartbeatNonSessionNonSequence(Communication connection) throws DiscardMessageException {
-		gotoDownEmpty(connection);
+	public void heartbeatNonSessionNonSequence(Communication communication) throws DiscardMessageException {
+		gotoDownEmpty(communication);
 	}
 	
 	@Override
-	public void updateStatusUp(Communication connection) {
-		connection.setState(manager.uping_zero);
+	public void updateStatusUp(Communication communication) {
+		communication.setState(manager.uping_zero);
 	}
 	
 	@Override
-	public void updateStatusDown(Communication connection) throws DiscardMessageException {
-		gotoDownEmpty(connection);
+	public void updateStatusDown(Communication communication) throws DiscardMessageException {
+		gotoDownEmpty(communication);
 	}
 	
 	@Override
-	public void updateStatusNonSession(Communication connection) throws DiscardMessageException {
-		gotoDownEmpty(connection);
+	public void updateStatusNonSession(Communication communication) throws DiscardMessageException {
+		gotoDownEmpty(communication);
 	}
 	
 	@Override
-	public void timeout(Communication connection) {
-		connection.setIncomingSequence(null);
-		connection.setIncomingSession(null);
-		connection.setState(manager.down_empty);
+	public void timeout(Communication communication) {
+		communication.invalidate();
+		communication.setState(manager.down_empty);
 	}
 	
 	@Override
-	public void messageOkSessionOkSequence(Communication connection) {
-		connection.setState(manager.down_greatherThenZero);
+	public void messageOkSessionOkSequence(Communication communication) {
+		communication.setState(manager.down_greatherThenZero);
 	}
 	
 	@Override
-	public void messageWithCallbackOkSessionOkSequence(Communication connection) {
-		connection.setState(manager.up_greatherThenZero);
+	public void messageWithCallbackOkSessionOkSequence(Communication communication) {
+		communication.setState(manager.up_greatherThenZero);
 	}
 	
 	@Override
-	public void messageNonSequence(Communication connection) throws DiscardMessageException {
-		gotoDownEmpty(connection);
+	public void messageNonSequence(Communication communication) throws DiscardMessageException {
+		gotoDownEmpty(communication);
 	}
 	
 	@Override
-	public void messageNonSession(Communication connection) throws DiscardMessageException {
-		gotoDownEmpty(connection);
+	public void messageNonSession(Communication communication) throws DiscardMessageException {
+		gotoDownEmpty(communication);
 	}
 	
-	private void gotoDownEmpty(Communication connection) throws DiscardMessageException {
-		connection.setIncomingSequence(null);
-		connection.setIncomingSession(null);
-		connection.setState(manager.down_empty);
-		
+	private void gotoDownEmpty(Communication communication) throws DiscardMessageException {
+		communication.invalidate();
+		communication.setState(manager.down_empty);
 		throw new DiscardMessageException();
 	}
 

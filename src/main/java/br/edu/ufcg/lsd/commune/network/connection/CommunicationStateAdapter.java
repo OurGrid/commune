@@ -111,4 +111,7 @@ public class CommunicationStateAdapter implements CommunicationState {
 		return (toReturn >= 0 ? toReturn : -1 * toReturn);
 	}
 
+	protected void forceNotifyFailure(Communication communication) {
+		manager.forceNotifyFailure(communication.getStubReference().getStubServiceID());
+	}
 }

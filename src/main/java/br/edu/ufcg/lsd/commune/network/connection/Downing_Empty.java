@@ -32,21 +32,20 @@ public class Downing_Empty extends CommunicationStateAdapter {
 
 	
 	@Override
-	public void registerInterest(Communication connection) {
+	public void registerInterest(Communication communication) {
 		// Maintain state
 	}
 
 	@Override
-	public void release(Communication connection) {
-		connection.setOutgoingSequence(null);
-		connection.setOutgoingSession(null);
-		connection.setState(manager.empty_empty);
+	public void release(Communication communication) {
+		communication.invalidate();
+		communication.setState(manager.empty_empty);
 	}
 
 	@Override
-	public void notifyFailure(Communication connection) {
-		connection.setOutgoingSession(generateSessionNumber());
-		connection.setOutgoingSequence(0L);
-		connection.setState(manager.down_empty);
+	public void notifyFailure(Communication communication) {
+		communication.setOutgoingSession(generateSessionNumber());
+		communication.setOutgoingSequence(0L);
+		communication.setState(manager.down_empty);
 	}
 }

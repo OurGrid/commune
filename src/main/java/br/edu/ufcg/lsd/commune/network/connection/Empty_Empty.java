@@ -32,15 +32,15 @@ public class Empty_Empty extends CommunicationStateAdapter {
 	}
 
 	@Override
-	public void registerInterest(Communication connection) {
-		connection.setOutgoingSession(generateSessionNumber());
-		connection.setOutgoingSequence(0L);
-		connection.setState(manager.down_empty);
+	public void registerInterest(Communication communication) {
+		communication.setOutgoingSession(generateSessionNumber());
+		communication.setOutgoingSequence(0L);
+		communication.setState(manager.down_empty);
 	}
 
 	@Override
-	public void heartbeatOkSessionZeroSequence(Communication connection) {
-		connection.setIncomingSequence(0L);
-		connection.setState(manager.empty_zero);
+	public void heartbeatOkSessionZeroSequence(Communication communication) {
+		communication.setIncomingSequence(0L);
+		communication.setState(manager.empty_zero);
 	}
 }

@@ -33,81 +33,80 @@ public class Empty_Zero extends CommunicationStateAdapter {
 
 	
 	@Override
-	public void registerInterest(Communication connection) {
-		connection.setOutgoingSession(generateSessionNumber());
-		connection.setOutgoingSequence(0L);
-		connection.setState(manager.down_zero); 
+	public void registerInterest(Communication communication) {
+		communication.setOutgoingSession(generateSessionNumber());
+		communication.setOutgoingSequence(0L);
+		communication.setState(manager.down_zero); 
 	}
 	
 	@Override
-	public void heartbeatOkSessionZeroSequence(Communication connection) {
+	public void heartbeatOkSessionZeroSequence(Communication communication) {
 		//Maintain state
 	}
 	
 	@Override
-	public void heartbeatOkSessionOkSequence(Communication connection) throws DiscardMessageException {
-		gotoInitial(connection);
+	public void heartbeatOkSessionOkSequence(Communication communication) throws DiscardMessageException {
+		gotoInitial(communication);
 	}
 
 	@Override
-	public void heartbeatOkSessionNonSequence(Communication connection) throws DiscardMessageException {
-		gotoInitial(connection);
+	public void heartbeatOkSessionNonSequence(Communication communication) throws DiscardMessageException {
+		gotoInitial(communication);
 	}
 	
 	@Override
-	public void heartbeatNonSessionZeroSequence(Communication connection) throws DiscardMessageException {
-		gotoInitial(connection);
+	public void heartbeatNonSessionZeroSequence(Communication communication) throws DiscardMessageException {
+		gotoInitial(communication);
 	}
 
 	@Override
-	public void heartbeatNonSessionOkSequence(Communication connection) throws DiscardMessageException {
-		gotoInitial(connection);
+	public void heartbeatNonSessionOkSequence(Communication communication) throws DiscardMessageException {
+		gotoInitial(communication);
 	}
 	
 	@Override
-	public void heartbeatNonSessionNonSequence(Communication connection) throws DiscardMessageException {
-		gotoInitial(connection);
+	public void heartbeatNonSessionNonSequence(Communication communication) throws DiscardMessageException {
+		gotoInitial(communication);
 	}
 	
 	@Override
-	public void updateStatusUp(Communication connection) throws DiscardMessageException {
-		gotoInitial(connection);
+	public void updateStatusUp(Communication communication) throws DiscardMessageException {
+		gotoInitial(communication);
 	}
 	
 	@Override
-	public void updateStatusDown(Communication connection) throws DiscardMessageException {
-		gotoInitial(connection);
+	public void updateStatusDown(Communication communication) throws DiscardMessageException {
+		gotoInitial(communication);
 	}
 
 	@Override
-	public void updateStatusNonSession(Communication connection) throws DiscardMessageException {
-		gotoInitial(connection);
+	public void updateStatusNonSession(Communication communication) throws DiscardMessageException {
+		gotoInitial(communication);
 	}
 	
 	@Override
-	public void messageOkSessionOkSequence(Communication connection) {
-		connection.setState(manager.empty_greatherThenZero);
+	public void messageOkSessionOkSequence(Communication communication) {
+		communication.setState(manager.empty_greatherThenZero);
 	}
 	
 	@Override
-	public void messageWithCallbackOkSessionOkSequence(Communication connection) {
-		connection.setState(manager.up_greatherThenZero);
+	public void messageWithCallbackOkSessionOkSequence(Communication communication) {
+		communication.setState(manager.up_greatherThenZero);
 	}
 	
 	@Override
-	public void messageNonSequence(Communication connection) throws DiscardMessageException {
-		gotoInitial(connection);
+	public void messageNonSequence(Communication communication) throws DiscardMessageException {
+		gotoInitial(communication);
 	}
 	
 	@Override
-	public void messageNonSession(Communication connection) throws DiscardMessageException {
-		gotoInitial(connection);
+	public void messageNonSession(Communication communication) throws DiscardMessageException {
+		gotoInitial(communication);
 	}
 	
-	private void gotoInitial(Communication connection) throws DiscardMessageException {
-		connection.setIncomingSequence(null);
-		connection.setIncomingSession(null);
-		connection.setState(manager.empty_empty);
+	private void gotoInitial(Communication communication) throws DiscardMessageException {
+		communication.invalidate();
+		communication.setState(manager.empty_empty);
 		
 		throw new DiscardMessageException();
 	}
