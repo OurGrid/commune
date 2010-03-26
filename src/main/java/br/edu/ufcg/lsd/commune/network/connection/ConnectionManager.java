@@ -105,21 +105,21 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			if (isFailureDetectorMessage(message)) {
 				
 				if (message.getFunctionName().equals(InterestProcessor.IS_IT_ALIVE_MESSAGE)) { //Outgoing - is it alive
+					validateOutgoing(communication, message);
 					message.setSession(communication.getOutgoingSession());
 					message.setSequence(communication.getOutgoingSequence());
-					validateOutgoing(communication, message);
 					
 				} else { //Incoming - updateStatus
+					validateIncoming(communication, message);
 					message.setSession(communication.getIncomingSession());
 					message.setSequence(communication.getIncomingSequence());
-					validateIncoming(communication, message);
 				}
 				
 			} else { //Outgoing - send application message
+				validateOutgoing(communication, message);
 				communication.incOutgoingSequenceNumber();
 				message.setSession(communication.getOutgoingSession());
 				message.setSequence(communication.getOutgoingSequence());
-				validateOutgoing(communication, message);
 			}
 			
 		} finally {
