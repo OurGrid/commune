@@ -90,7 +90,7 @@ public class Down_Zero extends CommunicationStateAdapter {
 	
 	@Override
 	public void timeout(Communication communication) {
-		communication.invalidate();
+		communication.invalidateIncoming();
 		communication.setState(manager.down_empty);
 	}
 	
@@ -115,7 +115,7 @@ public class Down_Zero extends CommunicationStateAdapter {
 	}
 	
 	private void gotoDownEmpty(Communication communication) throws DiscardMessageException {
-		communication.invalidate();
+		communication.invalidateIncoming();
 		communication.setState(manager.down_empty);
 		throw new DiscardMessageException();
 	}

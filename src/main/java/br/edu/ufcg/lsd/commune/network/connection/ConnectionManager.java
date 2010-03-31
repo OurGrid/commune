@@ -203,6 +203,8 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	private Communication initIncomingConnection(Message message) {
 		Communication communication = new Communication();
 		communication.setState(empty_empty);
+		communication.setIncomingSequence(0L);
+		communication.setIncomingSession(message.getSession());
 		return communication;
 	}
 

@@ -38,7 +38,7 @@ public class Downing_Empty extends CommunicationStateAdapter {
 
 	@Override
 	public void release(Communication communication) {
-		communication.invalidate();
+		communication.invalidateIncoming();
 		communication.setState(manager.empty_empty);
 	}
 

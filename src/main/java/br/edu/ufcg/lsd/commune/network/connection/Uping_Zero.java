@@ -89,7 +89,7 @@ public class Uping_Zero extends CommunicationStateAdapter {
 	
 	@Override
 	public void timeout(Communication communication) {
-		communication.invalidate();
+		communication.invalidateIncoming();
 		communication.setState(manager.downing_empty);
 	}
 	
@@ -119,8 +119,10 @@ public class Uping_Zero extends CommunicationStateAdapter {
 	}
 	
 	private void gotoDowningEmpty(Communication communication) throws DiscardMessageException {
-		communication.invalidate();
+		communication.invalidateIncoming();
 		communication.setState(manager.downing_empty);
+		
+		//TODO Should notifyFailure?
 		forceNotifyFailure(communication);
 		throw new DiscardMessageException();
 	}

@@ -105,7 +105,7 @@ public class Empty_Zero extends CommunicationStateAdapter {
 	}
 	
 	private void gotoInitial(Communication communication) throws DiscardMessageException {
-		communication.invalidate();
+		communication.invalidateIncoming();
 		communication.setState(manager.empty_empty);
 		
 		throw new DiscardMessageException();

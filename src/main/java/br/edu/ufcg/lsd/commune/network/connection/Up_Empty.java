@@ -40,7 +40,7 @@ public class Up_Empty extends CommunicationStateAdapter {
 	
 	@Override
 	public void release(Communication communication) {
-		communication.invalidate();
+		communication.invalidateOutgoing();
 		communication.setState(manager.empty_empty);
 	}
 	
@@ -116,6 +116,7 @@ public class Up_Empty extends CommunicationStateAdapter {
 	}
 	
 	private void gotoDowningEmpty(Communication communication) throws DiscardMessageException {
+		//TODO Should invalidate?
 		communication.invalidate();
 		communication.setState(manager.downing_empty);
 		forceNotifyFailure(communication);

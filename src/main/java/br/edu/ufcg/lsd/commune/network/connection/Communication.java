@@ -95,6 +95,16 @@ public class Communication {
 		outgoingSequence = null;
 	}
 	
+	public void invalidateIncoming() {
+		incomingSession = null;
+		incomingSequence = null;
+	}
+	
+	public void invalidateOutgoing() {
+		outgoingSession = null;
+		outgoingSequence = null;
+	}
+	
 	public boolean isValidOutgoing() {
 		return outgoingSession != null;
 	}
