@@ -9,10 +9,7 @@ public interface Actor {
 	public static final String ACTOR_USERNAME = "actor_experiment_commune";
 	public static final String ACTOR_SERVERNAME = "xmpp.ourgrid.org";
 	public static final String ACTOR_SERVICE = "ACTOR_IMPL";
-	public static final int MESSAGES_PER_SECOND = 30;
 
-	void sendPing();
-	
 	void pong(); 
 	
 }
