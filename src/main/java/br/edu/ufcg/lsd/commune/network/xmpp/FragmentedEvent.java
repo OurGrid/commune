@@ -118,6 +118,8 @@ public class FragmentedEvent {
 		} catch (InvalidClassException e) {
 			CommuneLoggerFactory.getInstance().getLogger("Compatibility").warn("Receiving a incompatible message");
 			throw new IOException(e.getMessage());
+		} finally {
+			ois.close();
 		}
 	}
 }
