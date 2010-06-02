@@ -19,6 +19,7 @@
  */
 package br.edu.ufcg.lsd.commune.testinfra.util;
 
+import static br.edu.ufcg.lsd.commune.testinfra.util.StubMatcher.eqRef;
 import static br.edu.ufcg.lsd.commune.testinfra.util.MessageMatcher.eqInterestMessage;
 import static br.edu.ufcg.lsd.commune.testinfra.util.MessageMatcher.eqServiceMessage;
 import static br.edu.ufcg.lsd.commune.testinfra.util.StubCollectionMatcher.eqCollectionRef;
@@ -66,7 +67,7 @@ public class TestWithTestableCommuneContainer {
 	}
 	
 	protected <T> T myEqRef(Class<T> clazz, ServiceID target) {
-		return null; //eqRef(application.getContainer(), target);
+		return eqRef(application.getContainer(), target);
 	}
 
 	protected <T> List<T> myEqListRef(Class<T> clazz, ServiceID... target) {

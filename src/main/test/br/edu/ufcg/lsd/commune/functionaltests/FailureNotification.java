@@ -174,7 +174,7 @@ public class FailureNotification extends TestWithTestableCommuneContainer {
 	
 
 	@Test
-	public void registerInterestSelfTwice() throws Exception {
+	public void registerInterestSelfTwiceUpdateStatusAvailable() throws Exception {
 		application = createApplication();
 		InterestedObject1 object = new InterestedObject1();
 		application.getContainer().deploy(InterestedObject1.MY_SERVICE_NAME, object);
@@ -193,7 +193,7 @@ public class FailureNotification extends TestWithTestableCommuneContainer {
 	}
 	
 	@Test
-	public void registerInterestOtherTwice() throws Exception {
+	public void registerInterestOtherTwiceUpdateStatusAvailable() throws Exception {
 		application = createApplication();
 		InterestedObject2 object = new InterestedObject2();
 		application.getContainer().deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());

@@ -53,14 +53,15 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 	public void registerInterestOther() throws Exception {
 		application = createApplication();
 		InterestedObject2 object = new InterestedObject2();
-		application.getContainer().deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
+		Monitor2 monitor = new Monitor2();
+		application.getContainer().deploy(InterestedObject2.OTHER_SERVICE_NAME, monitor);
 		application.getContainer().deploy(InterestedObject2.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject2.USER, InterestedObject2.SERVER, InterestedObject2.CONTAINER);
 		ServiceID monitoredID = new ServiceID(containerID, InterestedObject2.SERVICE);
 
-		runInterestExecution(InterestedObject2.OTHER_SERVICE_NAME, object, monitoredID);
+		runInterestExecution(InterestedObject2.OTHER_SERVICE_NAME, monitor, monitoredID);
 	}
 	
 	@Test

@@ -33,7 +33,7 @@ public class TransferDestinationReceiver implements TransferDestination {
 
 	public void transferRequestReceived(IncomingTransferHandle handle) {
 		this.serviceManager.acceptTransfer(handle, this, 
-				new File("tests\\filetransfer\\received\\received." + 
+				new File("tests/filetransfer/received/received." + 
 						serviceManager.getMyDeploymentID().getContainerID().getUserName() + (transfersStarted++) + ".txt"));
 	}
 

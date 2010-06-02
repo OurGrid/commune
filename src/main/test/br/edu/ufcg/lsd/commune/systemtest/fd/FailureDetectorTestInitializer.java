@@ -26,7 +26,7 @@ public class FailureDetectorTestInitializer {
 	private static ModuleContext createModuleContext(String username) {
 		Map<String, String> properties = new HashMap<String,String>();
 		properties.put(XMPPProperties.PROP_USERNAME, username);
-		properties.put(XMPPProperties.PROP_XMPP_SERVERNAME, "localhost");
+		properties.put(XMPPProperties.PROP_XMPP_SERVERNAME, "xmpp.ourgrid.org");
 		properties.put(XMPPProperties.PROP_PASSWORD, "password");
 		properties.put(CertificationProperties.PROP_CERT_PROVIDER_CLASS, 
 				FileCertificationDataProvider.class.getName());

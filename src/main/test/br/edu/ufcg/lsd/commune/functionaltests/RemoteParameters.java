@@ -56,6 +56,7 @@ import br.edu.ufcg.lsd.commune.functionaltests.data.remoteparameters.OtherObject
 import br.edu.ufcg.lsd.commune.functionaltests.data.remoteparameters.OtherObject1_8b;
 import br.edu.ufcg.lsd.commune.functionaltests.data.remoteparameters.OtherObject1_8c;
 import br.edu.ufcg.lsd.commune.functionaltests.data.remoteparameters.OtherObject6;
+import br.edu.ufcg.lsd.commune.functionaltests.data.remoteparameters.OtherObject7;
 import br.edu.ufcg.lsd.commune.testinfra.util.Context;
 import br.edu.ufcg.lsd.commune.testinfra.util.TestWithTestableCommuneContainer;
 
@@ -264,6 +265,12 @@ public class RemoteParameters extends TestWithTestableCommuneContainer {
 		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject6());
 		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject5());
 		application.getContainer().deploy(Context.A_SERVICE_NAME + "x", new MyObject6());
+	}
+
+	@Test(expected=InvalidMonitoringException.class)
+	public void duplicatedAnnotation() throws Exception {
+		application = createApplication();
+		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject7());
 	}
 
 }

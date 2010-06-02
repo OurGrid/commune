@@ -34,7 +34,7 @@ public class Context {
 
 	public static final String USER = "user";
 	public static final String PASSWORD = "password";
-	public static final String REAL_SERVER = "localhost";
+	public static final String REAL_SERVER = "xmpp.ourgrid.org";
 	public static final String PORT = "5222";
 	public static final String A_CONTAINER_NAME = "aName";
 	public static final String A_SERVICE_NAME = "aServiceName";

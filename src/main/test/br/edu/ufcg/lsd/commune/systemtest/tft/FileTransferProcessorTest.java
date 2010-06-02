@@ -25,7 +25,7 @@ import br.edu.ufcg.lsd.commune.systemtest.tft.conditions.TransferFinishedConditi
 public class FileTransferProcessorTest {
 
 	
-	private static final String RECEIVED_FILES_DIR = "tests\\filetransfer\\received";
+	private static final String RECEIVED_FILES_DIR = "tests/filetransfer/received";
 	private static final int VERIFICATION_COUNT = 5000;
 	private static final int VERIFICATION_DELAY = 10;
 	
@@ -74,7 +74,7 @@ public class FileTransferProcessorTest {
 	public void testZeroSizeFiles() throws Exception {
 	
 		int transfersToCreate = 100;
-		File fileToSend = new File("tests\\filetransfer\\testzerosizefile.txt");
+		File fileToSend = new File("tests/filetransfer/testzerosizefile.txt");
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend, 
 				FileTransferTestConstants.DEST_A_ADDRESS);
@@ -98,7 +98,7 @@ public class FileTransferProcessorTest {
 	public void testSmallAscFiles() throws Exception {
 	
 		int transfersToCreate = 100;
-		File fileToSend = new File("tests\\filetransfer\\testsmallfile-asc.txt");
+		File fileToSend = new File("tests/filetransfer/testsmallfile-asc.txt");
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend, 
 				FileTransferTestConstants.DEST_A_ADDRESS);
@@ -122,7 +122,7 @@ public class FileTransferProcessorTest {
 	public void testSmallBinFiles() throws Exception {
 	
 		int transfersToCreate = 100;
-		File fileToSend = new File("tests\\filetransfer\\testsmallfile-bin.zip");
+		File fileToSend = new File("tests/filetransfer/testsmallfile-bin.zip");
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend, 
 				FileTransferTestConstants.DEST_A_ADDRESS);
@@ -146,7 +146,7 @@ public class FileTransferProcessorTest {
 	public void testLargeAscFiles() throws Exception {
 		
 		int transfersToCreate = 100;
-		File fileToSend = new File("tests\\filetransfer\\testmedfile-asc.txt");
+		File fileToSend = new File("tests/filetransfer/testmedfile-asc.txt");
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend, 
 				FileTransferTestConstants.DEST_A_ADDRESS);
@@ -170,7 +170,7 @@ public class FileTransferProcessorTest {
 	public void testLargeBinFiles() throws Exception {
 	
 		int transfersToCreate = 100;
-		File fileToSend = new File("tests\\filetransfer\\testmedfile-bin.mp3");
+		File fileToSend = new File("tests/filetransfer/testmedfile-bin.mp3");
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend,
 				FileTransferTestConstants.DEST_A_ADDRESS);
@@ -194,7 +194,7 @@ public class FileTransferProcessorTest {
 	public void testSmallAscFilesTwoDest() throws Exception {
 	
 		int transfersToCreate = 100;
-		File fileToSend = new File("tests\\filetransfer\\testsmallfile-asc.txt");
+		File fileToSend = new File("tests/filetransfer/testsmallfile-asc.txt");
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend, 
 				FileTransferTestConstants.DEST_A_ADDRESS, FileTransferTestConstants.DEST_B_ADDRESS);
@@ -223,7 +223,7 @@ public class FileTransferProcessorTest {
 	public void testSmallBinFilesTwoDest() throws Exception {
 	
 		int transfersToCreate = 100;
-		File fileToSend = new File("tests\\filetransfer\\testsmallfile-bin.zip");
+		File fileToSend = new File("tests/filetransfer/testsmallfile-bin.zip");
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend, 
 				FileTransferTestConstants.DEST_A_ADDRESS, FileTransferTestConstants.DEST_B_ADDRESS);

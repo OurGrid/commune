@@ -119,7 +119,7 @@ public class RecoveryNotification extends TestWithTestableCommuneContainer {
 	}
 	
 	@Test
-	public void registerInterestSelfTwice() throws Exception {
+	public void registerInterestSelfTwiceUpdateStatus() throws Exception {
 		application = createApplication();
 		InterestedObject1 object = new InterestedObject1();
 		application.getContainer().deploy(InterestedObject1.MY_SERVICE_NAME, object);
@@ -136,7 +136,7 @@ public class RecoveryNotification extends TestWithTestableCommuneContainer {
 	}
 	
 	@Test
-	public void registerInterestOtherTwice() throws Exception {
+	public void registerInterestOtherTwiceUpdateStatus() throws Exception {
 		application = createApplication();
 		InterestedObject2 object = new InterestedObject2();
 		application.getContainer().deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
@@ -183,8 +183,13 @@ public class RecoveryNotification extends TestWithTestableCommuneContainer {
 		runInterestExecution(Object1.MY_SERVICE_NAME, object, stubSID);
 
 		EasyMock.verify(mock);
-		
+
+		EasyMock.reset(mock);
+		EasyMock.replay(mock);
+
 		sendUpdateStatusAvaliable(stubSID, Object1.MY_SERVICE_NAME);
+
+		EasyMock.verify(mock);
 	}
 
 }
