@@ -46,6 +46,10 @@ public class FragmentedEvent {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(baos);
 		oos.writeObject(event);
+		oos.reset();
+		oos.flush();
+		oos.close();
+		
 		byte[] bs = baos.toByteArray();
 
 		numOfFragments = (bs.length / MESSAGE_SIZE) + 1;
@@ -64,7 +68,6 @@ public class FragmentedEvent {
 		
 		System.arraycopy(bs, index * MESSAGE_SIZE, fragments[index], 0,
 				bs.length - (index * MESSAGE_SIZE));
-
 	}
 
 	public void receiveFragment(byte[] frag, int fragNumber) throws IOException {

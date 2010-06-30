@@ -37,7 +37,12 @@ public class OutgoingTransferHandle extends TransferHandle {
 		super(id, logicalFileName, localFile.length(), description);
 		this.destinationID = destinationID;
 		this.setLocalFile(localFile);
-		
+	}
+
+	public OutgoingTransferHandle(long id, String logicalFileName, long fileLength, 
+			String description, DeploymentID destinationID) {
+		super(id, logicalFileName, fileLength, description);
+		this.destinationID = destinationID;
 	}
 	
 	public OutgoingTransferHandle(String logicalFileName, File localFile, 
