@@ -86,7 +86,6 @@ public class ServiceProcessor extends AbstractProcessor {
 			updateReferences(objectDeployment, parameterTypes, parameterValues, parameters);
 		} catch (Exception e) {
 			msgLogger.error(e);
-			console.error(e.getMessage());
 		}
 
 		Object target = objectDeployment.getObject();
@@ -125,12 +124,9 @@ public class ServiceProcessor extends AbstractProcessor {
 		} catch (InvocationTargetException e) {
 			String msg = "Method '" + functionName + "' of object '" + destination + "' has thrown an exception: ";
 			msgLogger.fatal(msg, e.getCause());
-			console.error(msg + e.getCause().getMessage());
-			
+
 		} catch (Exception e) {
 			msgLogger.error(e);
-			e.printStackTrace();
-//			console.error(e.getClass() + ": " + e.getMessage());
 		}		
 	}
 	

@@ -36,9 +36,6 @@ public abstract class AbstractProcessor implements MessageProcessor {
 	
 	protected static final transient CommuneLogger msgLogger = 
 		CommuneLoggerFactory.getInstance().getMessagesLogger();
-	protected static final transient CommuneLogger console = 
-		CommuneLoggerFactory.getInstance().getConsoleLogger();
-
 	
     private Container container;
 
