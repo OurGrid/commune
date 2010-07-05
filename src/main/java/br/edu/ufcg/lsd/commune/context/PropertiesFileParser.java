@@ -100,7 +100,7 @@ public class PropertiesFileParser implements ContextParser {
 			fileOutputStream.close();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			//TODO log
 			throw new CommuneRuntimeException("File could not be created: " + fileName);
 		} 
 		return properties;

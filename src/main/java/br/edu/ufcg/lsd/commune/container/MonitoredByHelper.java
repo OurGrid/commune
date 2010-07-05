@@ -92,8 +92,7 @@ public class MonitoredByHelper {
 			}
 			
 		} catch (Exception e) {
-			//TODO throw
-			e.printStackTrace();
+			//TODO log
 		}
 		
 		int detectionTime = annotation.detectionTime();

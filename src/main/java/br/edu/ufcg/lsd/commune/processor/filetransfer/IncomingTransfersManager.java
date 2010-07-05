@@ -237,7 +237,7 @@ public class IncomingTransfersManager implements FileTransferListener {
 					try {
 						this.wait( 5000 );
 					} catch ( InterruptedException e ) {
-						e.printStackTrace();
+						//TODO log						
 					}
 				}
 			}

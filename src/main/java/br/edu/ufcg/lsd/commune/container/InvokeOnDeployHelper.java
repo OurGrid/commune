@@ -101,16 +101,10 @@ public class InvokeOnDeployHelper {
 	private void invokeOnDeploy(Method invokeOnDeploy, Object stub, Object[] parameters) {
 		try {
 			invokeOnDeploy.invoke(stub, parameters);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (IllegalArgumentException e) {}
+		catch (IllegalAccessException e) {} 
+		catch (InvocationTargetException e) {}
+		//TODO log
 	}
 
 

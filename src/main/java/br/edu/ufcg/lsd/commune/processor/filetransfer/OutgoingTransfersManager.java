@@ -220,7 +220,7 @@ public class OutgoingTransfersManager {
 					try {
 						this.wait( 5000 );
 					} catch ( InterruptedException e ) {
-						e.printStackTrace();
+						//TODO log
 					}
 				}
 			}

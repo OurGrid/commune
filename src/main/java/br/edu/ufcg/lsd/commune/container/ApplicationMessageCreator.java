@@ -22,6 +22,8 @@ package br.edu.ufcg.lsd.commune.container;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+import br.edu.ufcg.lsd.commune.container.logging.CommuneLogger;
+import br.edu.ufcg.lsd.commune.container.logging.CommuneLoggerFactory;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.message.Message;
@@ -33,6 +35,9 @@ public class ApplicationMessageCreator implements InvocationHandler {
     private final Container myContainer;
 	private final ServiceID stubServiceID;
 	private final boolean isLocal;
+	
+	protected static final transient CommuneLogger msgLogger = 
+		CommuneLoggerFactory.getInstance().getMessagesLogger();
 
     public ApplicationMessageCreator(Container myContainer, ServiceID stubServiceID) {
 		this.myContainer = myContainer;
@@ -97,7 +102,7 @@ public class ApplicationMessageCreator implements InvocationHandler {
         	this.myContainer.sendMessage(message);
         	
         } catch (Exception e) {
-			e.printStackTrace();
+        	msgLogger.error(e);
 		}
         
         return null;

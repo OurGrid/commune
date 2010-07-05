@@ -63,7 +63,7 @@ public class ServerModuleController extends ModuleController implements ServerMo
 					try {
 						getServiceManager().getApplication().stop();
 					} catch (CommuneNetworkException e1) {
-						e1.printStackTrace();
+						//TODO log
 					}
 					
 					callExit(false, result);
@@ -127,7 +127,7 @@ public class ServerModuleController extends ModuleController implements ServerMo
 			try {
 				getServiceManager().getApplication().stop();
 			} catch (CommuneNetworkException e) {
-				e.printStackTrace();
+				//TODO log
 			}
 			callExit(callExit, result);
 		}
