@@ -34,7 +34,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.message.Message;
@@ -56,7 +56,7 @@ public class IncomingTransfersManager implements FileTransferListener {
 	private ConcurrentHashMap<TransferHandle,IncomingTransfer> transfers;
 	private TransferStateMonitorThread transferStateMonitor;
 
-	private final Container container;
+	private final Module module;
 
 	/**
 	 * Lock used when making a change on both collections that store file
@@ -65,9 +65,9 @@ public class IncomingTransfersManager implements FileTransferListener {
 	protected final ReentrantLock transfersLock;
 
 
-	public IncomingTransfersManager(Container container, FileTransferManager manager, ReentrantLock transfersLock) {
+	public IncomingTransfersManager(Module module, FileTransferManager manager, ReentrantLock transfersLock) {
 
-		this.container = container;
+		this.module = module;
 		receiverListeners = new HashMap<DeploymentID,TransferReceiver>();
 		handlersRequestMap = new HashMap<IncomingTransferHandle,FileTransferRequest>();
 		transfers = new ConcurrentHashMap<TransferHandle,IncomingTransfer>();
@@ -104,16 +104,16 @@ public class IncomingTransfersManager implements FileTransferListener {
 		FileTransferRequest fileTransferRequest = handlersRequestMap.get( handle );
 		final IncomingFileTransfer transfer = fileTransferRequest.accept();
 
-		IncomingTransfer fileTransfer = new IncomingTransfer(container, listenerID, destination, transfer, handle,
+		IncomingTransfer fileTransfer = new IncomingTransfer(module, listenerID, destination, transfer, handle,
 			inactivityTimeout, fileTransferRequest.getFileSize(), receiveProgressUpdates);
 
 		if ( receiveProgressUpdates ) {
 			TransferProgress transferProgress = new TransferProgress( handle, destination.getName(),
 				fileTransferRequest.getFileSize(), transfer.getStatus(), 0L, 0D, 0, false );
 			Message message = 
-				AbstractTransfer.createUpdateTransferProgressMessage(container.getContainerID(), listenerID, 
+				AbstractTransfer.createUpdateTransferProgressMessage(module.getContainerID(), listenerID, 
 						transferProgress);
-			container.sendMessage(message);
+			module.sendMessage(message);
 		}
 
 		fileTransfer.start();
@@ -189,9 +189,9 @@ public class IncomingTransfersManager implements FileTransferListener {
 				
 				handlersRequestMap.put(handle, ftr);
 				
-				Message message = new Message(container.getContainerID(), receiverID, "transferRequestReceived");
+				Message message = new Message(module.getContainerID(), receiverID, "transferRequestReceived");
 				message.addParameter(IncomingTransferHandle.class, handle);
-				container.sendMessage(message);
+				module.sendMessage(message);
 				
 			} else {
 				rejectRequest( ftr );

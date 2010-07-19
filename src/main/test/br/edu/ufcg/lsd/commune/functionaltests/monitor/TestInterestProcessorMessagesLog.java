@@ -30,7 +30,7 @@ public class TestInterestProcessorMessagesLog extends TestWithTestableCommuneCon
 		application = deployMonitorUtil.createAndStartApplication(application);
 		
 		DeployableClass object = new DeployableClass();
-		application.getContainer().deploy(DeployableClass.OBJECT_NAME, object);
+		application.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
 		DeploymentID target = testInterestMessageLogUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
@@ -39,9 +39,9 @@ public class TestInterestProcessorMessagesLog extends TestWithTestableCommuneCon
 			new Message(target, source.getServiceID(), InterestProcessor.IS_IT_ALIVE_MESSAGE, 
 					InterestProcessor.class.getName());
 
-		application.getContainer().deliverMessage(message);
+		application.deliverMessage(message);
 		
-		application.getContainer().getInterestConsumer().consumeMessage();
+		application.getInterestConsumer().consumeMessage();
 		
 		testInterestMessageLogUtil.getMessagesLog(application, createMessageList(message));
 	}
@@ -51,7 +51,7 @@ public class TestInterestProcessorMessagesLog extends TestWithTestableCommuneCon
 		application = deployMonitorUtil.createAndStartApplication(application);
 		
 		DeployableClass object = new DeployableClass();
-		application.getContainer().deploy(DeployableClass.OBJECT_NAME, object);
+		application.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
 		DeploymentID target = testInterestMessageLogUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
@@ -61,9 +61,9 @@ public class TestInterestProcessorMessagesLog extends TestWithTestableCommuneCon
 			new Message(target, source.getServiceID(), InterestProcessor.IS_IT_ALIVE_MESSAGE, 
 					InterestProcessor.class.getName());
 		
-		application.getContainer().deliverMessage(message);		
+		application.deliverMessage(message);		
 		
-		application.getContainer().getInterestConsumer().consumeMessage();
+		application.getInterestConsumer().consumeMessage();
 		
 		//verify
 		testInterestMessageLogUtil.getMessagesLog(application, createMessageList(message));
@@ -76,9 +76,9 @@ public class TestInterestProcessorMessagesLog extends TestWithTestableCommuneCon
 				new Message(target, source.getServiceID(), InterestProcessor.IS_IT_ALIVE_MESSAGE, 
 						InterestProcessor.class.getName());
 
-			application.getContainer().deliverMessage(message);		
+			application.deliverMessage(message);		
 			
-			application.getContainer().getInterestConsumer().consumeMessage();
+			application.getInterestConsumer().consumeMessage();
 			
 			list.add(message);
 		}

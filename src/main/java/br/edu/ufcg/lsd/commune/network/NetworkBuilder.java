@@ -19,7 +19,7 @@
  */
 package br.edu.ufcg.lsd.commune.network;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.network.application.ApplicationProtocol;
 import br.edu.ufcg.lsd.commune.network.certification.CertificationProtocol;
@@ -34,12 +34,12 @@ public class NetworkBuilder {
     protected CommuneNetwork communeNetwork;
 	private ConnectionProtocol connectionProtocol;
 
-    public CommuneNetwork build(Container container) {
-        ModuleContext context = container.getContext();
-        communeNetwork = new CommuneNetwork(container);
+    public CommuneNetwork build(Module module) {
+        ModuleContext context = module.getContext();
+        communeNetwork = new CommuneNetwork(module);
         
-        Protocol xmppProtocol = createXMPPProtocol(container, communeNetwork);
-        Protocol applicationProtocol = createApplicationProtocol(container, communeNetwork);
+        Protocol xmppProtocol = createXMPPProtocol(module, communeNetwork);
+        Protocol applicationProtocol = createApplicationProtocol(module, communeNetwork);
         communeNetwork.init(applicationProtocol, xmppProtocol);
         
         connectionProtocol = createConnectionProtocol();
@@ -48,7 +48,7 @@ public class NetworkBuilder {
         }
 
         VirtualMachineLoopbackProtocol virtualMachineLoopbackProtocol = 
-            createLoopbackProtocol(container, communeNetwork);
+            createLoopbackProtocol(module, communeNetwork);
         if (virtualMachineLoopbackProtocol != null) {
             communeNetwork.addProtocol(virtualMachineLoopbackProtocol);
         }
@@ -59,7 +59,7 @@ public class NetworkBuilder {
             communeNetwork.addProtocol(signatureProtocol);
         }
         
-        CertificationProtocol certificationProtocol = createCertificationProtocol(container, communeNetwork);
+        CertificationProtocol certificationProtocol = createCertificationProtocol(module, communeNetwork);
         if (certificationProtocol != null) {
             communeNetwork.addProtocol(certificationProtocol);
         }
@@ -71,31 +71,31 @@ public class NetworkBuilder {
 		return new ConnectionProtocol(communeNetwork);
 	}
 
-    protected CertificationProtocol createCertificationProtocol(Container container, CommuneNetwork communeNetwork) {
-        return new CertificationProtocol(communeNetwork, container.getMyCertPath());
+    protected CertificationProtocol createCertificationProtocol(Module module, CommuneNetwork communeNetwork) {
+        return new CertificationProtocol(communeNetwork, module.getMyCertPath());
     }
 
     protected SignatureProtocol createSignatureProtocol(CommuneNetwork communeNetwork, String privateKey) {
         return new SignatureProtocol(communeNetwork, privateKey);
     }
 
-    protected VirtualMachineLoopbackProtocol createLoopbackProtocol(Container container, CommuneNetwork communeNetwork) {
-        return new VirtualMachineLoopbackProtocol(communeNetwork, container.getContainerID());
+    protected VirtualMachineLoopbackProtocol createLoopbackProtocol(Module module, CommuneNetwork communeNetwork) {
+        return new VirtualMachineLoopbackProtocol(communeNetwork, module.getContainerID());
     }
 
-    protected ApplicationProtocol createApplicationProtocol(Container container, CommuneNetwork communeNetwork) {
-        return new ApplicationProtocol(communeNetwork, container.getContainerID());
+    protected ApplicationProtocol createApplicationProtocol(Module module, CommuneNetwork communeNetwork) {
+        return new ApplicationProtocol(communeNetwork, module.getContainerID());
     }
 
-    protected Protocol createXMPPProtocol(Container container, CommuneNetwork communeNetwork) {
+    protected Protocol createXMPPProtocol(Module module, CommuneNetwork communeNetwork) {
         XMPPProtocol xmppProtocol = 
-            new XMPPProtocol(communeNetwork, container.getContainerID(), container.getContext());
+            new XMPPProtocol(communeNetwork, module.getContainerID(), module.getContext());
         return xmppProtocol;
     }
 
-	public void configure(Container container) {
+	public void configure(Module module) {
 		if (connectionProtocol != null) {
-			connectionProtocol.configure(container);
+			connectionProtocol.configure(module);
 		}
 	}
 

@@ -19,15 +19,16 @@
  */
 package br.edu.ufcg.lsd.commune.container;
 
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.processor.filetransfer.TransferReceiver;
 
 
 public class ReceiverHelper {
 
-	private final Container container;
+	private final Module module;
 
-	public ReceiverHelper(Container container) {
-		this.container = container;
+	public ReceiverHelper(Module module) {
+		this.module = module;
 	}
 
 	public void process(ObjectDeployment deployment) {
@@ -38,7 +39,7 @@ public class ReceiverHelper {
 			
 			TransferReceiver proxy = (TransferReceiver) deployment.getProxy();
 			
-			container.getTransferManager().addFileTransferInterested(proxy, deployment.getDeploymentID());
+			module.getTransferManager().addFileTransferInterested(proxy, deployment.getDeploymentID());
 			
 		}
 		

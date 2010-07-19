@@ -71,7 +71,7 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 	public void testDeployObject() throws Exception {
 		application = deployMonitorUtil.createAndStartApplication(application);
 		//Deploy another object
-		application.getContainer().deploy(DeployableClass.OBJECT_NAME, new DeployableClass());
+		application.deploy(DeployableClass.OBJECT_NAME, new DeployableClass());
 		
 		Map<DeploymentID, Collection<Class<?>>> deployedObjects = new HashMap<DeploymentID, Collection<Class<?>>>();
 		
@@ -100,7 +100,7 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 	public void testDeployAndUndeployObject() throws Exception {
 		application = deployMonitorUtil.createAndStartApplication(application);
 		//Deploy another object
-		application.getContainer().deploy(DeployableClass.OBJECT_NAME, new DeployableClass());
+		application.deploy(DeployableClass.OBJECT_NAME, new DeployableClass());
 		
 		Map<DeploymentID, Collection<Class<?>>> deployedObjects = new HashMap<DeploymentID, Collection<Class<?>>>();
 		
@@ -126,7 +126,7 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		
 		deployedObjects.remove(testGetDeployedObjectsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID());
 		//Undeploy the object
-		application.getContainer().undeploy(DeployableClass.OBJECT_NAME);
+		application.undeploy(DeployableClass.OBJECT_NAME);
 		testGetDeployedObjectsUtil.getDeployedObjects(application, deployedObjects);
 	}
 	
@@ -152,7 +152,7 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		testGetDeployedObjectsUtil.getDeployedObjects(application, deployedObjects);
 		
 		//Deploy another object
-		application.getContainer().deploy(DeployableClass.OBJECT_NAME, new DeployableClass());
+		application.deploy(DeployableClass.OBJECT_NAME, new DeployableClass());
 		DeploymentID deploymentID3 = testGetDeployedObjectsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list3 = new ArrayList<Class<?>>();
 		list3.add(DeployableInterface.class);
@@ -162,7 +162,7 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		
 		//Undeploy the object
 		deployedObjects.remove(testGetDeployedObjectsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID());
-		application.getContainer().undeploy(DeployableClass.OBJECT_NAME);
+		application.undeploy(DeployableClass.OBJECT_NAME);
 		testGetDeployedObjectsUtil.getDeployedObjects(application, deployedObjects);
 	}
 }

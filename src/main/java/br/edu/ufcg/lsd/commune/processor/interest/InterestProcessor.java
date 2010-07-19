@@ -20,7 +20,7 @@
 package br.edu.ufcg.lsd.commune.processor.interest;
 
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.InvalidMonitoringException;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
@@ -39,8 +39,8 @@ public class InterestProcessor extends AbstractProcessor {
 	private InterestManager interestManager;
 
 	
-    public InterestProcessor(Container container) {
-        super(container);
+    public InterestProcessor(Module module) {
+        super(module);
         this.interestManager = createInterestManager();
     }
 

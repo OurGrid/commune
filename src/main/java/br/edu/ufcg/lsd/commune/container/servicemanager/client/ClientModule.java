@@ -53,19 +53,19 @@ public abstract class ClientModule<A extends ServerModuleManager, B extends Mana
 		InterestRequirements requirements = new InterestRequirements(4, 2);
 		ServiceID controlID = new ServiceID(serverContainerID, Module.CONTROL_OBJECT_NAME);
 		
-		getContainer().registerInterest(MANAGER_CLIENT, getManagerObjectType(), controlID, 
+		registerInterest(MANAGER_CLIENT, getManagerObjectType(), controlID, 
 				requirements);
 	}
 
 	private void init() {
 		initializationContext = createInitializationContext();
 		serverContainerID = new ContainerID(
-			getContainer().getContainerID().getUserName(), 
-			getContainer().getContainerID().getServerName(), 
+			getContainerID().getUserName(), 
+			getContainerID().getServerName(), 
 			initializationContext.getServerContainerName(), 
-			getContainer().getContainerID().getPublicKey());
+			getContainerID().getPublicKey());
 		
-		getContainer().deploy(MANAGER_CLIENT, initializationContext.createManagerClient());
+		deploy(MANAGER_CLIENT, initializationContext.createManagerClient());
 	}
 
 	protected abstract InitializationContext<A, B> createInitializationContext();
@@ -86,7 +86,7 @@ public abstract class ClientModule<A extends ServerModuleManager, B extends Mana
 	
 	@SuppressWarnings("unchecked")
 	public B getManagerClient() {
-		return (B) getContainer().getObjectRepository().get(MANAGER_CLIENT).getObject();
+		return (B) getObjectRepository().get(MANAGER_CLIENT).getObject();
 	}
 	
 	@Override

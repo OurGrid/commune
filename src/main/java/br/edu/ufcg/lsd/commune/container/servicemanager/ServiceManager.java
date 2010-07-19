@@ -87,11 +87,11 @@ public class ServiceManager implements Serializable {
 			throw new CommuneRuntimeException("Can not release a null object");
 		}
 		
-		this.application.getContainer().releaseStub(object);
+		this.application.releaseStub(object);
 	}
 	
 	public void release(ServiceID serviceID) {
-		this.application.getContainer().release(serviceID);
+		this.application.release(serviceID);
 	}
 
 	public <T> T registerInterest(String monitorName, String monitorableAddress, Class<T> monitorableType, 
@@ -145,7 +145,7 @@ public class ServiceManager implements Serializable {
 		}
 		
 		return 
-			(T)this.application.getContainer().registerInterest(monitorName, monitorableType, serviceID, requirements);
+			(T)this.application.registerInterest(monitorName, monitorableType, serviceID, requirements);
 	}
 
 	private boolean isID(String monitorableAddress) {
@@ -257,30 +257,30 @@ public class ServiceManager implements Serializable {
 	}
 	
 	public void deploy(String serviceName, Object serviceObject) {
-		application.getContainer().deploy(serviceName, serviceObject);
+		application.deploy(serviceName, serviceObject);
 	}
 	
 	public void undeploy(String serviceName) {
-		application.getContainer().undeploy(serviceName);
+		application.undeploy(serviceName);
 		//TODO remove deployed object, invalidate and remove stub. 
 		//If is monitor and has interest, throw exception
 	}
 	
 	public String getSenderPublicKey() {
-		return application.getContainer().getExecutionContext().getCurrentConsumer().getPublicKey();
+		return application.getExecutionContext().getCurrentConsumer().getPublicKey();
 	}
 	
 	public X509CertPath getSenderCertPath() {
-		return application.getContainer().getExecutionContext().getSenderCertPath();
+		return application.getExecutionContext().getSenderCertPath();
 	}
 	
 	public ContainerID getSenderContainerID() {
-		CommuneAddress currentConsumer = application.getContainer().getExecutionContext().getCurrentConsumer();
+		CommuneAddress currentConsumer = application.getExecutionContext().getCurrentConsumer();
 		return currentConsumer.getContainerID();
 	}
 
 	public ServiceID getSenderServiceID() {
-		CommuneAddress currentConsumer = application.getContainer().getExecutionContext().getCurrentConsumer();
+		CommuneAddress currentConsumer = application.getExecutionContext().getCurrentConsumer();
 		
 		ContainerID containerID = getSenderContainerID();
 		
@@ -288,7 +288,7 @@ public class ServiceManager implements Serializable {
 	}
 
 	public boolean isThisMyPublicKey(String publicKey) {
-		return application.getContainer().getContainerID().getPublicKey().equals(publicKey);
+		return application.getContainerID().getPublicKey().equals(publicKey);
 	}
 
 	public X509CertPath getMyCertPath() {
@@ -296,11 +296,11 @@ public class ServiceManager implements Serializable {
 	}
 	
 	public String getMyPublicKey() {
-		return application.getContainer().getContainerID().getPublicKey();
+		return application.getContainerID().getPublicKey();
 	}
 	
 	public DeploymentID getStubDeploymentID(Object object) {
-		return application.getContainer().getStubDeploymentID(object);
+		return application.getStubDeploymentID(object);
 	}
 	
 	public DeploymentID getStubDeploymentID(ServiceID serviceID, Class<?> clazz) {
@@ -308,16 +308,16 @@ public class ServiceManager implements Serializable {
 		if (stub == null) {
 			return null;
 		}
-		return application.getContainer().getStubDeploymentID(stub);
+		return application.getStubDeploymentID(stub);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <T> T getStub(ServiceID serviceID, Class<T> clazz){
-		return (T) application.getContainer().getStub(serviceID, clazz);
+		return (T) application.getStub(serviceID, clazz);
 	}
 
 	public DeploymentID getLocalObjectID(Object object) {
-		return application.getContainer().getLocalObjectDeploymentID(object);
+		return application.getLocalObjectDeploymentID(object);
 	}
 	
 	public DeploymentID getMyDeploymentID() {
@@ -346,7 +346,7 @@ public class ServiceManager implements Serializable {
 
 	//TODO verify if this method is needed
 	public <T> T createStub(DeploymentID deploymentID, Class<T> type) {
-		return (T) this.application.getContainer().createStub(deploymentID, type);
+		return (T) this.application.createStub(deploymentID, type);
 	}
 
 }

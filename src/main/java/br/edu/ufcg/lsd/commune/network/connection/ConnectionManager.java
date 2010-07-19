@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.StubListener;
 import br.edu.ufcg.lsd.commune.container.StubReference;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
@@ -44,7 +44,7 @@ import br.edu.ufcg.lsd.commune.processor.objectdeployer.NotificationListener;
 
 public class ConnectionManager implements StubListener, TimeoutListener, NotificationListener {
 	
-	private Container container;
+	private Module module;
 	private ReadWriteLock connectionLock = new ReentrantReadWriteLock(true);
 	private Map<ContainerID, Communication> communications = new HashMap<ContainerID, Communication>();
 	
@@ -64,8 +64,8 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	CommunicationState downing_empty 			= new Downing_Empty(this);
 	
 	
-	public ConnectionManager(Container container) {
-		this.container = container;
+	public ConnectionManager(Module module) {
+		this.module = module;
 	}
 
 	
@@ -73,7 +73,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		
 		CommuneAddress source = message.getSource();
 		
-		if (container.isLocal(source)) {
+		if (module.isLocal(source)) {
 			//Do not verify session and sequence numbers for loopback messages
 			
 		} else {
@@ -86,7 +86,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		
 		CommuneAddress destination = message.getDestination();
 		
-		if (container.isLocal(destination)) {
+		if (module.isLocal(destination)) {
 			//Do not define session and sequence numbers for loopback messages
 			
 		} else {
@@ -317,7 +317,7 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				if(hasCallback(message)) {
 					
 					if (!communication.isValidOutgoing() && 
-							!container.isLocal(message.getSource())) {
+							!module.isLocal(message.getSource())) {
 						communication.setOutgoingSession(CommunicationStateAdapter.generateSessionNumber());
 						communication.setOutgoingSequence(0L);
 					}
@@ -467,13 +467,13 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 	}
 	
 	void forceNotifyFailure(ServiceID serviceID) {
-		container.getInterestManager().sendNotifyFailureMessage(serviceID);
+		module.getInterestManager().sendNotifyFailureMessage(serviceID);
 	}
 
 
-	public void configure(Container container) {
-		container.getStubRepository().addListener(this);
-		container.getInterestManager().addListener(this);
-		container.getServiceProcessor().addListener(this);
+	public void configure(Module module) {
+		module.getStubRepository().addListener(this);
+		module.getInterestManager().addListener(this);
+		module.getServiceProcessor().addListener(this);
 	}
 }

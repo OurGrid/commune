@@ -40,7 +40,7 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 	public void registerInterestSelf() throws Exception {
 		application = createApplication();
 		InterestedObject1 object = new InterestedObject1();
-		application.getContainer().deploy(InterestedObject1.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject1.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject1.USER, InterestedObject1.SERVER, InterestedObject1.CONTAINER);
@@ -54,8 +54,8 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 		application = createApplication();
 		InterestedObject2 object = new InterestedObject2();
 		Monitor2 monitor = new Monitor2();
-		application.getContainer().deploy(InterestedObject2.OTHER_SERVICE_NAME, monitor);
-		application.getContainer().deploy(InterestedObject2.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject2.OTHER_SERVICE_NAME, monitor);
+		application.deploy(InterestedObject2.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject2.USER, InterestedObject2.SERVER, InterestedObject2.CONTAINER);
@@ -68,8 +68,8 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 	public void twiceIsItAlive() throws Exception {
 		application = createApplication();
 		InterestedObject2 object = new InterestedObject2();
-		application.getContainer().deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
-		application.getContainer().deploy(InterestedObject2.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
+		application.deploy(InterestedObject2.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject2.USER, InterestedObject2.SERVER, InterestedObject2.CONTAINER);
@@ -84,7 +84,7 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 	public void registerInterestSelfWithDeploymentID() throws Exception {
 		application = createApplication();
 		InterestedObject3 object = new InterestedObject3();
-		application.getContainer().deploy(InterestedObject3.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject3.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject3.USER, InterestedObject3.SERVER, InterestedObject3.CONTAINER);
@@ -97,7 +97,7 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 	public void registerInterestSelfWithDeploymentIDOnlyOnRecovery() throws Exception {
 		application = createApplication();
 		InterestedObject4 object = new InterestedObject4();
-		application.getContainer().deploy(InterestedObject4.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject4.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject4.USER, InterestedObject4.SERVER, InterestedObject4.CONTAINER);
@@ -110,8 +110,8 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 	public void wrongDeploymentIDOrderOnRecovery() throws Exception {
 		application = createApplication();
 		InterestedObject5 object = new InterestedObject5();
-		application.getContainer().deploy(InterestedObject5.MY_SERVICE_NAME, object);
-		application.getContainer().getServiceConsumer().consumeMessage();
+		application.deploy(InterestedObject5.MY_SERVICE_NAME, object);
+		application.getServiceConsumer().consumeMessage();
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject5.USER, InterestedObject5.SERVER, InterestedObject5.CONTAINER);
@@ -124,8 +124,8 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 	public void wrongDeploymentIDOrderOnFailure() throws Exception {
 		application = createApplication();
 		InterestedObject6 object = new InterestedObject6();
-		application.getContainer().deploy(InterestedObject6.MY_SERVICE_NAME, object);
-		application.getContainer().getServiceConsumer().consumeMessage();
+		application.deploy(InterestedObject6.MY_SERVICE_NAME, object);
+		application.getServiceConsumer().consumeMessage();
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject6.USER, InterestedObject6.SERVER, InterestedObject6.CONTAINER);

@@ -19,14 +19,14 @@
  */
 package br.edu.ufcg.lsd.commune.testinfra.util;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.processor.MessageConsumer;
 import br.edu.ufcg.lsd.commune.processor.objectdeployer.ServiceProcessor;
 
 public class TestableServiceProcessor extends ServiceProcessor implements TestableProcessor {
 
-	public TestableServiceProcessor(Container container) {
-		super(container);
+	public TestableServiceProcessor(Module module) {
+		super(module);
 	}
 
 	@Override

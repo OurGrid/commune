@@ -43,7 +43,7 @@ public class FailureNotification extends TestWithTestableCommuneContainer {
 	public void failCreatedStub() throws Exception {
 		application = createApplication();
 		InterestedObject1 object = new InterestedObject1();
-		application.getContainer().deploy(InterestedObject1.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject1.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject1.USER, InterestedObject1.SERVER, InterestedObject1.CONTAINER, 
@@ -86,7 +86,7 @@ public class FailureNotification extends TestWithTestableCommuneContainer {
 	public void registerInterestSelf() throws Exception {
 		application = createApplication();
 		InterestedObject1 object = new InterestedObject1();
-		application.getContainer().deploy(InterestedObject1.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject1.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject1.USER, InterestedObject1.SERVER, InterestedObject1.CONTAINER, 
@@ -105,8 +105,8 @@ public class FailureNotification extends TestWithTestableCommuneContainer {
 	public void registerInterestOther() throws Exception {
 		application = createApplication();
 		InterestedObject2 object = new InterestedObject2();
-		application.getContainer().deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
-		application.getContainer().deploy(InterestedObject2.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
+		application.deploy(InterestedObject2.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject2.USER, InterestedObject2.SERVER, InterestedObject2.CONTAINER, 
@@ -123,8 +123,8 @@ public class FailureNotification extends TestWithTestableCommuneContainer {
 	public void twiceIsItAlive() throws Exception {
 		application = createApplication();
 		InterestedObject2 object = new InterestedObject2();
-		application.getContainer().deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
-		application.getContainer().deploy(InterestedObject2.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
+		application.deploy(InterestedObject2.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject3.USER, InterestedObject3.SERVER, InterestedObject3.CONTAINER, 
@@ -142,7 +142,7 @@ public class FailureNotification extends TestWithTestableCommuneContainer {
 	public void registerInterestSelfWithDeploymentID() throws Exception {
 		application = createApplication();
 		InterestedObject3 object = new InterestedObject3();
-		application.getContainer().deploy(InterestedObject3.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject3.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject4.USER, InterestedObject4.SERVER, InterestedObject4.CONTAINER, 
@@ -159,7 +159,7 @@ public class FailureNotification extends TestWithTestableCommuneContainer {
 	public void registerInterestSelfWithDeploymentIDOnlyOnRecovery() throws Exception {
 		application = createApplication();
 		InterestedObject4 object = new InterestedObject4();
-		application.getContainer().deploy(InterestedObject4.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject4.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject4.USER, InterestedObject4.SERVER, InterestedObject4.CONTAINER, 
@@ -177,7 +177,7 @@ public class FailureNotification extends TestWithTestableCommuneContainer {
 	public void registerInterestSelfTwiceUpdateStatusAvailable() throws Exception {
 		application = createApplication();
 		InterestedObject1 object = new InterestedObject1();
-		application.getContainer().deploy(InterestedObject1.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject1.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject1.USER, InterestedObject1.SERVER, InterestedObject1.CONTAINER, 
@@ -196,8 +196,8 @@ public class FailureNotification extends TestWithTestableCommuneContainer {
 	public void registerInterestOtherTwiceUpdateStatusAvailable() throws Exception {
 		application = createApplication();
 		InterestedObject2 object = new InterestedObject2();
-		application.getContainer().deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
-		application.getContainer().deploy(InterestedObject2.MY_SERVICE_NAME, object);
+		application.deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
+		application.deploy(InterestedObject2.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject2.USER, InterestedObject2.SERVER, InterestedObject2.CONTAINER, 
@@ -218,7 +218,7 @@ public class FailureNotification extends TestWithTestableCommuneContainer {
 		Object1 object = new Object1();
 		object.setMock(mock);
 		
-		application.getContainer().deploy(Object1.MY_SERVICE_NAME, object);
+		application.deploy(Object1.MY_SERVICE_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
 		DeploymentID target = application.getDeploymentID(Object1.MY_SERVICE_NAME);
@@ -228,12 +228,12 @@ public class FailureNotification extends TestWithTestableCommuneContainer {
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.getContainer().deliverMessage(message);
+		application.deliverMessage(message);
 		
 		mock.invoke(myEqRef(Stub.class, stubSID));
 		EasyMock.replay(mock);
 		
-		application.getContainer().getServiceConsumer().consumeMessage();
+		application.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 		
 		EasyMock.reset(mock);

@@ -22,6 +22,7 @@ package br.edu.ufcg.lsd.commune.container;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.logging.CommuneLogger;
 import br.edu.ufcg.lsd.commune.container.logging.CommuneLoggerFactory;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
@@ -32,17 +33,17 @@ import br.edu.ufcg.lsd.commune.processor.objectdeployer.ServiceProcessor;
 
 public class ApplicationMessageCreator implements InvocationHandler {
 
-    private final Container myContainer;
+    private final Module myModule;
 	private final ServiceID stubServiceID;
 	private final boolean isLocal;
 	
 	protected static final transient CommuneLogger msgLogger = 
 		CommuneLoggerFactory.getInstance().getMessagesLogger();
 
-    public ApplicationMessageCreator(Container myContainer, ServiceID stubServiceID) {
-		this.myContainer = myContainer;
+    public ApplicationMessageCreator(Module myModule, ServiceID stubServiceID) {
+		this.myModule = myModule;
 		this.stubServiceID = stubServiceID;
-		this.isLocal = myContainer.getContainerID().equals(stubServiceID.getContainerID());
+		this.isLocal = myModule.getContainerID().equals(stubServiceID.getContainerID());
     }
     
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -50,9 +51,9 @@ public class ApplicationMessageCreator implements InvocationHandler {
 		DeploymentID targetID = null;
 		
 		if (isLocal) {
-			targetID = myContainer.getObjectRepository().get(stubServiceID.getServiceName()).getDeploymentID();
+			targetID = myModule.getObjectRepository().get(stubServiceID.getServiceName()).getDeploymentID();
 		} else {
-			targetID = myContainer.getStubDeploymentID(stubServiceID);
+			targetID = myModule.getStubDeploymentID(stubServiceID);
 		}
 		
 		if (targetID == null) {
@@ -64,7 +65,7 @@ public class ApplicationMessageCreator implements InvocationHandler {
         Class<?>[] parameterTypes = method.getParameterTypes();
         Object[] parameterValues = args;
     
-        DeploymentID sourceID = myContainer.getExecutionContext().getRunningObject().getDeploymentID();
+        DeploymentID sourceID = myModule.getExecutionContext().getRunningObject().getDeploymentID();
 
         try {
         	
@@ -79,10 +80,10 @@ public class ApplicationMessageCreator implements InvocationHandler {
         				
         				DeploymentID paramID = null;
         				
-        				DeploymentID localID = myContainer.getObjectRepository().getDeploymentID(value);
+        				DeploymentID localID = myModule.getObjectRepository().getDeploymentID(value);
         				
         				if (localID == null) {
-        					paramID = myContainer.getStubDeploymentID(value);
+        					paramID = myModule.getStubDeploymentID(value);
         				} else {
         					paramID = localID;
         				}
@@ -99,7 +100,7 @@ public class ApplicationMessageCreator implements InvocationHandler {
         		}
         	}
         	
-        	this.myContainer.sendMessage(message);
+        	this.myModule.sendMessage(message);
         	
         } catch (Exception e) {
         	msgLogger.error(e);

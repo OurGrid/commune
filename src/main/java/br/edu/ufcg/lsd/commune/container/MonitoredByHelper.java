@@ -25,6 +25,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.api.MonitoredBy;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.message.MessageUtil;
@@ -33,10 +34,10 @@ import br.edu.ufcg.lsd.commune.processor.interest.InterestRequirements;
 
 public class MonitoredByHelper {
 
-	private final Container container;
+	private final Module module;
 
-	public MonitoredByHelper(Container container) {
-		this.container = container;
+	public MonitoredByHelper(Module module) {
+		this.module = module;
 	}
 
 	public void process(ObjectDeployment deployment) {
@@ -81,7 +82,7 @@ public class MonitoredByHelper {
 		String detectionTimeProperty = annotation.detectionTimeProperty();
 		String heartBeatDelayProperty = annotation.heartBeatDelayProperty();
 		
-		ModuleContext context = container.getContext();
+		ModuleContext context = module.getContext();
 		
 		try {
 			if (!detectionTimeProperty.equals("")) {
@@ -202,7 +203,7 @@ public class MonitoredByHelper {
 		
 		String monitorServiceName = annotation.value();
 		
-		InterestManager interestManager = this.container.getInterestManager();
+		InterestManager interestManager = this.module.getInterestManager();
 		interestManager.addMonitoredParameter(deployment, method, parameterIndex, parameterType, monitorServiceName, 
 				requirements);
 	}

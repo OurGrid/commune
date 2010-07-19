@@ -28,20 +28,21 @@ import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 
 public class StubRepository {
 
 	
-	private Container container;
+	private Module module;
 	private Map<ServiceID, StubReference> stubsPerId = new HashMap<ServiceID, StubReference>();
 	private ReadWriteLock stubLock = new ReentrantReadWriteLock(true);
 	private List<StubListener> listeners = new ArrayList<StubListener>();
 	
 	
-	StubRepository(Container container) {
-		this.container = container;
+	public StubRepository(Module module) {
+		this.module = module;
 	}
 
 	
@@ -56,7 +57,7 @@ public class StubRepository {
 			
 			if (stubReference == null) {
 				stubReference = 
-					createStub(this.container, identification, interfaceType.getClassLoader(), interfaceType);
+					createStub(this.module, identification, interfaceType.getClassLoader(), interfaceType);
 				stubsPerId.put(identification, stubReference);
 				fireStubCreated(stubReference);
 				
@@ -79,7 +80,7 @@ public class StubRepository {
 		
 			StubReference stubReference = stubsPerId.get(identification);
 			Object proxy = 
-				ProxyUtil.createProxy(this.container, identification, interfaceType.getClassLoader(), interfaceType); 
+				ProxyUtil.createProxy(this.module, identification, interfaceType.getClassLoader(), interfaceType); 
 	
 			stubReference.addProxy(interfaceType, proxy);
 	
@@ -98,7 +99,7 @@ public class StubRepository {
 			
 			if (stubReference == null) {
 				stubReference = 
-					createStub(this.container, identification.getServiceID(), interfaceType.getClassLoader(), interfaceType);
+					createStub(this.module, identification.getServiceID(), interfaceType.getClassLoader(), interfaceType);
 				stubsPerId.put(identification.getServiceID(), stubReference);
 				fireStubCreated(stubReference);
 				
@@ -278,10 +279,10 @@ public class StubRepository {
 		}
 	}
 
-	private StubReference createStub(Container sourceContainer, ServiceID stubSID, ClassLoader classloader, 
+	private StubReference createStub(Module sourceModule, ServiceID stubSID, ClassLoader classloader, 
 			Class<?> interfaceType) throws IllegalArgumentException{
 	
-		Object proxy = ProxyUtil.createProxy(sourceContainer, stubSID, classloader, interfaceType); 
+		Object proxy = ProxyUtil.createProxy(sourceModule, stubSID, classloader, interfaceType); 
 
 	    StubReference stubReference = new StubReference(stubSID);
 	    stubReference.addProxy(interfaceType, proxy);

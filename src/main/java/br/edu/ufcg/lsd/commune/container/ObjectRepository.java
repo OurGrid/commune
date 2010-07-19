@@ -28,21 +28,22 @@ import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.message.MessageUtil;
 
 public class ObjectRepository {
 
-	private Container container;
+	private Module module;
     private Map<String, ObjectDeployment> deployedObjects;
     private ReadWriteLock objectsLock = new ReentrantReadWriteLock(true);
 
     
-    public ObjectRepository(Container container) {
+    public ObjectRepository(Module module) {
     	try {
     		this.objectsLock.writeLock().lock();
     		
-	        this.container = container;
+	        this.module = module;
 	        this.deployedObjects = new HashMap<String, ObjectDeployment>();
 
     	} finally {
@@ -122,7 +123,7 @@ public class ObjectRepository {
     		return false;
     	}
     	
-        return this.container.getContainerID().equals(deploymentID.getServiceID().getContainerID());
+        return this.module.getContainerID().equals(deploymentID.getServiceID().getContainerID());
     }
 
     public ObjectDeployment removeObject(ObjectDeployment object) {

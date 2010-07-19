@@ -102,16 +102,16 @@ public class AcceptanceTestUtil {
 	}
 
 	public static void notifyRecovery(Module app, DeploymentID targetID) {
-		app.getContainer().getInterestManager().getInterest(
+		app.getInterestManager().getInterest(
 				targetID.getServiceID()).setLastHeartbeat();
-		app.getContainer().setStubDeploymentID(targetID);
+		app.setStubDeploymentID(targetID);
 	}
 	
 
 	/* Interest and notification */
 	
 	public static boolean isInterested(Module application, ServiceID monitorableID, DeploymentID interestedID) {
-		return application.getContainer().getInterestManager().isInterested(interestedID, monitorableID);
+		return application.getInterestManager().isInterested(interestedID, monitorableID);
 	}
 	
 	public static X509CertPath getCertificateMock(String domainName) {
@@ -154,19 +154,19 @@ public class AcceptanceTestUtil {
 	
 	public static void setExecutionContext(Module application, ObjectDeployment runningObject, 
 			CommuneAddress currentConsumer) {
-		application.getContainer().setExecutionContext(runningObject, currentConsumer, application.getMyCertPath());
+		application.setExecutionContext(runningObject, currentConsumer, application.getMyCertPath());
 	}
 
 	public static void setExecutionContext(Module application, ObjectDeployment runningObject, 
 			CommuneAddress currentConsumer, X509CertPath senderCertPath) {
-		application.getContainer().setExecutionContext(runningObject, currentConsumer, senderCertPath);
+		application.setExecutionContext(runningObject, currentConsumer, senderCertPath);
 	}
 	
 	public static void setExecutionContext(Module application, ObjectDeployment runningObject, 
 			String publicKey) {
 		DeploymentID fakeID = new DeploymentID("a@b/c","d");
 		fakeID.setPublicKey(publicKey);
-		application.getContainer().setExecutionContext(runningObject, fakeID, application.getMyCertPath());
+		application.setExecutionContext(runningObject, fakeID, application.getMyCertPath());
 	}
 	
 	/* Other */
@@ -193,7 +193,7 @@ public class AcceptanceTestUtil {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T getStub(Module application, DeploymentID rwpID, Class<T> clazz) {
-		return (T) application.getContainer().getStubRepository().getStub(rwpID.getServiceID()).getProxy(clazz);
+		return (T) application.getStubRepository().getStub(rwpID.getServiceID()).getProxy(clazz);
 		
 	}
 	

@@ -25,23 +25,23 @@ public class FileTransferManager implements Serializable {
 	
 	public void acceptTransfer(IncomingTransferHandle handle, TransferReceiver frl, File localFile) {
 		handle.setLocalFile(localFile);
-		this.application.getContainer().acceptTransfer(handle, frl);
+		this.application.acceptTransfer(handle, frl);
 	}
 
 	public void rejectTransfer(IncomingTransferHandle handle) {
-		this.application.getContainer().rejectTransfer(handle);
+		this.application.rejectTransfer(handle);
 	}
 
 	public void startTransfer(OutgoingTransferHandle handle, TransferSender fsl) {
-		this.application.getContainer().startTransfer(handle, fsl);
+		this.application.startTransfer(handle, fsl);
 	}
 
 	public void cancelIncomingTransfer(IncomingTransferHandle handle) {
-		this.application.getContainer().cancelIncomingTransfer(handle);
+		this.application.cancelIncomingTransfer(handle);
 	}
 
 	public void cancelOutgoingTransfer(OutgoingTransferHandle handle) {
-		this.application.getContainer().cancelOutgoingTransfer(handle);
+		this.application.cancelOutgoingTransfer(handle);
 	}
 
 }

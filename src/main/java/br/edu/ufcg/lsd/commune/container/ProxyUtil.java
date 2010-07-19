@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.message.MessageUtil;
 
@@ -208,7 +209,7 @@ public class ProxyUtil {
 		}
 	}
 
-	public static Object createProxy(Container sourceContainer, ServiceID stubSID, ClassLoader classloader, 
+	public static Object createProxy(Module sourceModule, ServiceID stubSID, ClassLoader classloader, 
 			Class<?>... interfaceTypes) {
 		
 	
@@ -226,7 +227,7 @@ public class ProxyUtil {
 		}
 		
 	            
-	    ApplicationMessageCreator invocationHandler = new ApplicationMessageCreator(sourceContainer, stubSID);
+	    ApplicationMessageCreator invocationHandler = new ApplicationMessageCreator(sourceModule, stubSID);
 	
 	    Class<?> proxyClass = Proxy.getProxyClass(classloader, interfaceTypes);
 	    Object proxy = null;

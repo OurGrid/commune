@@ -26,16 +26,16 @@ import br.edu.ufcg.lsd.commune.identification.ServiceID;
 
 public class StubMatcher implements IArgumentMatcher {
 
-	private TestableContainer container;
+	private TestableApplication module;
 	private final ServiceID stubID;
 	
-	StubMatcher(TestableContainer container, ServiceID stubID) {
-		this.container = container;
+	StubMatcher(TestableApplication module, ServiceID stubID) {
+		this.module = module;
 		this.stubID = stubID;
 	}
 
 	public boolean matches(Object obj) {
-		ServiceID objID = container.getStubServiceID(obj);
+		ServiceID objID = module.getStubServiceID(obj);
 		
 		if (objID == null) {
 			return false;
@@ -45,8 +45,8 @@ public class StubMatcher implements IArgumentMatcher {
 	}
 
 
-	public static <T> T eqRef(TestableContainer container, ServiceID stubID) {
-		StubMatcher messageMatcher = new StubMatcher(container, stubID);
+	public static <T> T eqRef(TestableApplication module, ServiceID stubID) {
+		StubMatcher messageMatcher = new StubMatcher(module, stubID);
 		EasyMock.reportMatcher(messageMatcher);
 		return null;
 	}

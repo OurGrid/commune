@@ -19,7 +19,7 @@
  */
 package br.edu.ufcg.lsd.commune.processor.filetransfer;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.message.StubParameter;
@@ -39,23 +39,23 @@ public class FileTransferProcessor extends AbstractProcessor {
 	
 	protected TransferManager transferManager;
 
-	public FileTransferProcessor(Container container) {
-		super(container);
+	public FileTransferProcessor(Module module) {
+		super(module);
 		transferManager = createTransferManager();
 	}
 
 
 	protected TransferManager createTransferManager() {
-		int maxOut = getContainer().getContext().parseIntegerProperty(TransferProperties.PROP_FILE_TRANSFER_MAX_OUT );
+		int maxOut = getModule().getContext().parseIntegerProperty(TransferProperties.PROP_FILE_TRANSFER_MAX_OUT );
 //		boolean notifyProgress = getContainer().getContext().isEnabled(TransferProperties.PROP_FILE_TRANSFER_NOTIFY_PROGRESS );
-		return new TransferManager(maxOut, getContainer().getContext());
+		return new TransferManager(maxOut, getModule().getContext());
 	}
 
 	public void start() {
 		super.start();
-		CommuneNetwork communicationLayer = (CommuneNetwork) getContainer().getMessageSender();
+		CommuneNetwork communicationLayer = (CommuneNetwork) getModule().getMessageSender();
 		XMPPProtocol xmppProtocol = communicationLayer.getXMPPProtocol();
-		transferManager.start(getContainer(), xmppProtocol.getConnection());
+		transferManager.start(getModule(), xmppProtocol.getConnection());
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class FileTransferProcessor extends AbstractProcessor {
 			StubParameter stubP = (StubParameter) message.getParameters().get(1).getValue();
 			
 			DeploymentID id = stubP.getId();
-			transferManager.startTransfer(handle, id, getContainer());
+			transferManager.startTransfer(handle, id, getModule());
 
 		} else if (CANCEL_INCOMING_TRANSFER.equals(message.getFunctionName())) {
 			IncomingTransferHandle handle = (IncomingTransferHandle) message.getParameters().get(0).getValue();

@@ -29,7 +29,7 @@ public class RemoteCollectionParameters extends TestWithTestableCommuneContainer
 	@Test
 	public void deployWithRemoteCollectionParameters() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(RemoteObject1.MY_SERVICE_NAME, new RemoteObject1());
+		application.deploy(RemoteObject1.MY_SERVICE_NAME, new RemoteObject1());
 	}
 	
 	//TODO Validations

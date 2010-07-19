@@ -19,7 +19,7 @@
  */
 package br.edu.ufcg.lsd.commune.processor;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.message.Message;
 
 public interface MessageProcessor {
@@ -28,7 +28,7 @@ public interface MessageProcessor {
     
     public void shutdown();
             
-    public Container getContainer(); 
+    public Module getModule(); 
     
     public void receiveMessage(Message message);        
 

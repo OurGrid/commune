@@ -1,6 +1,6 @@
 package br.edu.ufcg.lsd.commune.systemtest;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.network.CommuneNetwork;
 import br.edu.ufcg.lsd.commune.network.NetworkBuilder;
 import br.edu.ufcg.lsd.commune.network.certification.CertificationProtocol;
@@ -12,8 +12,8 @@ public class SystemTestNetworkBuilder extends NetworkBuilder {
     private ConnectionProtocol connectionProtocol;
 
 	@Override
-    public CommuneNetwork build(Container container) {
-        return super.build(container);
+    public CommuneNetwork build(Module module) {
+        return super.build(module);
     }
     
     
@@ -21,7 +21,7 @@ public class SystemTestNetworkBuilder extends NetworkBuilder {
      * Do not create the loopback protocol to force the messages to cross all the protocol stack
      */
     @Override
-    protected VirtualMachineLoopbackProtocol createLoopbackProtocol(Container container, 
+    protected VirtualMachineLoopbackProtocol createLoopbackProtocol(Module module, 
     		CommuneNetwork communeNetwork) {
     	return null;
     }
@@ -33,8 +33,8 @@ public class SystemTestNetworkBuilder extends NetworkBuilder {
     }
     
     @Override
-    protected CertificationProtocol createCertificationProtocol(Container container, CommuneNetwork communeNetwork) {
-    	return new SystemTestCertificationProtocol(communeNetwork, container.getMyCertPath());
+    protected CertificationProtocol createCertificationProtocol(Module module, CommuneNetwork communeNetwork) {
+    	return new SystemTestCertificationProtocol(communeNetwork, module.getMyCertPath());
     }
 
 

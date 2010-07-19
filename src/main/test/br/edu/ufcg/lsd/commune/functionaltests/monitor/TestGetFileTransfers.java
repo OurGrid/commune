@@ -55,7 +55,7 @@ public class TestGetFileTransfers extends TestWithTestableCommuneContainer {
 		application = deployMonitorUtil.createAndStartApplication(application);
 		
 		SenderClass senderObject = new SenderClass();
-		application.getContainer().deploy(SenderClass.OBJECT_NAME, senderObject);
+		application.deploy(SenderClass.OBJECT_NAME, senderObject);
 		
 		DeploymentID destinationID = testGetFileTransfersUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
 		DeploymentID listenerID = testGetFileTransfersUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
@@ -66,12 +66,12 @@ public class TestGetFileTransfers extends TestWithTestableCommuneContainer {
 		Message message = new Message(listenerID, destinationID, "sendFile");
 		message.addParameter(OutgoingTransferHandle.class, handle);
 
-		application.getContainer().deliverMessage(message);
+		application.deliverMessage(message);
 		
 		//expect send start transfer msg to FileTransfer
-		application.getContainer().getServiceConsumer().consumeMessage();
+		application.getServiceConsumer().consumeMessage();
 
-		application.getContainer().getFileTransferConsumer().consumeMessage();
+		application.getFileTransferConsumer().consumeMessage();
 		
 		testGetFileTransfersUtil.getFileTransfers(application, destinationID, 
 				listenerID, null, new File(TRANSFER_FILE), 0, false);
@@ -82,7 +82,7 @@ public class TestGetFileTransfers extends TestWithTestableCommuneContainer {
 		application = deployMonitorUtil.createAndStartApplication(application);
 		
 		SenderClass senderObject = new SenderClass();
-		application.getContainer().deploy(SenderClass.OBJECT_NAME, senderObject);
+		application.deploy(SenderClass.OBJECT_NAME, senderObject);
 		
 		DeploymentID destinationID = testGetFileTransfersUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
 		DeploymentID listenerID = testGetFileTransfersUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
@@ -93,17 +93,17 @@ public class TestGetFileTransfers extends TestWithTestableCommuneContainer {
 		Message message = new Message(listenerID, destinationID, "sendFile");
 		message.addParameter(OutgoingTransferHandle.class, handle);
 
-		application.getContainer().deliverMessage(message);
+		application.deliverMessage(message);
 		
 		//expect send start transfer msg to FileTransfer
-		application.getContainer().getServiceConsumer().consumeMessage();
+		application.getServiceConsumer().consumeMessage();
 
-		application.getContainer().getFileTransferConsumer().consumeMessage();
+		application.getFileTransferConsumer().consumeMessage();
 		
 		testGetFileTransfersUtil.getFileTransfers(application, destinationID, 
 				listenerID, null, new File(TRANSFER_FILE), 0, false);
 		
-		TestableFileTransferProcessor fileTransferProcessor = (TestableFileTransferProcessor) application.getContainer().getFileTransferProcessor();
+		TestableFileTransferProcessor fileTransferProcessor = (TestableFileTransferProcessor) application.getFileTransferProcessor();
 		fileTransferProcessor.setOutgoingTransferStatus(handle, Status.initial);
 		
 		testGetFileTransfersUtil.getFileTransfers(application, destinationID, 

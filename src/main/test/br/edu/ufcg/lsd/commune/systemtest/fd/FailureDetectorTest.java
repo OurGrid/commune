@@ -64,10 +64,10 @@ public class FailureDetectorTest {
 		String managerObserverName = MANAGER_OBSERVER_NAME;
 		ManagerObserverReceiver observer = new ManagerObserverReceiver();
 		
-		moduleClient.getContainer().deploy(managerObserverName, observer);
+		moduleClient.deploy(managerObserverName, observer);
 		
 		InterestRequirements requirements = new InterestRequirements(4, 2);
-		moduleClient.getContainer().registerInterest(managerObserverName, 
+		moduleClient.registerInterest(managerObserverName, 
 				ModuleManager.class, moduleManagerID, requirements);
 		
 		return moduleClient;

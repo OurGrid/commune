@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.container.logging.CommuneLogger;
 import br.edu.ufcg.lsd.commune.container.logging.CommuneLoggerFactory;
@@ -37,7 +37,7 @@ public abstract class AbstractProcessor implements MessageProcessor {
 	protected static final transient CommuneLogger msgLogger = 
 		CommuneLoggerFactory.getInstance().getMessagesLogger();
 	
-    private Container container;
+    private Module module;
 
     protected MessageQueue messageQueue;
     protected CountDownLatch shutdownCountDownLatch; 
@@ -47,17 +47,17 @@ public abstract class AbstractProcessor implements MessageProcessor {
     
     private static final int QUEUE_LIMIT = 30;
     
-    protected AbstractProcessor(Container container) {
-    	if (container == null) {
-    		throw new CommuneRuntimeException( "You need to set a container!" );
+    protected AbstractProcessor(Module module) {
+    	if (module == null) {
+    		throw new CommuneRuntimeException( "You need to set a module!" );
     	}
     	
-    	this.container = container;
+    	this.module = module;
         this.shutdownCountDownLatch = new CountDownLatch(1);
         this.messageQueue = new MessageQueue();
         this.messageConsumer = createMessageConsumer();
         
-        if (container.getContext().isEnabled(MonitorProperties.PROP_COMMUNE_MONITOR)) {
+        if (module.getContext().isEnabled(MonitorProperties.PROP_COMMUNE_MONITOR)) {
         	this.incomingMessageQueue = new ArrayList<Message>(QUEUE_LIMIT);
         	this.outgoingMessageQueue = new ArrayList<Message>(QUEUE_LIMIT);
         }
@@ -79,8 +79,8 @@ public abstract class AbstractProcessor implements MessageProcessor {
     	this.messageConsumer.shutdown();
     }
     
-    public Container getContainer() {
-        return this.container;
+    public Module getModule() {
+        return this.module;
     }
     
     private void logIncomingMessage(Message message) {
@@ -112,11 +112,11 @@ public abstract class AbstractProcessor implements MessageProcessor {
 
 	public void sendMessage(Message message) {
 		logOutgoingMessage(message);
-		getContainer().sendMessage(message);
+		getModule().sendMessage(message);
 	}
 
 	protected ObjectDeployment getObjectDeployment(String serviceName) {
-		return getContainer().getObjectRepository().get(serviceName);
+		return getModule().getObjectRepository().get(serviceName);
 	}
 	
 	public void setMessageConsumer(MessageConsumer messageConsumer) {

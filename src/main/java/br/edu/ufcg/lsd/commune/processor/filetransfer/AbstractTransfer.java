@@ -24,7 +24,7 @@ import java.io.File;
 import org.jivesoftware.smackx.filetransfer.FileTransfer;
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.message.Message;
@@ -32,7 +32,7 @@ import br.edu.ufcg.lsd.commune.message.Message;
 public abstract class AbstractTransfer implements Transfer {
 
 
-	protected final Container container;
+	protected final Module module;
 
 	private long previousAmountWrittenValue;
 	private long lastDataChangeTime;
@@ -46,10 +46,10 @@ public abstract class AbstractTransfer implements Transfer {
 	protected final DeploymentID listenerID;
 
 
-	public AbstractTransfer(Container container, DeploymentID listenerID, long inactivityTimeout, TransferHandle handle, File file, long fileSize,
+	public AbstractTransfer(Module module, DeploymentID listenerID, long inactivityTimeout, TransferHandle handle, File file, long fileSize,
 									boolean notifyProgress) {
 
-		this.container = container;
+		this.module = module;
 		this.listenerID = listenerID;
 		this.handle = handle;
 		this.inactivityTimeout = inactivityTimeout;
@@ -77,8 +77,8 @@ public abstract class AbstractTransfer implements Transfer {
 						this.getClass().isAssignableFrom(OutgoingTransfer.class));
 				
 				Message message = 
-					createUpdateTransferProgressMessage(container.getContainerID(), listenerID, transferProgress);
-				container.sendMessage(message);
+					createUpdateTransferProgressMessage(module.getContainerID(), listenerID, transferProgress);
+				module.sendMessage(message);
 				
 			}
 			return false;

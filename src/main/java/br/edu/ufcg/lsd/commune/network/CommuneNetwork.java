@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.IMessageSender;
 import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
@@ -34,10 +34,10 @@ public class CommuneNetwork implements IMessageSender {
 	private Protocol applicationProtocol;
 	private Protocol xmppProtocol;
 	private List<Protocol> protocolChain = new ArrayList<Protocol>();
-	private Container container;
+	private Module module;
 	
-	public CommuneNetwork(Container container) {
-		this.container = container;
+	public CommuneNetwork(Module module) {
+		this.module = module;
 	}
 	
 	public void init(Protocol applicationProtocol, Protocol xmppProtocol) {
@@ -90,14 +90,14 @@ public class CommuneNetwork implements IMessageSender {
 //	}
 
 	public void deliverMessage(Message message) {
-		container.deliverMessage(message);
+		module.deliverMessage(message);
 	}
 	
 	public XMPPProtocol getXMPPProtocol() {
 		return (XMPPProtocol) this.xmppProtocol;
 	}
 	
-	public Container getContainer() {
-		return container; 
+	public Module getModule() {
+		return module; 
 	}
 }

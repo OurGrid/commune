@@ -19,15 +19,15 @@
  */
 package br.edu.ufcg.lsd.commune.testinfra.util;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.processor.MessageConsumer;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestManager;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestProcessor;
 
 public class TestableInterestProcessor extends InterestProcessor implements TestableProcessor {
 
-	public TestableInterestProcessor(Container container) {
-		super(container);
+	public TestableInterestProcessor(Module module) {
+		super(module);
 	}
 
 	@Override

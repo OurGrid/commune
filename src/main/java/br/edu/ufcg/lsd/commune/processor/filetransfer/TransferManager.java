@@ -26,7 +26,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 
@@ -49,11 +49,11 @@ public class TransferManager {
 	}
 
 	
-	public void start(Container container, XMPPConnection connection) {
+	public void start(Module module, XMPPConnection connection) {
 		ReentrantLock lock = new ReentrantLock();
 		
 		FileTransferManager manager = new FileTransferManager(connection);
-		incomingManager = new IncomingTransfersManager(container, manager, lock);
+		incomingManager = new IncomingTransfersManager(module, manager, lock);
 		
 		int responseTimeout = context.parseIntegerProperty(TransferProperties.PROP_FILE_TRANSFER_TIMEOUT) * 1000;
 		outgoingManager = new OutgoingTransfersManager(manager, maxOut, responseTimeout, lock);
@@ -97,7 +97,7 @@ public class TransferManager {
 		incomingManager.reject(handle);
 	}
 	
-	public void startTransfer(OutgoingTransferHandle handle, DeploymentID listenerID, Container container) {
+	public void startTransfer(OutgoingTransferHandle handle, DeploymentID listenerID, Module module) {
 		File file = handle.getLocalFile();
 		DeploymentID destination = handle.getDestinationID();
 		
@@ -106,7 +106,7 @@ public class TransferManager {
 		
 		LOG.debug( "File: " + file.getAbsolutePath() + " to " + destination + ", handle: " + handle.getId() + 
 				", size: " + file.length() );
-		outgoingManager.startTransfer(handle, listenerID, container);
+		outgoingManager.startTransfer(handle, listenerID, module);
 		
 	}
 

@@ -19,7 +19,7 @@
  */
 package br.edu.ufcg.lsd.commune.network.connection;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.network.CommuneNetwork;
@@ -32,7 +32,7 @@ public class ConnectionProtocol extends Protocol {
 	
 	public ConnectionProtocol(CommuneNetwork communeNetwork) {
 		super(communeNetwork);
-		connectionManager = new ConnectionManager(communeNetwork.getContainer());
+		connectionManager = new ConnectionManager(communeNetwork.getModule());
 	}
 
 
@@ -57,8 +57,8 @@ public class ConnectionProtocol extends Protocol {
 		ServiceID serviceID = ServiceID.parse(address);
 		return connectionManager.getConnection(serviceID.getContainerID());
 	}
-	public void configure(Container container) {
-		connectionManager.configure(container);
+	public void configure(Module module) {
+		connectionManager.configure(module);
 		
 	}
 

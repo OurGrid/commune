@@ -20,13 +20,22 @@
 package br.edu.ufcg.lsd.commune.testinfra.util;
 
 import br.edu.ufcg.lsd.commune.Module;
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.container.IMessageDeliverer;
+import br.edu.ufcg.lsd.commune.container.IMessageSender;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
+import br.edu.ufcg.lsd.commune.processor.filetransfer.FileTransferProcessor;
+import br.edu.ufcg.lsd.commune.processor.interest.InterestProcessor;
+import br.edu.ufcg.lsd.commune.processor.objectdeployer.ServiceProcessor;
 
 public class TestableApplication extends Module {
+
+	
+	private TestableInterestProcessor interestProcessor;
+	private TestableServiceProcessor serviceProcessor;
+	private TestableFileTransferProcessor fileTransferProcessor;
 
 	
 	public TestableApplication(String containerName, ModuleContext context) 
@@ -35,16 +44,49 @@ public class TestableApplication extends Module {
 	}
 
 
-	@Override
-	protected Container createContainer(String containerName, ModuleContext context) {
-		return new TestableContainer(this, containerName, context);
-	}
-	
-	public TestableContainer getContainer() {
-		return (TestableContainer) container;
-	}
-
 	public DeploymentID getDeploymentID(String serviceName) {
 		return getObject(serviceName).getDeploymentID();
+	}
+	
+	public void setMessageDelivererMock(IMessageDeliverer messageDeliverer) {
+		this.messageDeliverer = messageDeliverer;
+	}
+
+	public void setMessageSenderMock(IMessageSender messageSender) {
+		this.messageSender = messageSender;
+	}
+
+	@Override
+	protected InterestProcessor createInterestProcessor() {
+		interestProcessor = new TestableInterestProcessor(this);
+		return interestProcessor;
+	}
+	
+	public TestableMessageConsumer getInterestConsumer() {
+		return (TestableMessageConsumer)this.interestProcessor.getMessageConsumer();
+	}
+	
+	@Override
+	protected ServiceProcessor createServiceProcessor() {
+		serviceProcessor = new TestableServiceProcessor(this);
+		return serviceProcessor;
+	}
+	
+	public TestableMessageConsumer getServiceConsumer() {
+		return (TestableMessageConsumer)this.serviceProcessor.getMessageConsumer();
+	}
+
+	@Override
+	protected FileTransferProcessor createFileTransferProcessor() {
+		fileTransferProcessor = new TestableFileTransferProcessor(this);
+		return fileTransferProcessor;
+	}
+	
+	public TestableMessageConsumer getFileTransferConsumer() {
+		return (TestableMessageConsumer)this.fileTransferProcessor.getMessageConsumer();
+	}
+	
+	public FileTransferProcessor getFileTransferProcessor() {
+		return this.fileTransferProcessor;
 	}
 }

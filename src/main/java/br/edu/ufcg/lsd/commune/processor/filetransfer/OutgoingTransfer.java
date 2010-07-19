@@ -24,7 +24,7 @@ import java.io.File;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.message.Message;
 
@@ -39,11 +39,11 @@ public class OutgoingTransfer extends AbstractTransfer {
 	private final String transferDescription;
 
 
-	public OutgoingTransfer(Container container, DeploymentID listenerID, TransferHandle handle, OutgoingFileTransfer transfer,
+	public OutgoingTransfer(Module module, DeploymentID listenerID, TransferHandle handle, OutgoingFileTransfer transfer,
 									File file, String destinationObjectID, long inactivityTimeout, 
 									boolean notifyProgress, String transferDescription) {
 
-		super(container, listenerID, inactivityTimeout, handle, file, file.length(), notifyProgress);
+		super(module, listenerID, inactivityTimeout, handle, file, file.length(), notifyProgress);
 		this.transfer = transfer;
 		this.destinationObjectID = destinationObjectID;
 		this.transferDescription = transferDescription;
@@ -70,12 +70,12 @@ public class OutgoingTransfer extends AbstractTransfer {
 	}
 
 	private void handleTransferError( Exception e ) {
-		Message message = new Message(container.getContainerID(), listenerID, "outgoingTransferFailed");
+		Message message = new Message(module.getContainerID(), listenerID, "outgoingTransferFailed");
 		message.addParameter(OutgoingTransferHandle.class, getHandle());
 		message.addParameter(Exception.class, e);
 		message.addParameter(long.class, 0L);
 		
-		container.sendMessage(message);
+		module.sendMessage(message);
 	}
 
 	public boolean updateStatus() {
@@ -92,15 +92,15 @@ public class OutgoingTransfer extends AbstractTransfer {
 			switch ( newStatus ) {
 
 				case cancelled:
-					Message message = new Message(container.getContainerID(), listenerID, "outgoingTransferCancelled");
+					Message message = new Message(module.getContainerID(), listenerID, "outgoingTransferCancelled");
 					message.addParameter(OutgoingTransferHandle.class, outGoingHandle);
 					message.addParameter(long.class, transfer.getBytesSent());
 					
-					container.sendMessage(message);
+					module.sendMessage(message);
 					return true;
 					
 				case error:
-					message = new Message(container.getContainerID(), listenerID, "outgoingTransferFailed");
+					message = new Message(module.getContainerID(), listenerID, "outgoingTransferFailed");
 					message.addParameter(OutgoingTransferHandle.class, outGoingHandle);
 					Exception xmppException = transfer.getException();
 					
@@ -114,14 +114,14 @@ public class OutgoingTransfer extends AbstractTransfer {
 					message.addParameter(Exception.class, paramExc);
 					message.addParameter(long.class, transfer.getBytesSent());
 					
-					container.sendMessage(message);
+					module.sendMessage(message);
 					return true;
 					
 				case refused:
-					message = new Message(container.getContainerID(), listenerID, "transferRejected");
+					message = new Message(module.getContainerID(), listenerID, "transferRejected");
 					message.addParameter(OutgoingTransferHandle.class, outGoingHandle);
 					
-					container.sendMessage(message);
+					module.sendMessage(message);
 					return true;
 					
 			}
@@ -132,10 +132,10 @@ public class OutgoingTransfer extends AbstractTransfer {
 			
 			boolean fileCompleted = transfer.getFileSize() == transfer.getBytesSent();
 			if (fileCompleted) {
-				Message message = new Message(container.getContainerID(), listenerID, "outgoingTransferCompleted");
+				Message message = new Message(module.getContainerID(), listenerID, "outgoingTransferCompleted");
 				message.addParameter(OutgoingTransferHandle.class, outGoingHandle);
 				message.addParameter(long.class, transfer.getBytesSent());
-				container.sendMessage(message);
+				module.sendMessage(message);
 				return true;
 			} 
 		}
@@ -143,12 +143,12 @@ public class OutgoingTransfer extends AbstractTransfer {
 		if ( checkTimeoutAndNotifyProgress(transfer) ) {
 			LOG.debug( "Handle: " + getHandle() + ". Outgoing file transfer timed out. More than "
 					+ getInactivityTimeout() + " milliseconds elapsed since the latest activity" );
-			Message message = new Message(container.getContainerID(), listenerID, "outgoingTransferFailed");
+			Message message = new Message(module.getContainerID(), listenerID, "outgoingTransferFailed");
 			message.addParameter(OutgoingTransferHandle.class, outGoingHandle);
 			message.addParameter(Exception.class, new Exception( "Transfer timed out" ));
 			message.addParameter(long.class, transfer.getAmountWritten());
 
-			container.sendMessage(message);
+			module.sendMessage(message);
 		}
 		return false;
 	}
@@ -156,7 +156,7 @@ public class OutgoingTransfer extends AbstractTransfer {
 
 	Message createOutgoingTransferFailed(OutgoingTransferHandle outGoingHandle, Exception exception) {
 		Message message;
-		message = new Message(container.getContainerID(), listenerID, "outgoingTransferFailed");
+		message = new Message(module.getContainerID(), listenerID, "outgoingTransferFailed");
 		message.addParameter(OutgoingTransferHandle.class, outGoingHandle);
 		message.addParameter(Exception.class, exception);
 		message.addParameter(long.class, transfer.getBytesSent());

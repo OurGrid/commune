@@ -25,7 +25,7 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.message.Message;
 
@@ -40,11 +40,11 @@ public class IncomingTransfer extends AbstractTransfer {
 
 
 
-	public IncomingTransfer(Container container, DeploymentID listenerID, File file, IncomingFileTransfer transfer,
+	public IncomingTransfer(Module module, DeploymentID listenerID, File file, IncomingFileTransfer transfer,
 									TransferHandle handle, long inactivityTimeout, long fileSize,
 									boolean notifyProgress) {
 
-		super(container, listenerID, inactivityTimeout, handle, file, fileSize, notifyProgress);
+		super(module, listenerID, inactivityTimeout, handle, file, fileSize, notifyProgress);
 		this.transfer = transfer;
 		this.listenerID = listenerID;
 	}
@@ -78,7 +78,7 @@ public class IncomingTransfer extends AbstractTransfer {
 							+ transfer.getException() );
 					
 					Message message = createIncomingTransferFailed(transfer.getException());
-					container.sendMessage(message);
+					module.sendMessage(message);
 					return true;
 			}
 		}
@@ -87,10 +87,10 @@ public class IncomingTransfer extends AbstractTransfer {
 			
 			boolean fileComplete = getHandle().getLocalFile().length() == transfer.getAmountWritten();
 			if (fileComplete) {
-				Message message = new Message(container.getContainerID(), listenerID, "incomingTransferCompleted");
+				Message message = new Message(module.getContainerID(), listenerID, "incomingTransferCompleted");
 				message.addParameter(IncomingTransferHandle.class, getHandle());
 				message.addParameter(long.class, transfer.getAmountWritten());
-				container.sendMessage(message);
+				module.sendMessage(message);
 				return true;
 			} 
 		}
@@ -100,7 +100,7 @@ public class IncomingTransfer extends AbstractTransfer {
 					+ getInactivityTimeout() + " milliseconds elapsed since the latest activity" );
 			
 			Message message = createIncomingTransferFailed(new Exception("Transfer timed out"));
-			container.sendMessage(message);
+			module.sendMessage(message);
 		}
 		
 		return false;
@@ -108,7 +108,7 @@ public class IncomingTransfer extends AbstractTransfer {
 
 
 	Message createIncomingTransferFailed(Exception exception) {
-		Message message = new Message(container.getContainerID(), listenerID, "incomingTransferFailed"); 
+		Message message = new Message(module.getContainerID(), listenerID, "incomingTransferFailed"); 
 		message.addParameter(IncomingTransferHandle.class, getHandle());
 		
 		if (exception == null) {

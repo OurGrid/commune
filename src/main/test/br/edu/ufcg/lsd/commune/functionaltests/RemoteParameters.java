@@ -65,212 +65,212 @@ public class RemoteParameters extends TestWithTestableCommuneContainer {
 	@Test(expected=InvalidDeploymentException.class)
 	public void remoteParameterWithoutMonitor() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_1());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_1());
 	}
 	
 	@Test(expected=InvalidMonitoringException.class)
 	public void remoteParameterWithUnknownMonitor() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_2());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_2());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void selfMonitorWithoutNotificationMethods() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_3());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_3());
 	}
 	
 	@Test(expected=InvalidMonitoringException.class)
 	public void otherMonitorWithoutNotificationMethods() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_3());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_3());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 
 	@Test
 	public void selfMonitor() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_4());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_4());
 	}
 
 	@Test
 	public void otherMonitor() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_4());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_4());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void notificationMethodsWithoutParameters() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_5a());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_5a());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void otherNotificationMethodsWithoutParameters() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_5a());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_5a());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void failureNotificationMethodWithoutParameters() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_5b());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_5b());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void otherFailureNotificationMethodWithoutParameters() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_5b());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_5b());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void recoveryNotificationMethodWithoutParameters() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_5c());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_5c());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void otherRecoveryNotificationMethodWithoutParameters() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_5c());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_5c());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void notificationMethodsWithSuperParameter1() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_5d());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_5d());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void otherNotificationMethodsWithSuperParameter1() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_5d());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_5d());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void notificationMethodsWithSubParameter() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_5e());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_5e());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void otherNotificationMethodsWithSubParameter() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_5e());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_5e());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void notificationMethodsWithSuperParameter2() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_5f());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_5f());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void otherNotificationMethodsWithSuperParameter2() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_5f());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_5f());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 	
 	@Test(expected=InvalidMonitoringException.class)
 	public void selfMonitorWithoutFailureNotification() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_6());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_6());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void otherMonitorWithoutFailureNotification() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_6());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_6());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void selfMonitorWithoutRecoveryNotification() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_7());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_7());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void otherMonitorWithoutRecoveryNotification() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_7());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_7());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void notificationMethodsWithWrongParameters() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_8a());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_8a());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void otherNotificationMethodsWithWrongParameters() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_8a());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_8a());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void notificationMethodsWithWrongFailureParameter() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_8b());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_8b());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void otherNotificationMethodsWithWrongFailureParameter() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_8b());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_8b());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void notificationMethodsWithWrongRecoveryParameter() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_8c());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_8c());
 	}
 	
 	@Test(expected=InvalidMonitoringException.class)
 	public void otherNotificationMethodsWithWrongRecoveryParameter() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_8c());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_8c());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1_9a());
 	}
 	
 	@Test
 	public void duplicateTheUseOfSameMonitor() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_4());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject4());
-		application.getContainer().deploy(Context.A_SERVICE_NAME + "x", new MyObject5());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_4());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject4());
+		application.deploy(Context.A_SERVICE_NAME + "x", new MyObject5());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void duplicateTheUseOfSameMonitorWithDifferentTypes1() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_4());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject5());
-		application.getContainer().deploy(Context.A_SERVICE_NAME + "x", new MyObject6());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject1_4());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject5());
+		application.deploy(Context.A_SERVICE_NAME + "x", new MyObject6());
 	}
 
 	@Test
 	public void duplicateTheUseOfSameMonitorWithDifferentTypes2() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject6());
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject5());
-		application.getContainer().deploy(Context.A_SERVICE_NAME + "x", new MyObject6());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject6());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject5());
+		application.deploy(Context.A_SERVICE_NAME + "x", new MyObject6());
 	}
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void duplicatedAnnotation() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.OTHER_SERVICE_NAME, new OtherObject7());
+		application.deploy(Context.OTHER_SERVICE_NAME, new OtherObject7());
 	}
 
 }

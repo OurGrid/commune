@@ -19,28 +19,29 @@
  */
 package br.edu.ufcg.lsd.commune.container;
 
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 
 public class ObjectDeployment {
 
-	private Container container;
+	private Module module;
 	private DeploymentID deploymentID;
 	private Object object;
 	private ServiceManager serviceManager;
 	private Object proxy;
 
 	
-	public ObjectDeployment(Container container, DeploymentID deploymentID,
+	public ObjectDeployment(Module module, DeploymentID deploymentID,
 			Object object) {
 
-		this.container = container;
+		this.module = module;
 		this.deploymentID = deploymentID;
 		this.object = object;
 	}
 
-	public Container getContainer() {
-		return container;
+	public Module getModule() {
+		return module;
 	}
 	
 	public DeploymentID getDeploymentID() {
@@ -52,7 +53,7 @@ public class ObjectDeployment {
 	}
 	
 	void invalidate() {
-		this.container = null;
+		this.module = null;
 		this.deploymentID = null;
 		this.object = null;
 		this.serviceManager = null;

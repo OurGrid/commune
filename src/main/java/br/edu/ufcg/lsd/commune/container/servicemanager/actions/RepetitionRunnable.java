@@ -21,7 +21,7 @@ package br.edu.ufcg.lsd.commune.container.servicemanager.actions;
 
 import java.io.Serializable;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.control.ModuleManager;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.message.Message;
@@ -40,11 +40,11 @@ public class RepetitionRunnable implements Runnable {
 	private String actionName;
 	private Serializable handler;
 	private ModuleManager componentControl;
-	private final Container container;
+	private final Module module;
 	
-	public RepetitionRunnable(Container container, ModuleManager componentControl, String actionName, 
+	public RepetitionRunnable(Module module, ModuleManager componentControl, String actionName, 
 			Serializable handler) {
-		this.container = container;
+		this.module = module;
 		this.componentControl = componentControl;
 		this.actionName = actionName;
 		this.handler = handler;
@@ -55,12 +55,12 @@ public class RepetitionRunnable implements Runnable {
 	 * referenced by its action name, passing the handler as parameter
 	 */
 	public void run() {
-		DeploymentID stubDeploymentID = container.getLocalObjectDeploymentID(componentControl);
-		Message message = new Message(container.getContainerID(), stubDeploymentID, "runAction");
+		DeploymentID stubDeploymentID = module.getLocalObjectDeploymentID(componentControl);
+		Message message = new Message(module.getContainerID(), stubDeploymentID, "runAction");
 		message.addParameter(String.class, actionName);
 		message.addParameter(Serializable.class, handler);
 		
-		container.sendMessage(message);
+		module.sendMessage(message);
 	}
 
 	/**

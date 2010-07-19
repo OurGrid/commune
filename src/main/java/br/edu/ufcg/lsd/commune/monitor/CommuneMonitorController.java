@@ -64,7 +64,7 @@ public class CommuneMonitorController implements CommuneMonitor {
 	
 	//get deployed objects
 	private Map<DeploymentID, Collection<Class<?>>> getDeployedObjects() {
-		ObjectRepository objectRepository = this.serviceManager.getApplication().getContainer().getObjectRepository();
+		ObjectRepository objectRepository = this.serviceManager.getApplication().getObjectRepository();
 		Collection<ObjectDeployment> objectDeployments = objectRepository.getObjects();
 		
 		Map<DeploymentID, Collection<Class<?>>> deployedObjects = new HashMap<DeploymentID, Collection<Class<?>>>();
@@ -86,7 +86,7 @@ public class CommuneMonitorController implements CommuneMonitor {
 	private Collection<TransferData> getOutgoingFileTransfers() {
 		Collection<TransferData> transferDatas = new ArrayList<TransferData>();
 		
-		OutgoingTransfersManager outgoingManager = this.serviceManager.getApplication().getContainer().getTransferManager().getOutgoingManager();
+		OutgoingTransfersManager outgoingManager = this.serviceManager.getApplication().getTransferManager().getOutgoingManager();
 		Collection<OutgoingTransfer> transfers = outgoingManager.getTransfers();
 		for (OutgoingTransfer transfer : transfers) {
 			OutgoingTransferHandle handle = (OutgoingTransferHandle) transfer.getHandle();
@@ -114,7 +114,7 @@ public class CommuneMonitorController implements CommuneMonitor {
 	private Collection<TransferData> getIncomingFileTransfers() {
 		Collection<TransferData> transferDatas = new ArrayList<TransferData>();
 		
-		IncomingTransfersManager incomingManager = this.serviceManager.getApplication().getContainer().getTransferManager().getIncomingManager();
+		IncomingTransfersManager incomingManager = this.serviceManager.getApplication().getTransferManager().getIncomingManager();
 		Collection<IncomingTransfer> transfers = incomingManager.getTransfers();
 		for (IncomingTransfer transfer : transfers) {
 			IncomingTransferHandle handle = (IncomingTransferHandle) transfer.getHandle();
@@ -139,7 +139,7 @@ public class CommuneMonitorController implements CommuneMonitor {
 	
 	//get stubs
 	private Collection<StubData> getStubs() {
-		StubRepository stubRepository = this.serviceManager.getApplication().getContainer().getStubRepository();
+		StubRepository stubRepository = this.serviceManager.getApplication().getStubRepository();
 		Collection<StubReference> stubReferences = stubRepository.getStubReferences();
 		
 		Collection<StubData> stubDatas = new ArrayList<StubData>();
@@ -149,7 +149,7 @@ public class CommuneMonitorController implements CommuneMonitor {
 			DeploymentID stubDID = stubReference.getStubDeploymentID();
 			Collection<Class<?>> proxies = stubReference.getProxies();
 			
-			Interest interest = this.serviceManager.getApplication().getContainer().getInterestManager().getInterest(stubSID);
+			Interest interest = this.serviceManager.getApplication().getInterestManager().getInterest(stubSID);
 			DeploymentID monitorDID = interest.getInterested().getDeploymentID();
 			
 			stubDatas.add(new StubData(monitorDID, stubSID, stubDID, proxies));
@@ -165,7 +165,7 @@ public class CommuneMonitorController implements CommuneMonitor {
 	
 	//get ServiceProcessor messages log
 	private Collection<Message> getServiceMessagesLog() {
-		ServiceProcessor service = (ServiceProcessor) this.serviceManager.getApplication().getContainer().getServiceProcessor();
+		ServiceProcessor service = (ServiceProcessor) this.serviceManager.getApplication().getServiceProcessor();
 		
 		Collection<Message> messages = new ArrayList<Message>();
 		messages.addAll(service.getIncomingQueueMessages());
@@ -180,7 +180,7 @@ public class CommuneMonitorController implements CommuneMonitor {
 	
 	//get FileTransferProcessor messages log
 	private Collection<Message> getFileTransferMessagesLog() {
-		FileTransferProcessor fileTransfer = (FileTransferProcessor) this.serviceManager.getApplication().getContainer().getFileTransferProcessor();
+		FileTransferProcessor fileTransfer = (FileTransferProcessor) this.serviceManager.getApplication().getFileTransferProcessor();
 		
 		Collection<Message> messages = new ArrayList<Message>();
 		messages.addAll(fileTransfer.getIncomingQueueMessages());
@@ -195,7 +195,7 @@ public class CommuneMonitorController implements CommuneMonitor {
 	
 	//get InterestProcessor messages log
 	private Collection<Message> getInterestMessagesLog() {
-		InterestProcessor interest = (InterestProcessor) this.serviceManager.getApplication().getContainer().getInterestProcessor();
+		InterestProcessor interest = (InterestProcessor) this.serviceManager.getApplication().getInterestProcessor();
 		
 		Collection<Message> messages = new ArrayList<Message>();
 		messages.addAll(interest.getIncomingQueueMessages());

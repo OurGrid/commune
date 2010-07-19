@@ -31,7 +31,7 @@ public class TestServiceProcessorMessagesLog extends TestWithTestableCommuneCont
 		application = deployMonitorUtil.createAndStartApplication(application);
 		
 		DeployableClass object = new DeployableClass();
-		application.getContainer().deploy(DeployableClass.OBJECT_NAME, object);
+		application.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
 		DeploymentID target = testServiceMessageLogUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
@@ -41,9 +41,9 @@ public class TestServiceProcessorMessagesLog extends TestWithTestableCommuneCont
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.getContainer().deliverMessage(message);
+		application.deliverMessage(message);
 		
-		application.getContainer().getServiceConsumer().consumeMessage();
+		application.getServiceConsumer().consumeMessage();
 		
 		testServiceMessageLogUtil.getMessagesLog(application, createMessageList(message));
 	}
@@ -53,7 +53,7 @@ public class TestServiceProcessorMessagesLog extends TestWithTestableCommuneCont
 		application = deployMonitorUtil.createAndStartApplication(application);
 		
 		DeployableClass object = new DeployableClass();
-		application.getContainer().deploy(DeployableClass.OBJECT_NAME, object);
+		application.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
 		DeploymentID target = testServiceMessageLogUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
@@ -65,9 +65,9 @@ public class TestServiceProcessorMessagesLog extends TestWithTestableCommuneCont
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 		
-		application.getContainer().deliverMessage(message);		
+		application.deliverMessage(message);		
 		
-		application.getContainer().getServiceConsumer().consumeMessage();
+		application.getServiceConsumer().consumeMessage();
 		
 		//verify
 		testServiceMessageLogUtil.getMessagesLog(application, createMessageList(message));
@@ -79,9 +79,9 @@ public class TestServiceProcessorMessagesLog extends TestWithTestableCommuneCont
 			message = new Message(source, target, "invoke");
 			message.addStubParameter(Stub.class, stubDID);
 
-			application.getContainer().deliverMessage(message);		
+			application.deliverMessage(message);		
 			
-			application.getContainer().getServiceConsumer().consumeMessage();
+			application.getServiceConsumer().consumeMessage();
 			
 			list.add(message);
 		}

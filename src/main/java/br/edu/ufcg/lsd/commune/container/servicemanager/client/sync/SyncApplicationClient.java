@@ -80,7 +80,7 @@ public abstract class SyncApplicationClient<A extends ServerModuleManager, B ext
 	
 		
 	protected long getQueueTimeout() {
-		String strQueueTimeout = getContainer().getContext().getProperty(CommuneClientProperties.PROP_CLIENT_QUEUE_TIMEOUT);
+		String strQueueTimeout = getContext().getProperty(CommuneClientProperties.PROP_CLIENT_QUEUE_TIMEOUT);
 		long queueTimeout = strQueueTimeout == null ? SyncContainerUtil.POLLING_TIMEOUT : Long.valueOf(strQueueTimeout);
 		
 		return queueTimeout;

@@ -81,7 +81,7 @@ public class ConnectionProtocolBlockingTest {
 		createBlocker(b_module, HEARTBEAT_FUNCTION_NAME, DO_NOT_BLOCK_SEQUENCE, DO_NOT_BLOCK_FUNCTION, 
 				DO_NOT_BLOCK_SEQUENCE);
 		
-		a_module.getContainer().deploy(A_SERVICE, new AReceiver());
+		a_module.deploy(A_SERVICE, new AReceiver());
 		
 		Condition<ConnectionProtocol> A2B_down_connection = new ConnectionStateCondition(B_ADDRESS, Down_Empty.class);
 		
@@ -95,8 +95,8 @@ public class ConnectionProtocolBlockingTest {
 		createBlocker(a_module, UPDATTE_STATUS_FUNCTION_NAME, DO_NOT_BLOCK_SEQUENCE, DO_NOT_BLOCK_FUNCTION, 
 				DO_NOT_BLOCK_SEQUENCE);
 		
-		a_module.getContainer().deploy(A_SERVICE, new AReceiver());
-		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+		a_module.deploy(A_SERVICE, new AReceiver());
+		b_module.deploy(B_SERVICE, new BReceiver());
 
 		Condition<ConnectionProtocol> B2A_emp_seq0_connection = 
 			new ConnectionStateCondition(A_ADDRESS, Empty_Zero.class);
@@ -113,8 +113,8 @@ public class ConnectionProtocolBlockingTest {
 	public void waitForConnectionUp() throws Exception {
 		AReceiver aReceiver = new AReceiver();
 		aReceiver.setSendMessage(false);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
-		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+		a_module.deploy(A_SERVICE, aReceiver);
+		b_module.deploy(B_SERVICE, new BReceiver());
 
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
@@ -126,8 +126,8 @@ public class ConnectionProtocolBlockingTest {
 	public void remoteNodeReceiveMessage() throws Exception {
 		AReceiver aReceiver = new AReceiver();
 		aReceiver.setSendMessage(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
-		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+		a_module.deploy(A_SERVICE, aReceiver);
+		b_module.deploy(B_SERVICE, new BReceiver());
 
 		Condition<ConnectionProtocol> B2A_emp_seqG_connection = 
 			new ConnectionStateCondition(A_ADDRESS, Empty_GreaterThenZero.class);
@@ -141,8 +141,8 @@ public class ConnectionProtocolBlockingTest {
 		AReceiver aReceiver = new AReceiver();
 		aReceiver.setSendMessage(true);
 		aReceiver.setUseCallback(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
-		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+		a_module.deploy(A_SERVICE, aReceiver);
+		b_module.deploy(B_SERVICE, new BReceiver());
 
 		Condition<ConnectionProtocol> B2A_up_seqG_connection = 
 			new ConnectionStateCondition(A_ADDRESS, Up_GreaterThenZero.class);
@@ -156,10 +156,10 @@ public class ConnectionProtocolBlockingTest {
 		AReceiver aReceiver = new AReceiver();
 		aReceiver.setSendMessage(true);
 		aReceiver.setUseCallback(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		a_module.deploy(A_SERVICE, aReceiver);
 		BReceiver bReceiver = new BReceiver();
 		bReceiver.setSendResponse(true);
-		b_module.getContainer().deploy(B_SERVICE, bReceiver);
+		b_module.deploy(B_SERVICE, bReceiver);
 		
 		Condition<ConnectionProtocol> B2A_up_seqG_connection = 
 			new ConnectionStateCondition(A_ADDRESS, Up_GreaterThenZero.class);
@@ -181,8 +181,8 @@ public class ConnectionProtocolBlockingTest {
 		
 		AReceiver aReceiver = new AReceiver();
 		aReceiver.setSendMessage(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
-		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+		a_module.deploy(A_SERVICE, aReceiver);
+		b_module.deploy(B_SERVICE, new BReceiver());
 		
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
@@ -207,8 +207,8 @@ public class ConnectionProtocolBlockingTest {
 		AReceiver aReceiver = new AReceiver();
 		aReceiver.setSendMessage(true);
 		aReceiver.setUseCallback(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
-		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+		a_module.deploy(A_SERVICE, aReceiver);
+		b_module.deploy(B_SERVICE, new BReceiver());
 		
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
@@ -233,10 +233,10 @@ public class ConnectionProtocolBlockingTest {
 		AReceiver aReceiver = new AReceiver();
 		aReceiver.setSendMessage(true);
 		aReceiver.setUseCallback(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		a_module.deploy(A_SERVICE, aReceiver);
 		BReceiver bReceiver = new BReceiver();
 		bReceiver.setSendResponse(true);
-		b_module.getContainer().deploy(B_SERVICE, bReceiver);
+		b_module.deploy(B_SERVICE, bReceiver);
 		
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
@@ -264,8 +264,8 @@ public class ConnectionProtocolBlockingTest {
 		AReceiver aReceiver = new AReceiver();
 		aReceiver.setSendMessage(true);
 		aReceiver.setReleaseOnFailure(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
-		b_module.getContainer().deploy(B_SERVICE, new BReceiver());
+		a_module.deploy(A_SERVICE, aReceiver);
+		b_module.deploy(B_SERVICE, new BReceiver());
 		
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
@@ -290,10 +290,10 @@ public class ConnectionProtocolBlockingTest {
 		aReceiver.setSendMessage(true);
 		aReceiver.setUseCallback(true);
 		aReceiver.setReleaseOnFailure(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		a_module.deploy(A_SERVICE, aReceiver);
 		BReceiver bReceiver = new BReceiver();
 		bReceiver.setSendResponse(true);
-		b_module.getContainer().deploy(B_SERVICE, bReceiver);
+		b_module.deploy(B_SERVICE, bReceiver);
 		
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
@@ -318,10 +318,10 @@ public class ConnectionProtocolBlockingTest {
 		aReceiver.setSendMessage(true);
 		aReceiver.setUseCallback(true);
 		aReceiver.setReleaseOnFailure(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		a_module.deploy(A_SERVICE, aReceiver);
 		BReceiver bReceiver = new BReceiver();
 		bReceiver.setSendResponse(true);
-		b_module.getContainer().deploy(B_SERVICE, bReceiver);
+		b_module.deploy(B_SERVICE, bReceiver);
 		
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
@@ -349,11 +349,11 @@ public class ConnectionProtocolBlockingTest {
 		AReceiver aReceiver = new AReceiver();
 		aReceiver.setSendMessage(true);
 		aReceiver.setUseCallback(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		a_module.deploy(A_SERVICE, aReceiver);
 		BReceiver bReceiver = new BReceiver();
 		bReceiver.setSendResponse(true);
 		bReceiver.setReleaseOnFailure(true);
-		b_module.getContainer().deploy(B_SERVICE, bReceiver);
+		b_module.deploy(B_SERVICE, bReceiver);
 		
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
@@ -382,11 +382,11 @@ public class ConnectionProtocolBlockingTest {
 		aReceiver.setSendMessage(true);
 		aReceiver.setUseCallback(true);
 		aReceiver.setReleaseOnFailure(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		a_module.deploy(A_SERVICE, aReceiver);
 		BReceiver bReceiver = new BReceiver();
 		bReceiver.setSendResponse(true);
 		bReceiver.setReleaseOnFailure(true);
-		b_module.getContainer().deploy(B_SERVICE, bReceiver);
+		b_module.deploy(B_SERVICE, bReceiver);
 		
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
@@ -415,9 +415,9 @@ public class ConnectionProtocolBlockingTest {
 		
 		AReceiver aReceiver = new AReceiver();
 		aReceiver.setSendMessage(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		a_module.deploy(A_SERVICE, aReceiver);
 		BReceiver bReceiver = new BReceiver();
-		b_module.getContainer().deploy(B_SERVICE, bReceiver);
+		b_module.deploy(B_SERVICE, bReceiver);
 		
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
@@ -454,10 +454,10 @@ public class ConnectionProtocolBlockingTest {
 		AReceiver aReceiver = new AReceiver();
 		aReceiver.setSendMessage(true);
 		aReceiver.setUseCallback(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		a_module.deploy(A_SERVICE, aReceiver);
 		BReceiver bReceiver = new BReceiver();
 		bReceiver.setSendResponse(true);
-		b_module.getContainer().deploy(B_SERVICE, bReceiver);
+		b_module.deploy(B_SERVICE, bReceiver);
 		
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
@@ -496,10 +496,10 @@ public class ConnectionProtocolBlockingTest {
 		AReceiver aReceiver = new AReceiver();
 		aReceiver.setSendMessage(true);
 		aReceiver.setUseCallback(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		a_module.deploy(A_SERVICE, aReceiver);
 		BReceiver bReceiver = new BReceiver();
 		bReceiver.setSendResponse(true);
-		b_module.getContainer().deploy(B_SERVICE, bReceiver);
+		b_module.deploy(B_SERVICE, bReceiver);
 		
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 
@@ -539,10 +539,10 @@ public class ConnectionProtocolBlockingTest {
 		aReceiver.setSendMessage(true);
 		aReceiver.setSendSecondMessage(true);
 		aReceiver.setUseCallback(true);
-		a_module.getContainer().deploy(A_SERVICE, aReceiver);
+		a_module.deploy(A_SERVICE, aReceiver);
 		BReceiver bReceiver = new BReceiver();
 		bReceiver.setSendResponse(true);
-		b_module.getContainer().deploy(B_SERVICE, bReceiver);
+		b_module.deploy(B_SERVICE, bReceiver);
 		
 		Condition<ConnectionProtocol> A2B_up_connection = new ConnectionStateCondition(B_ADDRESS, Up_Empty.class);
 		ConditionChecker<ConnectionProtocol> checker = 

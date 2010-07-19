@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.api.InvokeOnDeploy;
 import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
@@ -30,10 +31,10 @@ import br.edu.ufcg.lsd.commune.message.MessageUtil;
 
 public class InvokeOnDeployHelper {
 
-	private final Container container;
+	private final Module module;
 
-	public InvokeOnDeployHelper(Container container) {
-		this.container = container;
+	public InvokeOnDeployHelper(Module module) {
+		this.module = module;
 	}
 
 	public void process(ObjectDeployment deployment) {
@@ -44,7 +45,7 @@ public class InvokeOnDeployHelper {
         	
         	Object[] parameters = injectParameters(invokeOnDeploy, deployment);
         	
-        	container.setExecutionContext(deployment, deploymentID, container.getMyCertPath());
+        	module.setExecutionContext(deployment, deploymentID, module.getMyCertPath());
         	invokeOnDeploy(invokeOnDeploy, deployment.getObject(), parameters);
         }
 	}

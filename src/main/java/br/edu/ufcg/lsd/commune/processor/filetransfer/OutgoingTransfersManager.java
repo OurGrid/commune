@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.message.Message;
 
@@ -79,7 +79,7 @@ public class OutgoingTransfersManager {
 	}
 
 
-	public void startTransfer(OutgoingTransferHandle handle, DeploymentID listenerID, Container container) {
+	public void startTransfer(OutgoingTransferHandle handle, DeploymentID listenerID, Module module) {
 
 		File file = handle.getLocalFile();
 		DeploymentID destination = handle.getDestinationID();
@@ -89,16 +89,16 @@ public class OutgoingTransfersManager {
 		
 		final OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer( destination.getContainerID().toString() );
  
-		OutgoingTransfer fileTransfer = new OutgoingTransfer(container, listenerID, handle, transfer, file, 
+		OutgoingTransfer fileTransfer = new OutgoingTransfer(module, listenerID, handle, transfer, file, 
 				destination.toString(), inactivityTimeout, receiveProgressUpdates, transferDescription);
 
 		if ( receiveProgressUpdates ) {
 			TransferProgress transferProgress = 
 				new TransferProgress(handle, file.getName(), file.length(), transfer.getStatus(), 0L, 0D, 0, true);
 			Message message = 
-				AbstractTransfer.createUpdateTransferProgressMessage(container.getContainerID(), listenerID, 
+				AbstractTransfer.createUpdateTransferProgressMessage(module.getContainerID(), listenerID, 
 						transferProgress);
-			container.sendMessage(message);
+			module.sendMessage(message);
 		}
 
 		try {

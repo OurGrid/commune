@@ -35,9 +35,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import sun.security.provider.certpath.X509CertPath;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.api.FailureNotification;
 import br.edu.ufcg.lsd.commune.api.RecoveryNotification;
-import br.edu.ufcg.lsd.commune.container.Container;
 import br.edu.ufcg.lsd.commune.container.InvalidMonitoringException;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
@@ -247,11 +247,11 @@ public class InterestManager {
 	private void sendNotifyFailureMessage(Interest interest) {
 		ObjectDeployment interested = interest.getInterested();
 		Message message = 
-			new Message(interested.getContainer().getContainerID(), interested.getDeploymentID(), 
+			new Message(interested.getModule().getContainerID(), interested.getDeploymentID(), 
 					interest.getFailureNotificationMethod().getName());
 		
 		DeploymentID stubDeploymentID = 
-			interestProcessor.getContainer().getStubDeploymentID(interest.getStubServiceID());
+			interestProcessor.getModule().getStubDeploymentID(interest.getStubServiceID());
 		Class<?> stubType = interest.getFailureNotificationMethod().getParameterTypes()[0];
 		
 		StubParameter stubParameter = new StubParameter(stubDeploymentID);
@@ -278,7 +278,7 @@ public class InterestManager {
 			return;
 		}
 		
-		Container myContainer = this.interestProcessor.getContainer();
+		Module myContainer = this.interestProcessor.getModule();
 		ContainerID monitoredContainerID = monitoredID.getContainerID();
 		String serviceName = monitoredID.getServiceName();
 		
@@ -336,7 +336,7 @@ public class InterestManager {
 			
 			if (isStubDown(interest)) {
 				
-				interestProcessor.getContainer().setStubDeploymentID(targetDeploymentID);
+				interestProcessor.getModule().setStubDeploymentID(targetDeploymentID);
 				sendNotifyRecoveryMessage(interest);
 
 			} 
@@ -350,17 +350,17 @@ public class InterestManager {
 
 
 	private boolean isStubDown(Interest interest) {
-		return !interestProcessor.getContainer().isStubUp(interest.getStubServiceID());
+		return !interestProcessor.getModule().isStubUp(interest.getStubServiceID());
 	}
 	
 	private void sendNotifyRecoveryMessage(Interest interest) {
 		ObjectDeployment interested = interest.getInterested();
 		Message message = 
-			new Message(interested.getContainer().getContainerID(), interested.getDeploymentID(), 
+			new Message(interested.getModule().getContainerID(), interested.getDeploymentID(), 
 					interest.getRecoveryNotificationMethod().getName());
 		
 		DeploymentID stubDeploymentID = 
-			interestProcessor.getContainer().getStubDeploymentID(interest.getStubServiceID());
+			interestProcessor.getModule().getStubDeploymentID(interest.getStubServiceID());
 		Class<?> stubType = interest.getRecoveryNotificationMethod().getParameterTypes()[0]; 
 
 		message.addStubParameter(stubType, stubDeploymentID);
@@ -385,7 +385,7 @@ public class InterestManager {
 			
 			if (interest != null) {
 				interest.setInterestCertPath(certPath);
-				if (interestProcessor.getContainer().isStubUp(interest.getStubServiceID())) {
+				if (interestProcessor.getModule().isStubUp(interest.getStubServiceID())) {
 					sendNotifyFailureMessage(interest);
 				}
 			}
@@ -454,7 +454,7 @@ public class InterestManager {
 		try {
 			interestLock.lock();
 
-			ServiceID stubServiceID = interestProcessor.getContainer().getStubServiceID(stub);
+			ServiceID stubServiceID = interestProcessor.getModule().getStubServiceID(stub);
 			Interest removedInterest = interests.remove(stubServiceID);
 			if(removedInterest != null){
 				removedInterest.cancelScheduledExecution();

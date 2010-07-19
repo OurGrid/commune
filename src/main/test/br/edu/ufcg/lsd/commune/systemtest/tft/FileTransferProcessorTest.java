@@ -78,11 +78,11 @@ public class FileTransferProcessorTest {
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend, 
 				FileTransferTestConstants.DEST_A_ADDRESS);
-		source_module.getContainer().deploy(FileTransferTestConstants.SOURCE_SERVICE, 
+		source_module.deploy(FileTransferTestConstants.SOURCE_SERVICE, 
 				transferSourceRec);
 		
 		TransferDestinationReceiver transferDestRec = new TransferDestinationReceiver();
-		dest_a_module.getContainer().deploy(FileTransferTestConstants.DEST_SERVICE, 
+		dest_a_module.deploy(FileTransferTestConstants.DEST_SERVICE, 
 				transferDestRec);
 		
 		ConditionChecker<List<TransferDestinationReceiver>> checker = createCondition(transfersToCreate, transferDestRec);
@@ -102,11 +102,11 @@ public class FileTransferProcessorTest {
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend, 
 				FileTransferTestConstants.DEST_A_ADDRESS);
-		source_module.getContainer().deploy(FileTransferTestConstants.SOURCE_SERVICE, 
+		source_module.deploy(FileTransferTestConstants.SOURCE_SERVICE, 
 				transferSourceRec);
 		
 		TransferDestinationReceiver transferDestRec = new TransferDestinationReceiver();
-		dest_a_module.getContainer().deploy(FileTransferTestConstants.DEST_SERVICE, 
+		dest_a_module.deploy(FileTransferTestConstants.DEST_SERVICE, 
 				transferDestRec);
 		
 		ConditionChecker<List<TransferDestinationReceiver>> checker = createCondition(transfersToCreate, transferDestRec);
@@ -126,11 +126,11 @@ public class FileTransferProcessorTest {
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend, 
 				FileTransferTestConstants.DEST_A_ADDRESS);
-		source_module.getContainer().deploy(FileTransferTestConstants.SOURCE_SERVICE, 
+		source_module.deploy(FileTransferTestConstants.SOURCE_SERVICE, 
 				transferSourceRec);
 		
 		TransferDestinationReceiver transferDestRec = new TransferDestinationReceiver();
-		dest_a_module.getContainer().deploy(FileTransferTestConstants.DEST_SERVICE, 
+		dest_a_module.deploy(FileTransferTestConstants.DEST_SERVICE, 
 				transferDestRec);
 		
 		ConditionChecker<List<TransferDestinationReceiver>> checker = createCondition(transfersToCreate, transferDestRec);
@@ -150,11 +150,11 @@ public class FileTransferProcessorTest {
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend, 
 				FileTransferTestConstants.DEST_A_ADDRESS);
-		source_module.getContainer().deploy(FileTransferTestConstants.SOURCE_SERVICE, 
+		source_module.deploy(FileTransferTestConstants.SOURCE_SERVICE, 
 				transferSourceRec);
 		
 		TransferDestinationReceiver transferDestRec = new TransferDestinationReceiver();
-		dest_a_module.getContainer().deploy(FileTransferTestConstants.DEST_SERVICE, 
+		dest_a_module.deploy(FileTransferTestConstants.DEST_SERVICE, 
 				transferDestRec);
 		
 		ConditionChecker<List<TransferDestinationReceiver>> checker = createCondition(transfersToCreate, transferDestRec);
@@ -174,11 +174,11 @@ public class FileTransferProcessorTest {
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend,
 				FileTransferTestConstants.DEST_A_ADDRESS);
-		source_module.getContainer().deploy(FileTransferTestConstants.SOURCE_SERVICE, 
+		source_module.deploy(FileTransferTestConstants.SOURCE_SERVICE, 
 				transferSourceRec);
 		
 		TransferDestinationReceiver transferDestRec = new TransferDestinationReceiver();
-		dest_a_module.getContainer().deploy(FileTransferTestConstants.DEST_SERVICE, 
+		dest_a_module.deploy(FileTransferTestConstants.DEST_SERVICE, 
 				transferDestRec);
 		
 		ConditionChecker<List<TransferDestinationReceiver>> checker = createCondition(transfersToCreate, transferDestRec);
@@ -198,15 +198,15 @@ public class FileTransferProcessorTest {
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend, 
 				FileTransferTestConstants.DEST_A_ADDRESS, FileTransferTestConstants.DEST_B_ADDRESS);
-		source_module.getContainer().deploy(FileTransferTestConstants.SOURCE_SERVICE, 
+		source_module.deploy(FileTransferTestConstants.SOURCE_SERVICE, 
 				transferSourceRec);
 		
 		TransferDestinationReceiver transferDestRecA = new TransferDestinationReceiver();
-		dest_a_module.getContainer().deploy(FileTransferTestConstants.DEST_SERVICE, 
+		dest_a_module.deploy(FileTransferTestConstants.DEST_SERVICE, 
 				transferDestRecA);
 		
 		TransferDestinationReceiver transferDestRecB = new TransferDestinationReceiver();
-		dest_b_module.getContainer().deploy(FileTransferTestConstants.DEST_SERVICE, 
+		dest_b_module.deploy(FileTransferTestConstants.DEST_SERVICE, 
 				transferDestRecB);
 		
 		ConditionChecker<List<TransferDestinationReceiver>> checker = createCondition(transfersToCreate, 
@@ -227,15 +227,15 @@ public class FileTransferProcessorTest {
 		
 		TransferSourceReceiver transferSourceRec = new TransferSourceReceiver(transfersToCreate, fileToSend, 
 				FileTransferTestConstants.DEST_A_ADDRESS, FileTransferTestConstants.DEST_B_ADDRESS);
-		source_module.getContainer().deploy(FileTransferTestConstants.SOURCE_SERVICE, 
+		source_module.deploy(FileTransferTestConstants.SOURCE_SERVICE, 
 				transferSourceRec);
 		
 		TransferDestinationReceiver transferDestRecA = new TransferDestinationReceiver();
-		dest_a_module.getContainer().deploy(FileTransferTestConstants.DEST_SERVICE, 
+		dest_a_module.deploy(FileTransferTestConstants.DEST_SERVICE, 
 				transferDestRecA);
 		
 		TransferDestinationReceiver transferDestRecB = new TransferDestinationReceiver();
-		dest_b_module.getContainer().deploy(FileTransferTestConstants.DEST_SERVICE, 
+		dest_b_module.deploy(FileTransferTestConstants.DEST_SERVICE, 
 				transferDestRecB);
 		
 		ConditionChecker<List<TransferDestinationReceiver>> checker = createCondition(transfersToCreate, 

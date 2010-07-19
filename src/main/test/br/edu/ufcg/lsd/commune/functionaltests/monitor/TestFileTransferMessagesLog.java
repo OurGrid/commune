@@ -32,7 +32,7 @@ public class TestFileTransferMessagesLog extends TestWithTestableCommuneContaine
 		application = deployMonitorUtil.createAndStartApplication(application);
 		
 		SenderClass senderObject = new SenderClass();
-		application.getContainer().deploy(SenderClass.OBJECT_NAME, senderObject);
+		application.deploy(SenderClass.OBJECT_NAME, senderObject);
 		
 		DeploymentID destinationID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
 		DeploymentID listenerID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
@@ -43,10 +43,10 @@ public class TestFileTransferMessagesLog extends TestWithTestableCommuneContaine
 		Message message = new Message(listenerID, destinationID, "sendFile", FileTransferProcessor.class.getName());
 		message.addParameter(OutgoingTransferHandle.class, handle);
 
-		application.getContainer().deliverMessage(message);
+		application.deliverMessage(message);
 		
 		//expect send start transfer msg to FileTransfer
-		application.getContainer().getFileTransferConsumer().consumeMessage();
+		application.getFileTransferConsumer().consumeMessage();
 		
 		testFTMessageLogUtil.getMessagesLog(application, createMessageList(message));
 	}
@@ -56,7 +56,7 @@ public class TestFileTransferMessagesLog extends TestWithTestableCommuneContaine
 		application = deployMonitorUtil.createAndStartApplication(application);
 		
 		SenderClass senderObject = new SenderClass();
-		application.getContainer().deploy(SenderClass.OBJECT_NAME, senderObject);
+		application.deploy(SenderClass.OBJECT_NAME, senderObject);
 		
 		DeploymentID destinationID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
 		DeploymentID listenerID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
@@ -68,9 +68,9 @@ public class TestFileTransferMessagesLog extends TestWithTestableCommuneContaine
 		Message message = new Message(listenerID, destinationID, "sendFile", FileTransferProcessor.class.getName());
 		message.addParameter(OutgoingTransferHandle.class, handle);
 		
-		application.getContainer().deliverMessage(message);		
+		application.deliverMessage(message);		
 		
-		application.getContainer().getFileTransferConsumer().consumeMessage();
+		application.getFileTransferConsumer().consumeMessage();
 		
 		//verify
 		testFTMessageLogUtil.getMessagesLog(application, createMessageList(message));
@@ -82,9 +82,9 @@ public class TestFileTransferMessagesLog extends TestWithTestableCommuneContaine
 			message = new Message(listenerID, destinationID, "sendFile", FileTransferProcessor.class.getName());
 			message.addParameter(OutgoingTransferHandle.class, handle);
 
-			application.getContainer().deliverMessage(message);		
+			application.deliverMessage(message);		
 			
-			application.getContainer().getFileTransferConsumer().consumeMessage();
+			application.getFileTransferConsumer().consumeMessage();
 			
 			list.add(message);
 		}

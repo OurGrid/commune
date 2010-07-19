@@ -49,7 +49,7 @@ public class InvokeWithRemoteParameters extends TestWithTestableCommuneContainer
 		Object1 object = new Object1();
 		object.setMock(mock);
 		
-		application.getContainer().deploy(Object1.MY_SERVICE_NAME, object);
+		application.deploy(Object1.MY_SERVICE_NAME, object);
 		
 		source = createOtherMessageSource();
 		target = application.getDeploymentID(Object1.MY_SERVICE_NAME);
@@ -59,12 +59,12 @@ public class InvokeWithRemoteParameters extends TestWithTestableCommuneContainer
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.getContainer().deliverMessage(message);
+		application.deliverMessage(message);
 		
 		mock.invoke(myEqRef(Stub.class, stubSID));
 		EasyMock.replay(mock);
 		
-		application.getContainer().getServiceConsumer().consumeMessage();
+		application.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 		
 		EasyMock.reset(mock);
@@ -82,7 +82,7 @@ public class InvokeWithRemoteParameters extends TestWithTestableCommuneContainer
 		RemoteObject1 object = new RemoteObject1();
 		object.setMock(mock);
 
-		application.getContainer().deploy(RemoteObject1.MY_SERVICE_NAME, object);
+		application.deploy(RemoteObject1.MY_SERVICE_NAME, object);
 		
 		source = createOtherMessageSource();
 		target = application.getDeploymentID(RemoteObject1.MY_SERVICE_NAME);
@@ -102,12 +102,12 @@ public class InvokeWithRemoteParameters extends TestWithTestableCommuneContainer
 		Message message = new Message(source, target, "list");
 		message.addStubList(RemoteParameter.class, parametersList);
 
-		application.getContainer().deliverMessage(message);
+		application.deliverMessage(message);
 
 		mock.list(myEqListRef(RemoteParameter.class, stub1SID, stub2SID, stub3SID));
 		EasyMock.replay(mock);
 
-		application.getContainer().getServiceConsumer().consumeMessage();
+		application.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 		
 		EasyMock.reset(mock);

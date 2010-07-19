@@ -29,12 +29,12 @@ import br.edu.ufcg.lsd.commune.identification.ServiceID;
 public class StubCollectionMatcher implements IArgumentMatcher {
 
 	
-	private TestableContainer container;
+	private TestableApplication container;
 	private final ServiceID[] stubIDs;
 	
 	
-	StubCollectionMatcher(TestableContainer container, ServiceID[] stubIDs) {
-		this.container = container;
+	StubCollectionMatcher(TestableApplication module, ServiceID[] stubIDs) {
+		this.container = module;
 		this.stubIDs = stubIDs;
 	}
 
@@ -55,8 +55,8 @@ public class StubCollectionMatcher implements IArgumentMatcher {
 	}
 
 
-	public static <T> T eqCollectionRef(TestableContainer container, ServiceID... stubIDs) {
-		StubCollectionMatcher messageMatcher = new StubCollectionMatcher(container, stubIDs);
+	public static <T> T eqCollectionRef(TestableApplication module, ServiceID... stubIDs) {
+		StubCollectionMatcher messageMatcher = new StubCollectionMatcher(module, stubIDs);
 		EasyMock.reportMatcher(messageMatcher);
 		return null;
 	}

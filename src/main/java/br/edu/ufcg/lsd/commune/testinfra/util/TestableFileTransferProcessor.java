@@ -21,7 +21,7 @@ package br.edu.ufcg.lsd.commune.testinfra.util;
 
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 
-import br.edu.ufcg.lsd.commune.container.Container;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.processor.MessageConsumer;
 import br.edu.ufcg.lsd.commune.processor.filetransfer.FileTransferProcessor;
 import br.edu.ufcg.lsd.commune.processor.filetransfer.OutgoingTransfer;
@@ -29,8 +29,8 @@ import br.edu.ufcg.lsd.commune.processor.filetransfer.OutgoingTransferHandle;
 
 public class TestableFileTransferProcessor extends FileTransferProcessor implements TestableProcessor {
 
-	public TestableFileTransferProcessor(Container container) {
-		super(container);
+	public TestableFileTransferProcessor(Module module) {
+		super(module);
 	}
 
 	@Override

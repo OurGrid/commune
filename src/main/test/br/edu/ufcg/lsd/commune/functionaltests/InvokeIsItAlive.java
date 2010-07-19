@@ -47,7 +47,7 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 	@Test
 	public void avaliableObject1() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
@@ -55,7 +55,7 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 	@Test
 	public void avaliableAndUnavaliableObjects() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 		sendIsItAliveToUnavaliableObject(Context.OTHER_SERVICE_NAME);
@@ -64,7 +64,7 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 	@Test
 	public void avaliableAndUnavaliableObjectsManyTimes() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
@@ -87,7 +87,7 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 	@Test
 	public void avaliableObject2() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MySubObject1());
+		application.deploy(Context.A_SERVICE_NAME, new MySubObject1());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
@@ -95,7 +95,7 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 	@Test
 	public void avaliableObject3() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MySubInterfaceObject1());
+		application.deploy(Context.A_SERVICE_NAME, new MySubInterfaceObject1());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
@@ -103,7 +103,7 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 	@Test
 	public void avaliableObject4() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject2_1());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject2_1());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
@@ -111,7 +111,7 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 	@Test
 	public void avaliableObject5() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject2_2());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject2_2());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
@@ -119,7 +119,7 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 	@Test
 	public void avaliableObject6() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject2_3());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject2_3());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
@@ -127,7 +127,7 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 	@Test
 	public void avaliableObject7() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject2_4<String>());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject2_4<String>());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
@@ -135,7 +135,7 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 	@Test
 	public void avaliableObject8() throws Exception {
 		application = createApplication();
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject2_5_Sub());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject2_5_Sub());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}

@@ -24,7 +24,6 @@ import org.easymock.classextension.IMocksControl;
 import org.junit.Before;
 
 import br.edu.ufcg.lsd.commune.Module;
-import br.edu.ufcg.lsd.commune.container.Container;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
@@ -110,12 +109,7 @@ public abstract class AcceptanceTestCase {
 			return false;
 		}
 		
-		Container container = application.getContainer();
-		if (container == null) {
-			return false;
-		}
-		
-		ContainerID realContainerID = container.getContainerID();
+		ContainerID realContainerID = application.getContainerID();
 		if (realContainerID == null) {
 			return false;
 		}

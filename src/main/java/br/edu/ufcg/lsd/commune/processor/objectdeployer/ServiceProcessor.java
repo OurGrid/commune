@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.Set;
 
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
+import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.api.FailureNotification;
 import br.edu.ufcg.lsd.commune.api.RecoveryNotification;
-import br.edu.ufcg.lsd.commune.container.Container;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.container.servicemanager.ServiceManager;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
@@ -50,8 +50,8 @@ public class ServiceProcessor extends AbstractProcessor {
 	private List<NotificationListener> notificationListeners = new ArrayList<NotificationListener>();
 
 	
-    public ServiceProcessor(Container container) {
-        super(container);
+    public ServiceProcessor(Module module) {
+        super(module);
     }
 
     
@@ -79,7 +79,7 @@ public class ServiceProcessor extends AbstractProcessor {
 		Object[] parameterValues = message.getParameterValues();
 		List<MessageParameter> parameters = message.getParameters();
 		
-		getContainer().setExecutionContext(objectDeployment, message.getSource(), 
+		getModule().setExecutionContext(objectDeployment, message.getSource(), 
 				message.getSenderCertificatePath());
 
 		try {
@@ -104,13 +104,13 @@ public class ServiceProcessor extends AbstractProcessor {
 			
 			if(isFailureNotificationMethod(method)) {
 				Object stub = parameterValues[0];
-				fireNotifyFailure(getContainer().getStubDeploymentID(stub).getServiceID());
-				getContainer().setStubDown(stub);
+				fireNotifyFailure(getModule().getStubDeploymentID(stub).getServiceID());
+				getModule().setStubDown(stub);
 			}
 
 			if(isRecoveryNotificationMethod(method)) {
 				Object stub = parameterValues[0];
-				fireNotifyRecovery(getContainer().getStubDeploymentID(stub).getServiceID());
+				fireNotifyRecovery(getModule().getStubDeploymentID(stub).getServiceID());
 			}
 
 			method.invoke(target, parameterValues);
@@ -189,7 +189,7 @@ public class ServiceProcessor extends AbstractProcessor {
 			Method method, int i, Object parameterValue, Class<?> parameterType) {
 		StubParameter stubParameter = (StubParameter) parameterValue;
 		
-		getContainer().registerParameterInterest(objectDeployment, method, i, parameterType, 
+		getModule().registerParameterInterest(objectDeployment, method, i, parameterType, 
 				stubParameter.getId().getServiceID());
 	}
 	
@@ -252,7 +252,7 @@ public class ServiceProcessor extends AbstractProcessor {
 	private Object createStub(StubParameter stubParameter, Class<?> parameterType) {
 
 		if (stubParameter.getId() != null) {
-			return this.getContainer().createStub(stubParameter.getId(), parameterType);
+			return this.getModule().createStub(stubParameter.getId(), parameterType);
 		} 
 		
 		throw new CommuneRuntimeException("Stub parameter with id null for " + parameterType);

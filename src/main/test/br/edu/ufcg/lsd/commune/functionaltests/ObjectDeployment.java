@@ -46,98 +46,98 @@ public class ObjectDeployment extends TestWithApplication {
 	public void validateNullObject() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, null);
+		application.deploy(Context.A_SERVICE_NAME, null);
 	}
 	
 	@Test(expected=InvalidDeploymentException.class)
 	public void validateNotRemoteObject() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new Object());
+		application.deploy(Context.A_SERVICE_NAME, new Object());
 	}
 
 	@Test
 	public void objectDeployment1() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject1());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject1());
 	}
 
 	@Test
 	public void objectDeployment2() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MySubObject1());
+		application.deploy(Context.A_SERVICE_NAME, new MySubObject1());
 	}
 
 	@Test
 	public void objectDeployment3() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MySubInterfaceObject1());
+		application.deploy(Context.A_SERVICE_NAME, new MySubInterfaceObject1());
 	}
 	
 	@Test
 	public void objectDeployment4() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject2_1());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject2_1());
 	}
 	
 	@Test
 	public void objectDeployment5() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject2_2());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject2_2());
 	}
 	
 	@Test
 	public void objectDeployment6() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject2_3());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject2_3());
 	}
 	
 	@Test
 	public void objectDeployment7() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject2_4<String>());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject2_4<String>());
 	}
 	
 	@Test
 	public void objectDeployment8() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject2_5_Sub());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject2_5_Sub());
 	}
 	
 	@Test(expected=InvalidDeploymentException.class)
 	public void objectDeployment9() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject3());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject3());
 	}
 	
 	@Test(expected=InvalidDeploymentException.class)
 	public void objectDeployment10() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject4());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject4());
 	}
 	
 	@Test(expected=InvalidDeploymentException.class)
 	public void objectDeployment11() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject5());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject5());
 	}
 	
 	@Test(expected=InvalidDeploymentException.class)
 	public void objectDeployment12() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_CONTAINER_NAME, context);
-		application.getContainer().deploy(Context.A_SERVICE_NAME, new MyObject6());
+		application.deploy(Context.A_SERVICE_NAME, new MyObject6());
 	}
 	
 }
