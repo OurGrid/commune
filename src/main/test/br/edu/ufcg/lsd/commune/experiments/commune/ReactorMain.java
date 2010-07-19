@@ -17,6 +17,6 @@ public class ReactorMain {
 		String myContainer = Reactor.REACTOR_CONTAINER;
 		
 		Module module = Util.createModule(myContainer, myUser, myServer);
-		module.getContainer().deploy(Reactor.REACTOR_SERVICE, new ReactorImpl());
+		module.deploy(Reactor.REACTOR_SERVICE, new ReactorImpl());
 	}
 }

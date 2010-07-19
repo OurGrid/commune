@@ -15,6 +15,6 @@ public class ActorMain {
 		String myContainer = Actor.ACTOR_CONTAINER;
 		
 		Module module = Util.createModule(myContainer, myUser, myServer);
-		module.getContainer().deploy(Actor.ACTOR_SERVICE, new ActorImpl(properties));
+		module.deploy(Actor.ACTOR_SERVICE, new ActorImpl(properties));
 	}
 }
