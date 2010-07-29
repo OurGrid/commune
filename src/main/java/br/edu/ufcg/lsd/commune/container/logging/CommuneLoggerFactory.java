@@ -42,6 +42,10 @@ public class CommuneLoggerFactory {
 		return new CommuneLogger(clazz);
 	}
 	
+	public CommuneLogger gimmeALogger(String category){
+		return new CommuneLogger(category);
+	}
+	
 	public CommuneLogger getConsoleLogger() {
 		return new CommuneLogger(CONSOLE_CATEGORY);
 	}

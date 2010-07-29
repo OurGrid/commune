@@ -17,10 +17,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package br.edu.ufcg.lsd.commune.monitor;
+package br.edu.ufcg.lsd.commune.container.logging;
 
-public interface MonitorConstants {
+public interface LoggerProperties {
 	
-	public static final String COMMUNE_MONITOR_CONTROLLER = "COMMUNE_MONITOR_CONTROLLER";
+	public static final String PROP_SYNC_LOGGER = "sync.logger";
 	
 }

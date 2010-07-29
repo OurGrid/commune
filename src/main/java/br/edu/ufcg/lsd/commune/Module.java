@@ -228,6 +228,17 @@ public class Module {
 		return logger;
 	}
 	
+	/**
+	 * @param category 
+	 * @return the logger
+	 */
+	public CommuneLogger getLogger(String category) {
+		if (logger == null) {
+			return CommuneLoggerFactory.getInstance().gimmeALogger(category);
+		}
+		return logger;
+	}
+	
 	public CommuneLogger getLogger() {
 		if (logger == null) {
 			return null;

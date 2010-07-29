@@ -31,6 +31,7 @@ import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.InvalidMonitoringException;
 import br.edu.ufcg.lsd.commune.container.ObjectDeployment;
 import br.edu.ufcg.lsd.commune.container.logging.CommuneLogger;
+import br.edu.ufcg.lsd.commune.container.logging.LoggerProperties;
 import br.edu.ufcg.lsd.commune.container.servicemanager.actions.RepeatedAction;
 import br.edu.ufcg.lsd.commune.container.servicemanager.dao.ContainerDAO;
 import br.edu.ufcg.lsd.commune.container.servicemanager.dao.DAO;
@@ -47,6 +48,7 @@ import br.edu.ufcg.lsd.commune.processor.interest.InterestRequirements;
 
 public class ServiceManager implements Serializable {
 
+	private static final String SYNC_FILELOG_CATEGORY = "SYNCLOGFILEAPPENDER";
 	
 	private static final long serialVersionUID = 1L;
 
@@ -173,6 +175,10 @@ public class ServiceManager implements Serializable {
 	
 	/* Logger */
 	public CommuneLogger getLog() {
+		
+		if(containerContext.isEnabled(LoggerProperties.PROP_SYNC_LOGGER)){
+			return application.getLogger(SYNC_FILELOG_CATEGORY);
+		}
 		
 		return application.getLogger(objDeployment.getObject().getClass());
 		

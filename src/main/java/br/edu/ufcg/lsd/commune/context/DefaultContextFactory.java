@@ -28,6 +28,7 @@ import java.util.Map;
 
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
 import br.edu.ufcg.lsd.commune.container.InvalidContextPropertyException;
+import br.edu.ufcg.lsd.commune.container.logging.LoggerProperties;
 import br.edu.ufcg.lsd.commune.monitor.MonitorProperties;
 import br.edu.ufcg.lsd.commune.network.signature.SignatureProperties;
 import br.edu.ufcg.lsd.commune.network.signature.Util;
@@ -99,6 +100,8 @@ public class DefaultContextFactory implements ContextFactory {
 		
 		properties.put(SignatureProperties.PROP_PRIVATE_KEY, privateKey);
 		properties.put(SignatureProperties.PROP_PUBLIC_KEY, publicKey);
+		
+		properties.put(LoggerProperties.PROP_SYNC_LOGGER, "no");
 		
 		return properties;
 	}
