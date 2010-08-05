@@ -19,9 +19,14 @@
  */
 package br.edu.ufcg.lsd.commune.container.logging.appender;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import br.edu.ufcg.lsd.commune.container.logging.LoggerConstants;
@@ -29,39 +34,51 @@ import br.edu.ufcg.lsd.commune.container.logging.LoggerConstants;
 public class TimeStampClient{
 
 	private static Socket requestSocket;
- 	private ObjectInputStream in;
- 	private String message = "";
- 	private Long timeStamp;
- 	
- 	public TimeStampClient(){}
-	
+	private BufferedReader in;
+	private String message = "";
+	private Long timeStamp;
+
+	private boolean isLocal = true;
+
+	public TimeStampClient(){}
+
+	public boolean isLocal(){
+		return this.isLocal;
+	}
+
+	@SuppressWarnings("finally")
 	public Long getTimeStamp(){
-		
+
 		timeStamp = System.currentTimeMillis();
-		
+
 		try {
 
-			requestSocket = new Socket(LoggerConstants.TIMESTAMP_SERVER, LoggerConstants.TIMESTAMP_PORT);
-			in = new ObjectInputStream(requestSocket.getInputStream());
-			message = (String)in.readObject();
+			InetAddress addr = InetAddress.getByName(LoggerConstants.TIMESTAMP_SERVER);
+			SocketAddress sockaddr = new InetSocketAddress(addr, LoggerConstants.TIMESTAMP_PORT);
+
+			requestSocket = new Socket();
+			requestSocket.connect(sockaddr, LoggerConstants.TIMEOUT);
+
+			in = new BufferedReader(new InputStreamReader(requestSocket.getInputStream()));
+			message = in.readLine();
 			timeStamp = new Long(message);
-		
+			isLocal = false;
+
 		} catch(UnknownHostException unknownHost) {
-			System.err.println("You are trying to connect to an unknown host!");
+			unknownHost.printStackTrace();
+		} catch(SocketTimeoutException socketTimeout){
+			socketTimeout.printStackTrace();
 		} catch(IOException ioException) {
 			ioException.printStackTrace();
-		} catch (ClassNotFoundException classNotFoundException) {
-			classNotFoundException.printStackTrace();
 		} finally {
-			
+
 			try {
 				in.close();
 				requestSocket.close();
+			} catch(IOException ioException){
+			} finally {
+				return timeStamp;
 			}
-			catch(IOException ioException){
-				ioException.printStackTrace();
-			} 
 		}
-		return timeStamp;
 	}
 }

@@ -20,6 +20,7 @@ public class SyncFileAppender extends FileAppender{
 				event.getFqnOfCategoryClass(),
 				event.getLogger(),
 				newTimeStamp,
+				timeStampClient.isLocal(),
 				event.getLevel(),
 				event.getMessage(),
 				event.getThrowable());

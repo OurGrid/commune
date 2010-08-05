@@ -24,5 +24,7 @@ public interface LoggerConstants {
 	public static final String TIMESTAMP_SERVER = "colisa.lsd.ufcg.edu.br";
 	
 	public static final int TIMESTAMP_PORT = 1099;
+	
+	public static final int TIMEOUT = 2000;
 		
 }

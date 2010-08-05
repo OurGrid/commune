@@ -126,6 +126,8 @@ public class LoggingEvent implements java.io.Serializable {
   public final long timeStamp;
   /** Location information for the caller. */
   private LocationInfo locationInfo;
+  
+  private boolean isLocalTimeStamp;
 
   // Serialization
   static final long serialVersionUID = -868428216207166145L;
@@ -184,6 +186,34 @@ public class LoggingEvent implements java.io.Serializable {
     }
 
     this.timeStamp = timeStamp;
+  }
+  
+  /**
+  Instantiate a LoggingEvent from the supplied parameters.
+
+  <p>Except {@link #timeStamp} all the other fields of
+  <code>LoggingEvent</code> are filled when actually needed.
+  <p>
+  @param logger The logger generating this event.
+  @param timeStamp the timestamp of this logging event
+  @param isLocalTimeStamp
+  @param level The level of this event.
+  @param message  The message of this event.
+  @param throwable The throwable of this event.  */
+  public LoggingEvent(String fqnOfCategoryClass, Category logger,
+		      long timeStamp, boolean isLocalTimeStamp, Priority level, Object message,
+		      Throwable throwable) {
+	  this.fqnOfCategoryClass = fqnOfCategoryClass;
+	  this.logger = logger;
+	  this.categoryName = logger.getName();
+	  this.level = level;
+	  this.message = message;
+	  this.throwable = throwable;
+	  if(throwable != null) {
+		  this.throwableInfo = new ThrowableInformation(throwable);
+	  }
+	  this.timeStamp = timeStamp;
+	  this.isLocalTimeStamp = isLocalTimeStamp;
   }
 
   /**
@@ -440,6 +470,10 @@ public class LoggingEvent implements java.io.Serializable {
   
   public Throwable getThrowable(){
 	  return this.throwable;
+  }
+  
+  public boolean isLocalTimeStamp(){
+	  return this.isLocalTimeStamp;
   }
 
 }
