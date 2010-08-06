@@ -65,11 +65,8 @@ public class TimeStampClient{
 			isLocal = false;
 
 		} catch(UnknownHostException unknownHost) {
-			unknownHost.printStackTrace();
 		} catch(SocketTimeoutException socketTimeout){
-			socketTimeout.printStackTrace();
 		} catch(IOException ioException) {
-			ioException.printStackTrace();
 		} finally {
 
 			try {
