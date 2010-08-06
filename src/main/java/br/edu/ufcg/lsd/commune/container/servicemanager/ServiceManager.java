@@ -48,7 +48,7 @@ import br.edu.ufcg.lsd.commune.processor.interest.InterestRequirements;
 
 public class ServiceManager implements Serializable {
 
-	private static final String SYNC_FILELOG_CATEGORY = "SYNCLOGFILEAPPENDER";
+	private static final String SYNC_FILELOG_CATEGORY = "SYNCLOGFILE";
 	
 	private static final long serialVersionUID = 1L;
 
@@ -65,6 +65,8 @@ public class ServiceManager implements Serializable {
 		this.containerContext = containerContext;
 		this.objDeployment = deployment;
 		this.fileTransferManager = new FileTransferManager(application);
+		
+		
 	}
 
 	protected FileTransferManager getFileTransferManager() {
@@ -179,6 +181,7 @@ public class ServiceManager implements Serializable {
 		if(containerContext.isEnabled(LoggerProperties.PROP_SYNC_LOGGER)){
 			return application.getLogger(SYNC_FILELOG_CATEGORY);
 		}
+		
 		
 		return application.getLogger(objDeployment.getObject().getClass());
 		

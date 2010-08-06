@@ -24,7 +24,9 @@ import org.apache.log4j.spi.RootLogger;
 
 
 public class CommuneLogger{
+	
 	private Logger logger;
+	private String userInfo;
 	
 	public CommuneLogger(Class<?> clazz) {
 		logger = RootLogger.getLogger(clazz);
@@ -34,6 +36,15 @@ public class CommuneLogger{
 		logger = RootLogger.getLogger(category);
 	}	
 	
+	public CommuneLogger(String category, String userInfo) {
+		logger = RootLogger.getLogger(category);
+		this.userInfo = userInfo;
+	}
+	
+	public String getUserInfo(){
+		return userInfo;
+	}
+
 	public void enter(){
 		logger.trace("Entering " + getMethodName());
 	}
@@ -51,15 +62,15 @@ public class CommuneLogger{
 	}
 	
 	public void info(Object msg){
-		logger.info(msg);
+		logger.info(addUserInfo(msg));
 	}
 	
 	public void error(Object msg){
-		logger.error(msg);
+		logger.error(addUserInfo(msg));
 	}
 
 	public void error(Object msg, Throwable e){
-		logger.error(msg, e);
+		logger.error(addUserInfo(msg), e);
 	}
 	
 	/**
@@ -77,7 +88,7 @@ public class CommuneLogger{
 	 * @see org.apache.log4j.Category#debug(java.lang.Object)
 	 */
 	public void debug(Object message) {
-		logger.debug(message);
+		logger.debug(addUserInfo(message));
 	}
 
 
@@ -87,7 +98,7 @@ public class CommuneLogger{
 	 * @see org.apache.log4j.Category#fatal(java.lang.Object, java.lang.Throwable)
 	 */
 	public void fatal(Object message, Throwable t) {
-		logger.fatal(message, t);
+		logger.fatal(addUserInfo(message), t);
 	}
 
 
@@ -96,7 +107,7 @@ public class CommuneLogger{
 	 * @see org.apache.log4j.Logger#trace(java.lang.Object)
 	 */
 	public void trace(Object message) {
-		logger.trace(message);
+		logger.trace(addUserInfo(message));
 	}
 
 
@@ -105,11 +116,15 @@ public class CommuneLogger{
 	 * @see org.apache.log4j.Category#warn(java.lang.Object)
 	 */
 	public void warn(Object message) {
-		logger.warn(message);
+		logger.warn(addUserInfo(message));
 	}
 
 
 	public void debug(String string, Exception e) {
-		logger.debug(string, e);
+		logger.debug(addUserInfo(string), e);
+	}
+	
+	private Object addUserInfo(Object msg){
+		return "[" + this.userInfo + "] " + msg;
 	}
 }

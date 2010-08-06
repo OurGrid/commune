@@ -230,11 +230,15 @@ public class Module {
 	
 	/**
 	 * @param category 
+	 * @param userInfo
 	 * @return the logger
 	 */
 	public CommuneLogger getLogger(String category) {
+		
+		String userInfo = containerID.toString();
+		
 		if (logger == null) {
-			return CommuneLoggerFactory.getInstance().gimmeALogger(category);
+			return CommuneLoggerFactory.getInstance().gimmeALogger(category, userInfo);
 		}
 		return logger;
 	}
