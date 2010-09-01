@@ -23,6 +23,7 @@ import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.container.servicemanager.client.ClientModule;
 import br.edu.ufcg.lsd.commune.container.servicemanager.client.ManagerClientService;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
+import br.edu.ufcg.lsd.commune.network.ConnectionListener;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 
@@ -33,6 +34,12 @@ public abstract class AsyncApplicationClient<A extends ServerModuleManager, B ex
 			ModuleContext context) throws CommuneNetworkException,
 			ProcessorStartException {
 		super(containerName, context);
+	}
+	
+	public AsyncApplicationClient(String containerName,
+			ModuleContext context, ConnectionListener listener) throws CommuneNetworkException,
+			ProcessorStartException {
+		super(containerName, context, listener);
 	}
 
 	public void start() {
