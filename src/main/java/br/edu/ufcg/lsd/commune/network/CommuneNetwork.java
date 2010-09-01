@@ -73,9 +73,30 @@ public class CommuneNetwork implements IMessageSender {
 
     public void start() throws CommuneNetworkException {
     	for (Iterator<Protocol> iterator = protocolChain.iterator(); iterator.hasNext();) {
-			Protocol protocol = iterator.next();
-			protocol.start();
+			final Protocol protocol = iterator.next();
+			protocol.addCreationListener(new ProtocolCreationListener() {
+				
+				@Override
+				public void started() {
+					try {
+						if(protocol.nextProtocol != null){
+							protocol.nextProtocol.start();
+						}
+					} catch (CommuneNetworkException e) {
+						module.getConnectionListener().connectionFailed(e);
+					}
+				}
+			});
 		}
+    	if(!protocolChain.isEmpty()){
+    		protocolChain.iterator().next().start();
+    	}
+    }
+    
+    public void addProtocolChainStartedListener(ProtocolCreationListener listener){
+    	if(!protocolChain.isEmpty()){
+    		protocolChain.get(protocolChain.size()-1).addCreationListener(listener);
+    	}
     }
 
     public void shutdown() throws CommuneNetworkException {

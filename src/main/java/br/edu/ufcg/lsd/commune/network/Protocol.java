@@ -19,6 +19,9 @@
  */
 package br.edu.ufcg.lsd.commune.network;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 
@@ -27,7 +30,7 @@ public abstract class Protocol {
 
 	protected static final Object lock = new Object();
 
-
+	protected List<ProtocolCreationListener> listeners = new ArrayList<ProtocolCreationListener>();
 	protected Protocol nextProtocol = null;
 	protected Protocol previousProtocol = null;
 	protected CommuneNetwork communeNetwork; 
@@ -87,7 +90,19 @@ public abstract class Protocol {
 		this.previousProtocol = previousProtocol;
 	}
 	
-	public void start() throws CommuneNetworkException {}
+	public void start() throws CommuneNetworkException {
+		protocolStarted();
+	}
+
+	protected void protocolStarted() {
+		for (ProtocolCreationListener listener : this.listeners) {
+			listener.started();
+		}
+	}
 	
 	public void shutdown() throws CommuneNetworkException {}
+	
+	public void addCreationListener(ProtocolCreationListener listener) {
+		this.listeners.add(listener);
+	}
 }

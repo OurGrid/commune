@@ -89,7 +89,7 @@ public class NetworkBuilder {
 
     protected Protocol createXMPPProtocol(Module module, CommuneNetwork communeNetwork) {
         XMPPProtocol xmppProtocol = 
-            new XMPPProtocol(communeNetwork, module.getContainerID(), module.getContext());
+            new XMPPProtocol(communeNetwork, module.getContainerID(), module.getContext(), module.getConnectionListener());
         return xmppProtocol;
     }
 
