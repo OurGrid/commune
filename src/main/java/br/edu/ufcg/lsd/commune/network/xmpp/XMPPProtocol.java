@@ -37,9 +37,10 @@ import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.InvalidIdentificationException;
 import br.edu.ufcg.lsd.commune.network.CommuneNetwork;
+import br.edu.ufcg.lsd.commune.network.ConnectionListener;
 import br.edu.ufcg.lsd.commune.network.Protocol;
 
-public class XMPPProtocol extends Protocol implements PacketListener {
+public class XMPPProtocol extends Protocol implements PacketListener{
 	
 	private static String prefix = StringUtils.randomString( 5 );
 	private static long id = 0;
@@ -54,13 +55,16 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 
 	private FragmentationManager fm;
 	private ModuleContext context;
+	private final ConnectionListener connectionListener;
 
 
-	public XMPPProtocol(CommuneNetwork communicationLayer, ContainerID identification, ModuleContext context) {
+	public XMPPProtocol(CommuneNetwork communicationLayer, ContainerID identification, 
+			ModuleContext context, ConnectionListener connectionListener) {
 		super(communicationLayer);
 		
 		this.identification = identification;
 		this.context = context;
+		this.connectionListener = connectionListener;
 		this.chats = new HashMap<String,String>();
 		this.wasShutdown = false;
 	}
@@ -71,44 +75,85 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 
 	@Override
 	public void start() throws CommuneNetworkException {
-		String login = null;
-		String serverName = null;
-		String resource = null;
-		
 		if ( this.identification == null ) {
 			throw new InvalidIdentificationException( 
 					"The xmpp protocol could not be started. Identification is null");
 		}
 
-		login = identification.getUserName();
-		serverName = identification.getServerName();
-		resource = identification.getContainerName();
+		final String login = identification.getUserName();
+		final String serverName = identification.getServerName();
+		final String resource = identification.getContainerName();
 
-		String password = context.getProperty(XMPPProperties.PROP_PASSWORD);
+		final String password = context.getProperty(XMPPProperties.PROP_PASSWORD);
 		int serverPort = context.parseIntegerProperty(XMPPProperties.PROP_XMPP_SERVERPORT);
 
-		try {
-			ConnectionConfiguration cc = new ConnectionConfiguration( serverName, serverPort );
-			cc.setReconnectionAllowed(true);
-			connection = new XMPPConnection( cc );
-			connection.connect();
-		} catch ( XMPPException e ) {
-			throw new CommuneNetworkException( "The XMPP Server at " + serverName + ":" + serverPort + 
-					" is unreachable", e );
-		}
+		ConnectionConfiguration cc = new ConnectionConfiguration( serverName, serverPort );
+		cc.setReconnectionAllowed(true);
+		connection = new XMPPConnection( cc);
+		new Thread(new ConnectionRunnable(new XMPPConnectionListener() {
+			
+			@Override
+			public void connetionCreated() {
+				
+				try {
+					createAccount( login, password );
+					connection.login( login, password, resource );
+				} catch ( XMPPException e ) {
+					connectionListener.connectionFailed(new CommuneNetworkException( "Error logging in to XMPP server with user name: '" + login +
+							"'. Check XMPP user name and password. " + e.getMessage() , e ));
+					return;
+				}
 
-		try {
-			createAccount( login, password );
-			connection.login( login, password, resource );
-		} catch ( XMPPException e ) {
-			throw new CommuneNetworkException( "Error logging in to XMPP server with user name: '" + login +
-					"'. Check XMPP user name and password. " + e.getMessage() , e );
-		}
+				fm = new FragmentationManager( XMPPProtocol.this );
+				
+				connection.addPacketListener( XMPPProtocol.this, new AFilter() );
+				protocolStarted();
+				
+				if(connectionListener != null){
+					connectionListener.connected();
+				}
+				
+				connection.addConnectionListener(new org.jivesoftware.smack.ConnectionListener() {
+				
+				@Override
+				public void reconnectionSuccessful() {
+					if(connectionListener != null){
+						connectionListener.reconnected();
+					}
+				}
+				
+				@Override
+				public void reconnectionFailed(Exception arg0) {
+					if(connectionListener != null){
+						connectionListener.reconnectedFailed();
+					}
+					
+				}
+				
+				@Override
+				public void reconnectingIn(int arg0) {}
+				
+				@Override
+				public void connectionClosedOnError(Exception arg0) {
+					if(connectionListener != null){
+						connectionListener.disconnected();
+					}
+				}
+				
+				@Override
+				public void connectionClosed() {
+					if(connectionListener != null){
+						connectionListener.disconnected();
+					}
+				}
+			});
+			}
+		})).start();
 
-		fm = new FragmentationManager( this );
-		
-		connection.addPacketListener( this, new AFilter() );
+		//			connection.connect();
+
 	}
+
 
 	public class AFilter implements PacketFilter {
 
@@ -228,4 +273,39 @@ public class XMPPProtocol extends Protocol implements PacketListener {
 			Thread.sleep(5);
 		} catch (InterruptedException e) {}
 	}
+	
+	private  class ConnectionRunnable implements Runnable {
+
+		private static final long SLEEP_TIME = 60000;
+		
+		private final XMPPConnectionListener connectionListener;
+
+		public ConnectionRunnable(XMPPConnectionListener connectionListener) {
+			this.connectionListener = connectionListener;
+			
+		}
+		
+		@Override
+		public void run() {
+			
+			while (!connection.isConnected()) {
+				try {
+					connection.connect();
+				} catch (XMPPException e) {
+					try {
+						Thread.sleep(SLEEP_TIME);
+					} catch (InterruptedException e1) {	}
+				}
+			}
+			
+			connectionListener.connetionCreated();
+			
+		}
+	}
+	
+	private interface XMPPConnectionListener{
+		
+		public void connetionCreated();
+	}
+
 }
