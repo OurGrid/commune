@@ -56,6 +56,7 @@ public class VirtualMachineLoopbackProtocol extends Protocol {
     @Override
     public void start() {
 		LoopbackRegistry.addModule(id, this);
+		protocolStarted();
     }
 
     @Override
