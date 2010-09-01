@@ -65,7 +65,9 @@ import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.message.MessageUtil;
 import br.edu.ufcg.lsd.commune.network.CommuneNetwork;
+import br.edu.ufcg.lsd.commune.network.ConnectionListener;
 import br.edu.ufcg.lsd.commune.network.NetworkBuilder;
+import br.edu.ufcg.lsd.commune.network.ProtocolCreationListener;
 import br.edu.ufcg.lsd.commune.network.certification.providers.CertificationDataProvider;
 import br.edu.ufcg.lsd.commune.network.certification.providers.CertificationDataProviderFactory;
 import br.edu.ufcg.lsd.commune.network.signature.SignatureProperties;
@@ -92,11 +94,11 @@ public class Module {
 	
 	private CommuneLogger logger;
 	private ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
-	private final Map<String, ServiceManager> serviceManagers;
-	private final Map<String, RepeatedAction> scheduledActionsMap;
+	private Map<String, ServiceManager> serviceManagers;
+	private Map<String, RepeatedAction> scheduledActionsMap;
 	private final DAOCache daoCache = new DAOCache();
-	private final ContainerDAO containerDAO;
-	private final X509CertPath myCertPath;
+	private ContainerDAO containerDAO;
+	private X509CertPath myCertPath;
 	private FileTransferManager fileTransferManager;
 
 	private ContainerID containerID;
@@ -122,14 +124,29 @@ public class Module {
     private ReadWriteLock executionContextLock = new ReentrantReadWriteLock(true);
 
     //Helpers
-    private final InvokeOnDeployHelper invokeOnDeployHelper;
-    private final MonitoredByHelper monitoredByHelper;
-    private final ReceiverHelper receiverHelper;
+    private InvokeOnDeployHelper invokeOnDeployHelper;
+    private MonitoredByHelper monitoredByHelper;
+    private ReceiverHelper receiverHelper;
 
+    protected ConnectionListener connectionListener;
+	
+    public Module(String containerName, ModuleContext context, ConnectionListener listener) 
+		throws CommuneNetworkException, ProcessorStartException{
+		
+    	this.connectionListener = listener;
+    	init(containerName, context);
+		
+	}
 	
 	public Module(String containerName, ModuleContext context) 
 			throws CommuneNetworkException, ProcessorStartException {
 		
+		init(containerName, context);
+	}
+
+
+	private void init(String containerName, ModuleContext context)
+			throws ProcessorStartException, CommuneNetworkException {
 		/*Load my certificate*/
 		this.myCertPath = this.loadCertificate(context);
 		
@@ -167,7 +184,7 @@ public class Module {
         networkBuilder.configure(this);
 		
         initComponents();
-		
+        
 		/* Service managers */
 		this.serviceManagers = new HashMap<String, ServiceManager>();
 		
@@ -176,7 +193,10 @@ public class Module {
 		
 		/* DAO */
 		this.containerDAO = createDAO(ContainerDAO.class);
-		
+	}
+
+	private void createServices() {
+
 		/* ApplicationManager */
 		this.createAndDeployApplicationManager();
 	}
@@ -408,6 +428,10 @@ public class Module {
         }
     }
     
+    protected void connectionCreated(){
+    	
+    }
+    
 	private void validateControl(String controlService, Object controlObject) {
 		if (controlService == null) {
     		throw new IllegalArgumentException( "The control service name is mandatory" );
@@ -509,16 +533,29 @@ public class Module {
 
     public void initComponents() throws ProcessorStartException, CommuneNetworkException {
     	verifyShutdown();
-        this.communeNetwork.start();
-        this.service.start();
-        this.interest.start();        
-        this.fileTransfer.start();
-        this.isStarted = true;
+    	this.communeNetwork.addProtocolChainStartedListener(new ProtocolCreationListener() {
+			
+			@Override
+			public void started() {
+		        service.start();
+		        interest.start();        
+		        fileTransfer.start();
+		        isStarted = true;
+		        createServices();
+		        connectionCreated();
+				
+			}
+		});
+    	this.communeNetwork.start();
     }
 
     public void shutdown() throws CommuneNetworkException {
-    	verifyStarted();
+//    	verifyStarted();
     	//verifyShutdown();
+    	if(!isStarted){
+    		return;
+    	}
+    	
     	isShutdown = true;
     	this.communeNetwork.shutdown();
     	this.fileTransfer.shutdown();
@@ -749,4 +786,10 @@ public class Module {
 	public boolean isLocal(CommuneAddress address) {
 		return containerID.equals(address.getContainerID());
 	}
+
+
+	public ConnectionListener getConnectionListener() {
+		return connectionListener;
+	}
+
 }
