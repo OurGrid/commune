@@ -26,6 +26,7 @@ import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
+import br.edu.ufcg.lsd.commune.network.ConnectionListener;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestRequirements;
@@ -42,6 +43,18 @@ public abstract class ClientModule<A extends ServerModuleManager, B extends Mana
 	public ClientModule(String containerName, ModuleContext context)
 			throws CommuneNetworkException, ProcessorStartException {
 		super(containerName, context);
+		init();
+		deploymentDone();
+		registerInterestOnManager();
+	}
+	
+	public ClientModule(String containerName, ModuleContext context, ConnectionListener listener)
+	throws CommuneNetworkException, ProcessorStartException {
+		super(containerName, context, listener);
+	}
+
+	@Override
+	protected void connectionCreated() {
 		init();
 		deploymentDone();
 		registerInterestOnManager();
