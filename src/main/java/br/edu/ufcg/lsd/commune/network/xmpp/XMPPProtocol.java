@@ -150,8 +150,6 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 			}
 		})).start();
 
-		//			connection.connect();
-
 	}
 
 
