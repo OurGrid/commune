@@ -53,7 +53,7 @@ public class SyncContainerUtil {
 	public static <T> T waitForResponseObject(BlockingQueue<Object> queue, Class<T> clazz, long timeout) {
 		T takingResponse = null;
 		try {
-			takingResponse = (T) queue.poll(timeout, TimeUnit.SECONDS);
+			takingResponse = (T) (timeout == -1 ? queue.take() : queue.poll(timeout, TimeUnit.SECONDS));
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}

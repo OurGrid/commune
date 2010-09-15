@@ -99,8 +99,10 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					createAccount( login, password );
 					connection.login( login, password, resource );
 				} catch ( XMPPException e ) {
-					connectionListener.connectionFailed(new CommuneNetworkException( "Error logging in to XMPP server with user name: '" + login +
+					if(connectionListener != null){
+						connectionListener.connectionFailed(new CommuneNetworkException( "Error logging in to XMPP server with user name: '" + login +
 							"'. Check XMPP user name and password. " + e.getMessage() , e ));
+					}
 					return;
 				}
 
@@ -113,40 +115,42 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					connectionListener.connected();
 				}
 				
+				if(connection.isConnected()){
 				connection.addConnectionListener(new org.jivesoftware.smack.ConnectionListener() {
 				
-				@Override
-				public void reconnectionSuccessful() {
-					if(connectionListener != null){
-						connectionListener.reconnected();
-					}
-				}
-				
-				@Override
-				public void reconnectionFailed(Exception arg0) {
-					if(connectionListener != null){
-						connectionListener.reconnectedFailed();
+					@Override
+					public void reconnectionSuccessful() {
+						if(connectionListener != null){
+							connectionListener.reconnected();
+						}
 					}
 					
-				}
-				
-				@Override
-				public void reconnectingIn(int arg0) {}
-				
-				@Override
-				public void connectionClosedOnError(Exception arg0) {
-					if(connectionListener != null){
-						connectionListener.disconnected();
+					@Override
+					public void reconnectionFailed(Exception arg0) {
+						if(connectionListener != null){
+							connectionListener.reconnectedFailed();
+						}
+						
 					}
-				}
-				
-				@Override
-				public void connectionClosed() {
-					if(connectionListener != null){
-						connectionListener.disconnected();
+					
+					@Override
+					public void reconnectingIn(int arg0) {}
+					
+					@Override
+					public void connectionClosedOnError(Exception arg0) {
+						if(connectionListener != null){
+							connectionListener.disconnected();
+						}
 					}
-				}
+					
+					@Override
+					public void connectionClosed() {
+						if(connectionListener != null){
+							connectionListener.disconnected();
+						}
+					}
 			});
+			}
 			}
 		})).start();
 
@@ -274,7 +278,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 	
 	private  class ConnectionRunnable implements Runnable {
 
-		private static final long SLEEP_TIME = 60000;
+		private static final long SLEEP_TIME = 10000;
 		
 		private final XMPPConnectionListener connectionListener;
 
@@ -295,7 +299,6 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					} catch (InterruptedException e1) {	}
 				}
 			}
-			
 			connectionListener.connetionCreated();
 			
 		}

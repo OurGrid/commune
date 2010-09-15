@@ -43,14 +43,22 @@ public abstract class ClientModule<A extends ServerModuleManager, B extends Mana
 	public ClientModule(String containerName, ModuleContext context)
 			throws CommuneNetworkException, ProcessorStartException {
 		super(containerName, context);
-		init();
-		deploymentDone();
-		registerInterestOnManager();
+		createContext();
+	}
+
+	private void createContext() {
+		initializationContext = createInitializationContext();
+		serverContainerID = new ContainerID(
+				getContainerID().getUserName(), 
+				getContainerID().getServerName(), 
+				initializationContext.getServerContainerName(), 
+				getContainerID().getPublicKey());
 	}
 	
 	public ClientModule(String containerName, ModuleContext context, ConnectionListener listener)
 	throws CommuneNetworkException, ProcessorStartException {
 		super(containerName, context, listener);
+		createContext();
 	}
 
 	@Override
@@ -71,13 +79,6 @@ public abstract class ClientModule<A extends ServerModuleManager, B extends Mana
 	}
 
 	private void init() {
-		initializationContext = createInitializationContext();
-		serverContainerID = new ContainerID(
-			getContainerID().getUserName(), 
-			getContainerID().getServerName(), 
-			initializationContext.getServerContainerName(), 
-			getContainerID().getPublicKey());
-		
 		deploy(MANAGER_CLIENT, initializationContext.createManagerClient());
 	}
 

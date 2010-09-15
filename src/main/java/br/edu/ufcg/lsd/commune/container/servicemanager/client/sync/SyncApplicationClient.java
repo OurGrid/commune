@@ -40,12 +40,12 @@ public abstract class SyncApplicationClient<A extends ServerModuleManager, B ext
 			ModuleContext context) throws CommuneNetworkException,
 			ProcessorStartException {
 		super(containerName, context);
-		setManager(SyncContainerUtil.waitForResponseObject(queue, getManagerObjectType(), getQueueTimeout()));
+		this.queue = new ArrayBlockingQueue<Object>(1);
+		setManager(SyncContainerUtil.waitForResponseObject(queue, getManagerObjectType(), -1));
 	}
 
 	@Override
 	protected void deploymentDone() {
-		this.queue = new ArrayBlockingQueue<Object>(1);
 		getManagerClient().setQueue(queue);
 	}
 	
