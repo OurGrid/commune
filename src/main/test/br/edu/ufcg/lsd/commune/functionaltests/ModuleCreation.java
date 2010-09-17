@@ -25,7 +25,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import br.edu.ufcg.lsd.commune.Module;
-import br.edu.ufcg.lsd.commune.functionaltests.data.EmptyConnectionListener;
 import br.edu.ufcg.lsd.commune.network.certification.CertificationProperties;
 import br.edu.ufcg.lsd.commune.network.certification.providers.FileCertificationDataProvider;
 import br.edu.ufcg.lsd.commune.network.certification.providers.FileCertificationProperties;
