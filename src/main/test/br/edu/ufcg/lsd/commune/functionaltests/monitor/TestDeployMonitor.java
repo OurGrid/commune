@@ -45,7 +45,7 @@ public class TestDeployMonitor extends TestWithTestableCommuneContainer {
 	@Test
 	public void testDeployingMonitor() throws Exception {
 		TestContext context = deployMonitorUtil.createBasicContext();
-		application = new TestableApplication(Context.A_CONTAINER_NAME, context);
+		application = new TestableApplication(Context.A_MODULE_NAME, context);
 		
 		ObjectDeployment object = application.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
 		assertNull(object);
@@ -59,7 +59,7 @@ public class TestDeployMonitor extends TestWithTestableCommuneContainer {
 	@Test
 	public void testNotDeployingMonitor() throws Exception {
 		TestContext context = Context.createRealContext();
-		application = new TestableApplication(Context.A_CONTAINER_NAME, context);
+		application = new TestableApplication(Context.A_MODULE_NAME, context);
 		
 		ObjectDeployment object = application.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
 		assertNull(object);

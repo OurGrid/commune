@@ -36,7 +36,7 @@ public class Context {
 	public static final String PASSWORD = "password";
 	public static final String REAL_SERVER = "xmpp.ourgrid.org";
 	public static final String PORT = "5222";
-	public static final String A_CONTAINER_NAME = "aName";
+	public static final String A_MODULE_NAME = "aName";
 	public static final String A_SERVICE_NAME = "aServiceName";
 	public static final String OTHER_SERVICE_NAME = "otherServiceName";
 	public static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCqMahIKKqrK0fYMmik63UdyQ4D3/6sc5EHQKRMH5htDb+5qLO2bCAvtVb07CFaXxbJv5IWiwT1iuH5ppgSrbY5vRSUmr/Aag1pXc748q8+cIcnVPZYRRGRm2qUMkDxjHMTc/J3qZuIsYiGgSvaGAbp5AaRr3+U+vqa5yrcB9ucbQIDAQAB";

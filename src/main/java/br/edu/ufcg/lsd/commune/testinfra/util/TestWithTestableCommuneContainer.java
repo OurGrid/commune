@@ -62,7 +62,7 @@ public class TestWithTestableCommuneContainer {
 			throws CommuneNetworkException, ProcessorStartException {
 		
 		TestContext context = Context.createRealContext();
-		TestableApplication testableApplication = new TestableApplication(Context.A_CONTAINER_NAME, context);
+		TestableApplication testableApplication = new TestableApplication(Context.A_MODULE_NAME, context);
 		return testableApplication;
 	}
 	
@@ -87,12 +87,12 @@ public class TestWithTestableCommuneContainer {
 	}
 
 	protected DeploymentID createDeploymentID(String serviceName) {
-		ContainerID containerAddress = new ContainerID(Context.USER, Context.REAL_SERVER, Context.A_CONTAINER_NAME); 
+		ContainerID containerAddress = new ContainerID(Context.USER, Context.REAL_SERVER, Context.A_MODULE_NAME); 
 		return new DeploymentID(containerAddress, serviceName);
 	}
 
 	protected ServiceID createServiceID(String serviceName) {
-		ContainerID containerAddress = new ContainerID(Context.USER, Context.REAL_SERVER, Context.A_CONTAINER_NAME); 
+		ContainerID containerAddress = new ContainerID(Context.USER, Context.REAL_SERVER, Context.A_MODULE_NAME); 
 		return new ServiceID(containerAddress, serviceName);
 	}
 

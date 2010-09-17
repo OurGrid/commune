@@ -31,7 +31,7 @@ public class TestDeployMonitorUtil extends MonitorAcceptanceUtil {
 	
 	public TestableApplication createAndStartApplication(TestableApplication application) throws Exception {
 		TestContext context = createBasicContext();
-		application = new TestableApplication(Context.A_CONTAINER_NAME, context);
+		application = new TestableApplication(Context.A_MODULE_NAME, context);
 		
 		ObjectDeployment control = application.getObject(Module.CONTROL_OBJECT_NAME);
 		
