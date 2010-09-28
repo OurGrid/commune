@@ -21,10 +21,12 @@ package br.edu.ufcg.lsd.commune.functionaltests;
 
 import java.io.File;
 
+import org.easymock.classextension.EasyMock;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import br.edu.ufcg.lsd.commune.Module;
+import br.edu.ufcg.lsd.commune.network.ConnectionListener;
 import br.edu.ufcg.lsd.commune.network.certification.CertificationProperties;
 import br.edu.ufcg.lsd.commune.network.certification.providers.FileCertificationDataProvider;
 import br.edu.ufcg.lsd.commune.network.certification.providers.FileCertificationProperties;
@@ -55,7 +57,7 @@ public class ModuleCreation extends TestWithApplication {
 		application = new Module(Context.A_MODULE_NAME, null);
 	}
 
-	@Test(expected=CommuneNetworkException.class)
+	@Test
 	public void validateContextUnknownServer() throws Exception {
 		TestContext context = createBasicContext();
 		context.set(XMPPProperties.PROP_XMPP_SERVERNAME, UNKNOWN_SERVER);
@@ -75,7 +77,7 @@ public class ModuleCreation extends TestWithApplication {
 		return context;
 	}
 
-	@Test(expected=CommuneNetworkException.class)
+	@Test
 	public void validateContextUnknownPort() throws Exception {
 		TestContext context = Context.createRealContext();
 		context.set(XMPPProperties.PROP_XMPP_SERVERPORT, UNKNOWN_PORT);
@@ -96,10 +98,19 @@ public class ModuleCreation extends TestWithApplication {
 		application = new Module(Context.A_MODULE_NAME, context);
 	}
 	
-	@Test(expected=CommuneNetworkException.class)
+	@Test
 	public void validateContextWrongPassword() throws Exception {
 		TestContext context = Context.createRealContext();
 		context.set(XMPPProperties.PROP_PASSWORD, WRONG_PASSWORD);
-		application = new Module(Context.A_MODULE_NAME, context);
+		
+		ConnectionListener connectionListener = EasyMock.createMock(ConnectionListener.class);
+		connectionListener.connectionFailed((CommuneNetworkException) EasyMock.notNull());
+		EasyMock.replay(connectionListener);
+		
+		application = new Module(Context.A_MODULE_NAME, context, connectionListener);
+		
+		Thread.sleep(1000);
+		
+		EasyMock.verify(connectionListener);
 	}
 }

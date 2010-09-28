@@ -47,11 +47,11 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void testSimpleGet() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		Map<DeploymentID, Collection<Class<?>>> deployedObjects = new HashMap<DeploymentID, Collection<Class<?>>>();
 		
-		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Module.CONTROL_OBJECT_NAME).getDeploymentID();
+		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(module, Module.CONTROL_OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list1 = new ArrayList<Class<?>>();
 		list1.add(ModuleManager.class);
 		list1.add(ServerModuleManager.class);
@@ -59,23 +59,23 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		list1.add(ModuleStatusProvider.class);
 		deployedObjects.put(deploymentID1, list1);
 		
-		DeploymentID deploymentID2 = testGetDeployedObjectsUtil.getMonitorControllerDeployment(application).getDeploymentID();
+		DeploymentID deploymentID2 = testGetDeployedObjectsUtil.getMonitorControllerDeployment(module).getDeploymentID();
 		List<Class<?>> list2 = new ArrayList<Class<?>>();
 		list2.add(CommuneMonitor.class);
 		deployedObjects.put(deploymentID2, list2);
 		
-		testGetDeployedObjectsUtil.getDeployedObjects(application, deployedObjects);
+		testGetDeployedObjectsUtil.getDeployedObjects(module, deployedObjects);
 	}
 	
 	@Test
 	public void testDeployObject() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		//Deploy another object
-		application.deploy(DeployableClass.OBJECT_NAME, new DeployableClass());
+		module.deploy(DeployableClass.OBJECT_NAME, new DeployableClass());
 		
 		Map<DeploymentID, Collection<Class<?>>> deployedObjects = new HashMap<DeploymentID, Collection<Class<?>>>();
 		
-		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Module.CONTROL_OBJECT_NAME).getDeploymentID();
+		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(module, Module.CONTROL_OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list1 = new ArrayList<Class<?>>();
 		list1.add(ModuleManager.class);
 		list1.add(ServerModuleManager.class);
@@ -83,28 +83,28 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		list1.add(ModuleStatusProvider.class);
 		deployedObjects.put(deploymentID1, list1);
 		
-		DeploymentID deploymentID2 = testGetDeployedObjectsUtil.getMonitorControllerDeployment(application).getDeploymentID();
+		DeploymentID deploymentID2 = testGetDeployedObjectsUtil.getMonitorControllerDeployment(module).getDeploymentID();
 		List<Class<?>> list2 = new ArrayList<Class<?>>();
 		list2.add(CommuneMonitor.class);
 		deployedObjects.put(deploymentID2, list2);
 		
-		DeploymentID deploymentID3 = testGetDeployedObjectsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID deploymentID3 = testGetDeployedObjectsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list3 = new ArrayList<Class<?>>();
 		list3.add(DeployableInterface.class);
 		deployedObjects.put(deploymentID3, list3);
 		
-		testGetDeployedObjectsUtil.getDeployedObjects(application, deployedObjects);
+		testGetDeployedObjectsUtil.getDeployedObjects(module, deployedObjects);
 	}
 	
 	@Test
 	public void testDeployAndUndeployObject() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		//Deploy another object
-		application.deploy(DeployableClass.OBJECT_NAME, new DeployableClass());
+		module.deploy(DeployableClass.OBJECT_NAME, new DeployableClass());
 		
 		Map<DeploymentID, Collection<Class<?>>> deployedObjects = new HashMap<DeploymentID, Collection<Class<?>>>();
 		
-		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Module.CONTROL_OBJECT_NAME).getDeploymentID();
+		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(module, Module.CONTROL_OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list1 = new ArrayList<Class<?>>();
 		list1.add(ModuleManager.class);
 		list1.add(ServerModuleManager.class);
@@ -112,31 +112,31 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		list1.add(ModuleStatusProvider.class);
 		deployedObjects.put(deploymentID1, list1);
 		
-		DeploymentID deploymentID2 = testGetDeployedObjectsUtil.getMonitorControllerDeployment(application).getDeploymentID();
+		DeploymentID deploymentID2 = testGetDeployedObjectsUtil.getMonitorControllerDeployment(module).getDeploymentID();
 		List<Class<?>> list2 = new ArrayList<Class<?>>();
 		list2.add(CommuneMonitor.class);
 		deployedObjects.put(deploymentID2, list2);
 		
-		DeploymentID deploymentID3 = testGetDeployedObjectsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID deploymentID3 = testGetDeployedObjectsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list3 = new ArrayList<Class<?>>();
 		list3.add(DeployableInterface.class);
 		deployedObjects.put(deploymentID3, list3);
 		
-		testGetDeployedObjectsUtil.getDeployedObjects(application, deployedObjects);
+		testGetDeployedObjectsUtil.getDeployedObjects(module, deployedObjects);
 		
-		deployedObjects.remove(testGetDeployedObjectsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID());
+		deployedObjects.remove(testGetDeployedObjectsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID());
 		//Undeploy the object
-		application.undeploy(DeployableClass.OBJECT_NAME);
-		testGetDeployedObjectsUtil.getDeployedObjects(application, deployedObjects);
+		module.undeploy(DeployableClass.OBJECT_NAME);
+		testGetDeployedObjectsUtil.getDeployedObjects(module, deployedObjects);
 	}
 	
 	@Test
 	public void testGetAndAfterDeployAndUndeployObject() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		Map<DeploymentID, Collection<Class<?>>> deployedObjects = new HashMap<DeploymentID, Collection<Class<?>>>();
 		
-		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(application, Module.CONTROL_OBJECT_NAME).getDeploymentID();
+		DeploymentID deploymentID1 = testGetDeployedObjectsUtil.getObjectDeployment(module, Module.CONTROL_OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list1 = new ArrayList<Class<?>>();
 		list1.add(ModuleManager.class);
 		list1.add(ServerModuleManager.class);
@@ -144,25 +144,25 @@ public class TestGetDeployedObjects extends TestWithTestableCommuneContainer {
 		list1.add(ModuleStatusProvider.class);
 		deployedObjects.put(deploymentID1, list1);
 		
-		DeploymentID deploymentID2 = testGetDeployedObjectsUtil.getMonitorControllerDeployment(application).getDeploymentID();
+		DeploymentID deploymentID2 = testGetDeployedObjectsUtil.getMonitorControllerDeployment(module).getDeploymentID();
 		List<Class<?>> list2 = new ArrayList<Class<?>>();
 		list2.add(CommuneMonitor.class);
 		deployedObjects.put(deploymentID2, list2);
 		
-		testGetDeployedObjectsUtil.getDeployedObjects(application, deployedObjects);
+		testGetDeployedObjectsUtil.getDeployedObjects(module, deployedObjects);
 		
 		//Deploy another object
-		application.deploy(DeployableClass.OBJECT_NAME, new DeployableClass());
-		DeploymentID deploymentID3 = testGetDeployedObjectsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		module.deploy(DeployableClass.OBJECT_NAME, new DeployableClass());
+		DeploymentID deploymentID3 = testGetDeployedObjectsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 		List<Class<?>> list3 = new ArrayList<Class<?>>();
 		list3.add(DeployableInterface.class);
 		deployedObjects.put(deploymentID3, list3);
 		
-		testGetDeployedObjectsUtil.getDeployedObjects(application, deployedObjects);
+		testGetDeployedObjectsUtil.getDeployedObjects(module, deployedObjects);
 		
 		//Undeploy the object
-		deployedObjects.remove(testGetDeployedObjectsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID());
-		application.undeploy(DeployableClass.OBJECT_NAME);
-		testGetDeployedObjectsUtil.getDeployedObjects(application, deployedObjects);
+		deployedObjects.remove(testGetDeployedObjectsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID());
+		module.undeploy(DeployableClass.OBJECT_NAME);
+		testGetDeployedObjectsUtil.getDeployedObjects(module, deployedObjects);
 	}
 }

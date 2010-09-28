@@ -28,8 +28,8 @@ public class RemoteCollectionParameters extends TestWithTestableCommuneContainer
 
 	@Test
 	public void deployWithRemoteCollectionParameters() throws Exception {
-		application = createApplication();
-		application.deploy(RemoteObject1.MY_SERVICE_NAME, new RemoteObject1());
+		module = createApplication();
+		module.deploy(RemoteObject1.MY_SERVICE_NAME, new RemoteObject1());
 	}
 	
 	//TODO Validations

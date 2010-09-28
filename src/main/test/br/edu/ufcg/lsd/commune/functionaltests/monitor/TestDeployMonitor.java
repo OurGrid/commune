@@ -35,7 +35,7 @@ import br.edu.ufcg.lsd.commune.monitor.MonitorConstants;
 import br.edu.ufcg.lsd.commune.testinfra.util.Context;
 import br.edu.ufcg.lsd.commune.testinfra.util.TestContext;
 import br.edu.ufcg.lsd.commune.testinfra.util.TestWithTestableCommuneContainer;
-import br.edu.ufcg.lsd.commune.testinfra.util.TestableApplication;
+import br.edu.ufcg.lsd.commune.testinfra.util.TestableModule;
 
 
 public class TestDeployMonitor extends TestWithTestableCommuneContainer {
@@ -45,26 +45,26 @@ public class TestDeployMonitor extends TestWithTestableCommuneContainer {
 	@Test
 	public void testDeployingMonitor() throws Exception {
 		TestContext context = deployMonitorUtil.createBasicContext();
-		application = new TestableApplication(Context.A_MODULE_NAME, context);
+		module = new TestableModule(Context.A_MODULE_NAME, context);
 		
-		ObjectDeployment object = application.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
+		ObjectDeployment object = module.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
 		assertNull(object);
 		
-		application = deployMonitorUtil.startApplication(application);
+		module = deployMonitorUtil.startApplication(module);
 		
-		object = application.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
+		object = module.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
 		assertNotNull(object);
 	}
 	
 	@Test
 	public void testNotDeployingMonitor() throws Exception {
 		TestContext context = Context.createRealContext();
-		application = new TestableApplication(Context.A_MODULE_NAME, context);
+		module = new TestableModule(Context.A_MODULE_NAME, context);
 		
-		ObjectDeployment object = application.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
+		ObjectDeployment object = module.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
 		assertNull(object);
 
-		ObjectDeployment control = application.getObject(Module.CONTROL_OBJECT_NAME);
+		ObjectDeployment control = module.getObject(Module.CONTROL_OBJECT_NAME);
 		
 		ModuleControlClient appClient = EasyMock.createMock(ModuleControlClient.class);
 		appClient.operationSucceed(ControlOperationResultMatcher.noError());
@@ -73,7 +73,7 @@ public class TestDeployMonitor extends TestWithTestableCommuneContainer {
 		
 		((ServerModuleManager)control.getObject()).start(appClient);
 		
-		object = application.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
+		object = module.getObject(MonitorConstants.COMMUNE_MONITOR_CONTROLLER);
 
 		EasyMock.verify(appClient);
 		assertNull(object);

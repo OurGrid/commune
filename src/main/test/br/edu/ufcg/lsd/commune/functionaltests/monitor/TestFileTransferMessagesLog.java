@@ -23,19 +23,19 @@ public class TestFileTransferMessagesLog extends TestWithTestableCommuneContaine
 	
 	@Test
 	public void testGetEmptyLog() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
-		testFTMessageLogUtil.getEmptyLog(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
+		testFTMessageLogUtil.getEmptyLog(module);
 	}
 	
 	@Test
 	public void testSimpleGet() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		SenderClass senderObject = new SenderClass();
-		application.deploy(SenderClass.OBJECT_NAME, senderObject);
+		module.deploy(SenderClass.OBJECT_NAME, senderObject);
 		
-		DeploymentID destinationID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
-		DeploymentID listenerID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID destinationID = testFTMessageLogUtil.getObjectDeployment(module, SenderClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID listenerID = testFTMessageLogUtil.getObjectDeployment(module, SenderClass.OBJECT_NAME).getDeploymentID();
 		
 		OutgoingTransferHandle handle = new OutgoingTransferHandle(TestGetFileTransfers.TRANSFER_FILE_LOG_NAME,
 				new File(TestGetFileTransfers.TRANSFER_FILE), "", destinationID);
@@ -43,23 +43,23 @@ public class TestFileTransferMessagesLog extends TestWithTestableCommuneContaine
 		Message message = new Message(listenerID, destinationID, "sendFile", FileTransferProcessor.class.getName());
 		message.addParameter(OutgoingTransferHandle.class, handle);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		//expect send start transfer msg to FileTransfer
-		application.getFileTransferConsumer().consumeMessage();
+		module.getFileTransferConsumer().consumeMessage();
 		
-		testFTMessageLogUtil.getMessagesLog(application, createMessageList(message));
+		testFTMessageLogUtil.getMessagesLog(module, createMessageList(message));
 	}
 	
 	@Test
 	public void testQueueOverflow() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		SenderClass senderObject = new SenderClass();
-		application.deploy(SenderClass.OBJECT_NAME, senderObject);
+		module.deploy(SenderClass.OBJECT_NAME, senderObject);
 		
-		DeploymentID destinationID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
-		DeploymentID listenerID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID destinationID = testFTMessageLogUtil.getObjectDeployment(module, SenderClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID listenerID = testFTMessageLogUtil.getObjectDeployment(module, SenderClass.OBJECT_NAME).getDeploymentID();
 		
 		OutgoingTransferHandle handle = new OutgoingTransferHandle(TestGetFileTransfers.TRANSFER_FILE_LOG_NAME, 
 				new File(TestGetFileTransfers.TRANSFER_FILE), "", destinationID);
@@ -68,12 +68,12 @@ public class TestFileTransferMessagesLog extends TestWithTestableCommuneContaine
 		Message message = new Message(listenerID, destinationID, "sendFile", FileTransferProcessor.class.getName());
 		message.addParameter(OutgoingTransferHandle.class, handle);
 		
-		application.deliverMessage(message);		
+		module.deliverMessage(message);		
 		
-		application.getFileTransferConsumer().consumeMessage();
+		module.getFileTransferConsumer().consumeMessage();
 		
 		//verify
-		testFTMessageLogUtil.getMessagesLog(application, createMessageList(message));
+		testFTMessageLogUtil.getMessagesLog(module, createMessageList(message));
 		
 		//remaining messages
 		List<Message> list = new ArrayList<Message>();
@@ -82,15 +82,15 @@ public class TestFileTransferMessagesLog extends TestWithTestableCommuneContaine
 			message = new Message(listenerID, destinationID, "sendFile", FileTransferProcessor.class.getName());
 			message.addParameter(OutgoingTransferHandle.class, handle);
 
-			application.deliverMessage(message);		
+			module.deliverMessage(message);		
 			
-			application.getFileTransferConsumer().consumeMessage();
+			module.getFileTransferConsumer().consumeMessage();
 			
 			list.add(message);
 		}
 		
 		//verify
-		testFTMessageLogUtil.getMessagesLog(application, list);
+		testFTMessageLogUtil.getMessagesLog(module, list);
 	}
 	
 	private List<Message> createMessageList(Message... messages) {

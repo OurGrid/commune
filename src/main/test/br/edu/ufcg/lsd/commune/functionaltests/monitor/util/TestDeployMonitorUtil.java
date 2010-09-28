@@ -11,10 +11,10 @@ import br.edu.ufcg.lsd.commune.functionaltests.monitor.MonitorAcceptanceUtil;
 import br.edu.ufcg.lsd.commune.functionaltests.monitor.matchers.ControlOperationResultMatcher;
 import br.edu.ufcg.lsd.commune.testinfra.util.Context;
 import br.edu.ufcg.lsd.commune.testinfra.util.TestContext;
-import br.edu.ufcg.lsd.commune.testinfra.util.TestableApplication;
+import br.edu.ufcg.lsd.commune.testinfra.util.TestableModule;
 
 public class TestDeployMonitorUtil extends MonitorAcceptanceUtil {
-	public TestableApplication startApplication(TestableApplication application) throws Exception {
+	public TestableModule startApplication(TestableModule application) throws Exception {
 		ObjectDeployment control = application.getObject(Module.CONTROL_OBJECT_NAME);
 		
 		ModuleControlClient appClient = EasyMock.createMock(ModuleControlClient.class);
@@ -29,9 +29,9 @@ public class TestDeployMonitorUtil extends MonitorAcceptanceUtil {
 		return application;
 	}
 	
-	public TestableApplication createAndStartApplication(TestableApplication application) throws Exception {
+	public TestableModule createAndStartApplication(TestableModule application) throws Exception {
 		TestContext context = createBasicContext();
-		application = new TestableApplication(Context.A_MODULE_NAME, context);
+		application = new TestableModule(Context.A_MODULE_NAME, context);
 		
 		ObjectDeployment control = application.getObject(Module.CONTROL_OBJECT_NAME);
 		

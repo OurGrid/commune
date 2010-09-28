@@ -10,10 +10,10 @@ import br.edu.ufcg.lsd.commune.functionaltests.monitor.matchers.MessageLogMatche
 import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.monitor.CommuneMonitor;
 import br.edu.ufcg.lsd.commune.monitor.CommuneMonitorClient;
-import br.edu.ufcg.lsd.commune.testinfra.util.TestableApplication;
+import br.edu.ufcg.lsd.commune.testinfra.util.TestableModule;
 
 public class TestFTMessageLogUtil extends MonitorAcceptanceUtil {
-	public void getEmptyLog(TestableApplication application) throws Exception {
+	public void getEmptyLog(TestableModule application) throws Exception {
 		CommuneMonitor monitor = getMonitorController(application);
 		
 		CommuneMonitorClient client = EasyMock.createMock(CommuneMonitorClient.class);
@@ -25,7 +25,7 @@ public class TestFTMessageLogUtil extends MonitorAcceptanceUtil {
 		EasyMock.verify(client);
 	}
 	
-	public void getMessagesLog(TestableApplication application, Collection<Message> messages) {
+	public void getMessagesLog(TestableModule application, Collection<Message> messages) {
 		CommuneMonitor monitor = getMonitorController(application);
 		
 		CommuneMonitorClient client = EasyMock.createMock(CommuneMonitorClient.class);

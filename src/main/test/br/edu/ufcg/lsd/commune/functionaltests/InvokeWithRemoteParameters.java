@@ -44,27 +44,27 @@ public class InvokeWithRemoteParameters extends TestWithTestableCommuneContainer
 	
 	@Test
 	public void invokeWithOneRemoteParameter() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		Object1 mock = EasyMock.createMock(Object1.class);
 		Object1 object = new Object1();
 		object.setMock(mock);
 		
-		application.deploy(Object1.MY_SERVICE_NAME, object);
+		module.deploy(Object1.MY_SERVICE_NAME, object);
 		
 		source = createOtherMessageSource();
-		target = application.getDeploymentID(Object1.MY_SERVICE_NAME);
+		target = module.getDeploymentID(Object1.MY_SERVICE_NAME);
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		mock.invoke(myEqRef(Stub.class, stubSID));
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 		
 		EasyMock.reset(mock);
@@ -77,15 +77,15 @@ public class InvokeWithRemoteParameters extends TestWithTestableCommuneContainer
 	
 	@Test
 	public void invokeWithOneRemoteCollectionParameter() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		RemoteObject1 mock = EasyMock.createMock(RemoteObject1.class);
 		RemoteObject1 object = new RemoteObject1();
 		object.setMock(mock);
 
-		application.deploy(RemoteObject1.MY_SERVICE_NAME, object);
+		module.deploy(RemoteObject1.MY_SERVICE_NAME, object);
 		
 		source = createOtherMessageSource();
-		target = application.getDeploymentID(RemoteObject1.MY_SERVICE_NAME);
+		target = module.getDeploymentID(RemoteObject1.MY_SERVICE_NAME);
 
 		ServiceID stub1SID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stub1DID = new DeploymentID(stub1SID);
@@ -102,12 +102,12 @@ public class InvokeWithRemoteParameters extends TestWithTestableCommuneContainer
 		Message message = new Message(source, target, "list");
 		message.addStubList(RemoteParameter.class, parametersList);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 
 		mock.list(myEqListRef(RemoteParameter.class, stub1SID, stub2SID, stub3SID));
 		EasyMock.replay(mock);
 
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 		
 		EasyMock.reset(mock);

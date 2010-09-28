@@ -45,19 +45,19 @@ public class InvokeOnDeploy extends TestWithTestableCommuneContainer {
 
 	@Test(expected=InvalidDeploymentException.class)
 	public void controlIsNotRemoteObject1() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MyObject1_1());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MyObject1_1());
 	}
 
 	@Test(expected=InvalidDeploymentException.class)
 	public void controlIsNotRemoteObject2() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MyObject1_2());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MyObject1_2());
 	}
 	
 	@Test
 	public void methodWithoutParameters() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		IMessageDeliverer messageDeliverer = setMessageDeliverer();
 		
 		DeploymentID destinationAddress = createDeploymentID(Context.A_SERVICE_NAME);
@@ -65,19 +65,19 @@ public class InvokeOnDeploy extends TestWithTestableCommuneContainer {
 		messageDeliverer.deliverMessage(eqServiceMessage(destinationAddress, destinationAddress, Context.A_METHOD));
 		EasyMock.replay(messageDeliverer);
 		
-		application.deploy(Context.A_SERVICE_NAME, new MyObject2_1());
+		module.deploy(Context.A_SERVICE_NAME, new MyObject2_1());
 		EasyMock.verify(messageDeliverer);
 	}
 	
 	@Test(expected=InvalidDeploymentException.class)
 	public void notRemoteMethod() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MyObject2_2());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MyObject2_2());
 	}
 
 	@Test
 	public void superClassMethod() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		IMessageDeliverer messageDeliverer = setMessageDeliverer();
 
 		DeploymentID destinationAddress = createDeploymentID(Context.A_SERVICE_NAME);
@@ -85,13 +85,13 @@ public class InvokeOnDeploy extends TestWithTestableCommuneContainer {
 		messageDeliverer.deliverMessage(eqServiceMessage(destinationAddress, destinationAddress, Context.A_METHOD));
 		EasyMock.replay(messageDeliverer);
 		
-		application.deploy(Context.A_SERVICE_NAME, new MyObject2_3_Sub());
+		module.deploy(Context.A_SERVICE_NAME, new MyObject2_3_Sub());
 		EasyMock.verify(messageDeliverer);
 	}
 	
 	@Test
 	public void invokeOnDeployWithDeploymentID() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		IMessageDeliverer messageDeliverer = setMessageDeliverer();
 		
 		DeploymentID destinationAddress = createDeploymentID(Context.A_SERVICE_NAME);
@@ -101,21 +101,21 @@ public class InvokeOnDeploy extends TestWithTestableCommuneContainer {
 				eqServiceMessage(destinationAddress, destinationAddress, Context.A_METHOD, deploymentID));
 		EasyMock.replay(messageDeliverer);
 		
-		application.deploy(Context.A_SERVICE_NAME, new MyObject3());
+		module.deploy(Context.A_SERVICE_NAME, new MyObject3());
 		EasyMock.verify(messageDeliverer);
 	}
 	
 	@Test(expected=InvalidDeploymentException.class)
 	public void invokeOnDeployWithInvalidParameter() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MyObject4());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MyObject4());
 	}
 
 	@Test
 	public void invokeOnDeployWithDeploymentIDAndServiceManager() throws Exception {
 		MyObject5 object = new MyObject5();
 
-		application = createApplication();
+		module = createApplication();
 		IMessageDeliverer messageDeliverer = setMessageDeliverer();
 
 		DeploymentID destinationAddress = createDeploymentID(Context.A_SERVICE_NAME);
@@ -129,14 +129,14 @@ public class InvokeOnDeploy extends TestWithTestableCommuneContainer {
 						serviceManagerParam));
 		EasyMock.replay(messageDeliverer);
 		
-		application.deploy(Context.A_SERVICE_NAME, object);
+		module.deploy(Context.A_SERVICE_NAME, object);
 		EasyMock.verify(messageDeliverer);
 	}
 
 	@Test
 	public void invokeOnDeployWithServiceManagerAndDeploymentID() throws Exception {
 		MyObject6 object = new MyObject6();
-		application = createApplication();
+		module = createApplication();
 		IMessageDeliverer messageDeliverer = setMessageDeliverer();
 
 		DeploymentID destinationAddress = createDeploymentID(Context.A_SERVICE_NAME);
@@ -150,7 +150,7 @@ public class InvokeOnDeploy extends TestWithTestableCommuneContainer {
 						deploymentIDParam));
 		EasyMock.replay(messageDeliverer);
 		
-		application.deploy(Context.A_SERVICE_NAME, object);
+		module.deploy(Context.A_SERVICE_NAME, object);
 		EasyMock.verify(messageDeliverer);
 	}
 

@@ -46,148 +46,148 @@ public class TestGetStubs extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void testEmptyGet() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
-		testGetStubsUtil.getEmptyListOfStubs(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
+		testGetStubsUtil.getEmptyListOfStubs(module);
 	}
 	
 	@Test
 	public void testGetWithOneStubByParameter() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testGetStubsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testGetStubsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
-		testGetStubsUtil.getStubs(application, target, stubDID, stubSID, Stub.class);
+		testGetStubsUtil.getStubs(module, target, stubDID, stubSID, Stub.class);
 	}
 	
 	@Test
 	public void testGetWithOneStubByManager() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		InterestedObject1 object = new InterestedObject1();
-		application.deploy(InterestedObject1.OTHER_SERVICE_NAME, new Monitor1());
-		application.deploy(InterestedObject1.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject1.OTHER_SERVICE_NAME, new Monitor1());
+		module.deploy(InterestedObject1.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject1.USER, InterestedObject1.SERVER, InterestedObject1.CONTAINER);
 		ServiceID monitoredID = new ServiceID(containerID, InterestedObject1.SERVICE);
 
-		DeploymentID monitorDID = testGetStubsUtil.getObjectDeployment(application, InterestedObject1.OTHER_SERVICE_NAME).getDeploymentID();
+		DeploymentID monitorDID = testGetStubsUtil.getObjectDeployment(module, InterestedObject1.OTHER_SERVICE_NAME).getDeploymentID();
 		
-		testGetStubsUtil.getStubs(application, monitorDID, null, monitoredID, Stub.class);
+		testGetStubsUtil.getStubs(module, monitorDID, null, monitoredID, Stub.class);
 	}
 	
 	
 	@Test
 	public void testGetWithStubByParameterAndByManager() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		//deploy by parameter
 		DeployableClass deployableClass = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, deployableClass);
+		module.deploy(DeployableClass.OBJECT_NAME, deployableClass);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testGetStubsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testGetStubsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
 		//deploy by manager
 		InterestedObject1 object = new InterestedObject1();
-		application.deploy(InterestedObject1.OTHER_SERVICE_NAME, new Monitor1());
-		application.deploy(InterestedObject1.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject1.OTHER_SERVICE_NAME, new Monitor1());
+		module.deploy(InterestedObject1.MY_SERVICE_NAME, object);
 		
 		ContainerID containerID = 
 			new ContainerID(InterestedObject1.USER, InterestedObject1.SERVER, InterestedObject1.CONTAINER);
 		ServiceID monitoredID = new ServiceID(containerID, InterestedObject1.SERVICE);
 		
-		DeploymentID monitorDID2 = testGetStubsUtil.getObjectDeployment(application, InterestedObject1.OTHER_SERVICE_NAME).getDeploymentID();
+		DeploymentID monitorDID2 = testGetStubsUtil.getObjectDeployment(module, InterestedObject1.OTHER_SERVICE_NAME).getDeploymentID();
 		
 		//verify stubs
 		List<StubData> stubDatas = new ArrayList<StubData>();
 		stubDatas.add(new StubData(monitorDID2, monitoredID, null, testGetStubsUtil.createClassList(Stub.class)));
 		stubDatas.add(new StubData(target, stubSID, stubDID, testGetStubsUtil.createClassList(Stub.class)));
 		
-		testGetStubsUtil.getStubs(application, stubDatas);
+		testGetStubsUtil.getStubs(module, stubDatas);
 	}
 	
 	@Test
 	public void testGetTheSameStubByParameterAndByManager() throws Exception {
 		//by parameter
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testGetStubsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testGetStubsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
 		//by manager
-		application.deploy(DeployableClass.OTHER_OBJECT_NAME, new Monitor1());
+		module.deploy(DeployableClass.OTHER_OBJECT_NAME, new Monitor1());
 		object.getManager().registerInterest(DeployableClass.OTHER_OBJECT_NAME, stubSID.toString(), Stub.class);
 		
-		DeploymentID monitorDID = testGetStubsUtil.getObjectDeployment(application, DeployableClass.OTHER_OBJECT_NAME).getDeploymentID();
+		DeploymentID monitorDID = testGetStubsUtil.getObjectDeployment(module, DeployableClass.OTHER_OBJECT_NAME).getDeploymentID();
 		
-		testGetStubsUtil.getStubs(application, monitorDID, stubDID, stubSID, Stub.class);
+		testGetStubsUtil.getStubs(module, monitorDID, stubDID, stubSID, Stub.class);
 	}
 	
 	@Test
 	public void testGetTheSameStubByManagerAndByParameter() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		//by manager
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testGetStubsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testGetStubsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 		
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
 		
-		application.deploy(DeployableClass.OTHER_OBJECT_NAME, new Monitor1());
+		module.deploy(DeployableClass.OTHER_OBJECT_NAME, new Monitor1());
 		object.getManager().registerInterest(DeployableClass.OTHER_OBJECT_NAME, stubSID.toString(), Stub.class);
 		
 		//by parameter
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
-		testGetStubsUtil.getStubs(application, target, stubDID, stubSID, Stub.class);
+		testGetStubsUtil.getStubs(module, target, stubDID, stubSID, Stub.class);
 	}
 	
 	@Test
 	public void testGetWithOneStubByManagerWithRecoveryNotification() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		InterestedObject1 object = new InterestedObject1();
-		application.deploy(InterestedObject1.OTHER_SERVICE_NAME, new Monitor1());
-		application.deploy(InterestedObject1.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject1.OTHER_SERVICE_NAME, new Monitor1());
+		module.deploy(InterestedObject1.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject1.USER, InterestedObject1.SERVER, InterestedObject1.CONTAINER, 
@@ -197,17 +197,17 @@ public class TestGetStubs extends TestWithTestableCommuneContainer {
 		runInterestExecution(InterestedObject1.OTHER_SERVICE_NAME, object, monitoredID);
 		DeploymentID monitoredDID = sendUpdateStatusAvaliableAndRecover(monitoredID, InterestedObject1.OTHER_SERVICE_NAME, "toDo", Stub.class);
 		
-		DeploymentID monitorDID = testGetStubsUtil.getObjectDeployment(application, InterestedObject1.OTHER_SERVICE_NAME).getDeploymentID();
+		DeploymentID monitorDID = testGetStubsUtil.getObjectDeployment(module, InterestedObject1.OTHER_SERVICE_NAME).getDeploymentID();
 		
-		testGetStubsUtil.getStubs(application, monitorDID, monitoredDID, monitoredID, Stub.class);
+		testGetStubsUtil.getStubs(module, monitorDID, monitoredDID, monitoredID, Stub.class);
 	}
 	
 	@Test
 	public void testGetWithOneStubByManagerWithRecoveryAndFailureNotification() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		InterestedObject1 object = new InterestedObject1();
-		application.deploy(InterestedObject1.OTHER_SERVICE_NAME, new Monitor1());
-		application.deploy(InterestedObject1.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject1.OTHER_SERVICE_NAME, new Monitor1());
+		module.deploy(InterestedObject1.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject1.USER, InterestedObject1.SERVER, InterestedObject1.CONTAINER, 
@@ -219,154 +219,154 @@ public class TestGetStubs extends TestWithTestableCommuneContainer {
 		
 		runInterestExecution(InterestedObject1.OTHER_SERVICE_NAME, object, monitoredID);
 		Message message = sendUpdateStatusUnvaliableAndFail(monitoredDID, InterestedObject1.OTHER_SERVICE_NAME, "toDone", Stub.class);
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
-		DeploymentID monitorDID = testGetStubsUtil.getObjectDeployment(application, InterestedObject1.OTHER_SERVICE_NAME).getDeploymentID();
+		DeploymentID monitorDID = testGetStubsUtil.getObjectDeployment(module, InterestedObject1.OTHER_SERVICE_NAME).getDeploymentID();
 		
-		testGetStubsUtil.getStubs(application, monitorDID, null, monitoredID, Stub.class);
+		testGetStubsUtil.getStubs(module, monitorDID, null, monitoredID, Stub.class);
 	}
 	
 	@Test
 	public void testGetWithOneStubByParameterWithFailureNotification() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testGetStubsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testGetStubsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
 		runInterestExecution(DeployableClass.OBJECT_NAME, object, stubSID);
 		Message failureNotificationMessage = sendUpdateStatusUnvaliableAndFail(stubDID, DeployableClass.OBJECT_NAME, "stubIsDown", Stub.class);
-		application.deliverMessage(failureNotificationMessage);
+		module.deliverMessage(failureNotificationMessage);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
-		testGetStubsUtil.getStubs(application, target, null, stubSID, Stub.class);
+		testGetStubsUtil.getStubs(module, target, null, stubSID, Stub.class);
 	}
 	
 	@Test
 	public void testGetOneStubByParameterWithFailureAndRecoveryNotification() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testGetStubsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testGetStubsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
 		runInterestExecution(DeployableClass.OBJECT_NAME, object, stubSID);
 		//notify failure
 		Message failureNotificationMessage = sendUpdateStatusUnvaliableAndFail(stubDID, DeployableClass.OBJECT_NAME, "stubIsDown", Stub.class);
-		application.deliverMessage(failureNotificationMessage);
+		module.deliverMessage(failureNotificationMessage);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
 		//notify recovery
 		stubDID = sendUpdateStatusAvaliableAndRecover(stubSID, DeployableClass.OBJECT_NAME, "stubIsUp", Stub.class);
 		
-		testGetStubsUtil.getStubs(application, target, stubDID, stubSID, Stub.class);
+		testGetStubsUtil.getStubs(module, target, stubDID, stubSID, Stub.class);
 	}
 	
 	@Test
 	public void testGetWithTwoStubByParameter() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		//first stub
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testGetStubsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testGetStubsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
 		//second stub
 		DeployableClass2 object2 = new DeployableClass2();
-		application.deploy(DeployableClass2.OBJECT_NAME, object2);
+		module.deploy(DeployableClass2.OBJECT_NAME, object2);
 		
 		DeploymentID source2 = createOtherMessageSource();
-		DeploymentID target2 = testGetStubsUtil.getObjectDeployment(application, DeployableClass2.OBJECT_NAME).getDeploymentID();
+		DeploymentID target2 = testGetStubsUtil.getObjectDeployment(module, DeployableClass2.OBJECT_NAME).getDeploymentID();
 
 		ServiceID stubSID2 = new ServiceID(source2.getContainerID(), "stub2");
 		DeploymentID stubDID2 = new DeploymentID(stubSID2);
 		Message message2 = new Message(source2, target2, "invoke");
 		message2.addStubParameter(Stub2.class, stubDID2);
 
-		application.deliverMessage(message2);
+		module.deliverMessage(message2);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
 		//verify stubs
 		List<StubData> stubDatas = new ArrayList<StubData>();
 		stubDatas.add(new StubData(target2, stubSID2, stubDID2, testGetStubsUtil.createClassList(Stub2.class)));
 		stubDatas.add(new StubData(target, stubSID, stubDID, testGetStubsUtil.createClassList(Stub.class)));
 		
-		testGetStubsUtil.getStubs(application, stubDatas);
+		testGetStubsUtil.getStubs(module, stubDatas);
 	}
 	
 	@Test
 	public void testGetStubWithTwoInterests() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		//first interest
 		InterestedObject1 object = new InterestedObject1();
-		application.deploy(InterestedObject1.OTHER_SERVICE_NAME, new Monitor1());
-		application.deploy(InterestedObject1.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject1.OTHER_SERVICE_NAME, new Monitor1());
+		module.deploy(InterestedObject1.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject1.USER, InterestedObject1.SERVER, InterestedObject1.CONTAINER);
 		ServiceID monitoredID = new ServiceID(containerID, InterestedObject1.SERVICE);
 
-		DeploymentID monitorDID1 = testGetStubsUtil.getObjectDeployment(application, InterestedObject1.OTHER_SERVICE_NAME).getDeploymentID();
+		DeploymentID monitorDID1 = testGetStubsUtil.getObjectDeployment(module, InterestedObject1.OTHER_SERVICE_NAME).getDeploymentID();
 		
-		testGetStubsUtil.getStubs(application, monitorDID1, null, monitoredID, Stub.class);
+		testGetStubsUtil.getStubs(module, monitorDID1, null, monitoredID, Stub.class);
 		
 		//second interest at the same stub, the monitor will change
 		DeployableClass object2 = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object2);
+		module.deploy(DeployableClass.OBJECT_NAME, object2);
 		object2.getManager().registerInterest(DeployableClass.OBJECT_NAME, InterestedObject1.USER + "@" + InterestedObject1.SERVER + "/" + 
 				InterestedObject1.CONTAINER + "/" + InterestedObject1.SERVICE, Stub.class);
 		
 		//new monitor deploymentID
-		DeploymentID monitorDID2 = testGetStubsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID monitorDID2 = testGetStubsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 		
-		testGetStubsUtil.getStubs(application, monitorDID2, null, monitoredID, Stub.class);
+		testGetStubsUtil.getStubs(module, monitorDID2, null, monitoredID, Stub.class);
 	}
 	
 	@Test
 	public void testGetWithStubsByParameter() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testGetStubsUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testGetStubsUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
@@ -378,14 +378,14 @@ public class TestGetStubs extends TestWithTestableCommuneContainer {
 		message.addStubParameter(Stub.class, stubDID);
 		message.addStubParameter(Stub2.class, stubDID2);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
 		List<StubData> stubDatas = new ArrayList<StubData>();
 		stubDatas.add(new StubData(target, stubSID2, stubDID2, testGetStubsUtil.createClassList(Stub2.class)));
 		stubDatas.add(new StubData(target, stubSID, stubDID, testGetStubsUtil.createClassList(Stub.class)));
 		
-		testGetStubsUtil.getStubs(application, stubDatas);
+		testGetStubsUtil.getStubs(module, stubDatas);
 	}
 }

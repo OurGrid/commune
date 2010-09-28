@@ -30,11 +30,11 @@ import br.edu.ufcg.lsd.commune.identification.ServiceID;
 public class StubMapMatcher implements IArgumentMatcher {
 
 	
-	private TestableApplication container;
+	private TestableModule container;
 	private final Map<Serializable,ServiceID> mapIDs;
 	
 	
-	StubMapMatcher(TestableApplication module, Map<Serializable,ServiceID> mapIDs) {
+	StubMapMatcher(TestableModule module, Map<Serializable,ServiceID> mapIDs) {
 		this.container = module;
 		this.mapIDs = mapIDs;
 	}
@@ -60,7 +60,7 @@ public class StubMapMatcher implements IArgumentMatcher {
 	}
 
 
-	public static <T> T eqMapRef(TestableApplication module, Class<T> clazz, Map<Serializable,ServiceID> mapIDs) {
+	public static <T> T eqMapRef(TestableModule module, Class<T> clazz, Map<Serializable,ServiceID> mapIDs) {
 		StubMapMatcher messageMatcher = new StubMapMatcher(module, mapIDs);
 		EasyMock.reportMatcher(messageMatcher);
 		return null;

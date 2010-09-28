@@ -41,9 +41,9 @@ public class RecoveryNotification extends TestWithTestableCommuneContainer {
 
 	@Test
 	public void registerInterestSelf() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject1 object = new InterestedObject1();
-		application.deploy(InterestedObject1.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject1.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject1.USER, InterestedObject1.SERVER, InterestedObject1.CONTAINER, 
@@ -57,10 +57,10 @@ public class RecoveryNotification extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void registerInterestOther() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject2 object = new InterestedObject2();
-		application.deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
-		application.deploy(InterestedObject2.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
+		module.deploy(InterestedObject2.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject2.USER, InterestedObject2.SERVER, InterestedObject2.CONTAINER, 
@@ -73,10 +73,10 @@ public class RecoveryNotification extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void twiceIsItAlive() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject2 object = new InterestedObject2();
-		application.deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
-		application.deploy(InterestedObject2.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
+		module.deploy(InterestedObject2.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject3.USER, InterestedObject3.SERVER, InterestedObject3.CONTAINER, 
@@ -90,9 +90,9 @@ public class RecoveryNotification extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void registerInterestSelfWithDeploymentID() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject3 object = new InterestedObject3();
-		application.deploy(InterestedObject3.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject3.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject4.USER, InterestedObject4.SERVER, InterestedObject4.CONTAINER, 
@@ -105,9 +105,9 @@ public class RecoveryNotification extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void registerInterestSelfWithDeploymentIDOnlyOnRecovery() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject4 object = new InterestedObject4();
-		application.deploy(InterestedObject4.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject4.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject4.USER, InterestedObject4.SERVER, InterestedObject4.CONTAINER, 
@@ -120,9 +120,9 @@ public class RecoveryNotification extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void registerInterestSelfTwiceUpdateStatus() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject1 object = new InterestedObject1();
-		application.deploy(InterestedObject1.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject1.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject1.USER, InterestedObject1.SERVER, InterestedObject1.CONTAINER, 
@@ -137,10 +137,10 @@ public class RecoveryNotification extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void registerInterestOtherTwiceUpdateStatus() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject2 object = new InterestedObject2();
-		application.deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
-		application.deploy(InterestedObject2.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
+		module.deploy(InterestedObject2.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject2.USER, InterestedObject2.SERVER, InterestedObject2.CONTAINER, 
@@ -154,27 +154,27 @@ public class RecoveryNotification extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void invokeWithOneRemoteParameter() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		Object1 mock = EasyMock.createMock(Object1.class);
 		Object1 object = new Object1();
 		object.setMock(mock);
 		
-		application.deploy(Object1.MY_SERVICE_NAME, object);
+		module.deploy(Object1.MY_SERVICE_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = application.getDeploymentID(Object1.MY_SERVICE_NAME);
+		DeploymentID target = module.getDeploymentID(Object1.MY_SERVICE_NAME);
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		mock.invoke(myEqRef(Stub.class, stubSID));
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 		
 		EasyMock.reset(mock);

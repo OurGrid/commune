@@ -22,41 +22,41 @@ public class TestServiceProcessorMessagesLog extends TestWithTestableCommuneCont
 	
 	@Test
 	public void testGetEmptyLog() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
-		testServiceMessageLogUtil.getEmptyLog(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
+		testServiceMessageLogUtil.getEmptyLog(module);
 	}
 	
 	@Test
 	public void testSimpleGet() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testServiceMessageLogUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testServiceMessageLogUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
-		testServiceMessageLogUtil.getMessagesLog(application, createMessageList(message));
+		testServiceMessageLogUtil.getMessagesLog(module, createMessageList(message));
 	}
 	
 	@Test
 	public void testQueueOverflow() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testServiceMessageLogUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testServiceMessageLogUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
@@ -65,12 +65,12 @@ public class TestServiceProcessorMessagesLog extends TestWithTestableCommuneCont
 		Message message = new Message(source, target, "invoke");
 		message.addStubParameter(Stub.class, stubDID);
 		
-		application.deliverMessage(message);		
+		module.deliverMessage(message);		
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
 		//verify
-		testServiceMessageLogUtil.getMessagesLog(application, createMessageList(message));
+		testServiceMessageLogUtil.getMessagesLog(module, createMessageList(message));
 		
 		//remaining messages
 		List<Message> list = new ArrayList<Message>();
@@ -79,15 +79,15 @@ public class TestServiceProcessorMessagesLog extends TestWithTestableCommuneCont
 			message = new Message(source, target, "invoke");
 			message.addStubParameter(Stub.class, stubDID);
 
-			application.deliverMessage(message);		
+			module.deliverMessage(message);		
 			
-			application.getServiceConsumer().consumeMessage();
+			module.getServiceConsumer().consumeMessage();
 			
 			list.add(message);
 		}
 		
 		//verify
-		testServiceMessageLogUtil.getMessagesLog(application, list);
+		testServiceMessageLogUtil.getMessagesLog(module, list);
 	}
 	
 	private List<Message> createMessageList(Message... messages) {

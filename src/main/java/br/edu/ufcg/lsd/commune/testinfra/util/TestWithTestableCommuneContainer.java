@@ -19,10 +19,10 @@
  */
 package br.edu.ufcg.lsd.commune.testinfra.util;
 
-import static br.edu.ufcg.lsd.commune.testinfra.util.StubMatcher.eqRef;
 import static br.edu.ufcg.lsd.commune.testinfra.util.MessageMatcher.eqInterestMessage;
 import static br.edu.ufcg.lsd.commune.testinfra.util.MessageMatcher.eqServiceMessage;
 import static br.edu.ufcg.lsd.commune.testinfra.util.StubCollectionMatcher.eqCollectionRef;
+import static br.edu.ufcg.lsd.commune.testinfra.util.StubMatcher.eqRef;
 
 import java.util.List;
 
@@ -48,41 +48,44 @@ import br.edu.ufcg.lsd.commune.processor.interest.MonitorableStatus;
 public class TestWithTestableCommuneContainer {
 
 	
-	protected TestableApplication application;
+	protected TestableModule module;
 
 	
 	@After
 	public void cleanContainer() throws CommuneNetworkException {
-		if (application != null) {
-			application.stop();
+		if (module != null) {
+			module.stop();
 		}
 	}
 	
-	protected TestableApplication createApplication() 
-			throws CommuneNetworkException, ProcessorStartException {
+	protected TestableModule createApplication() 
+			throws CommuneNetworkException, ProcessorStartException, InterruptedException {
 		
 		TestContext context = Context.createRealContext();
-		TestableApplication testableApplication = new TestableApplication(Context.A_MODULE_NAME, context);
+		TestableModule testableApplication = new TestableModule(Context.A_MODULE_NAME, context);
+		
+		Thread.sleep(2000);
+		
 		return testableApplication;
 	}
 	
 	protected <T> T myEqRef(Class<T> clazz, ServiceID target) {
-		return eqRef(application, target);
+		return eqRef(module, target);
 	}
 
 	protected <T> List<T> myEqListRef(Class<T> clazz, ServiceID... target) {
-		return eqCollectionRef(application, target);
+		return eqCollectionRef(module, target);
 	}
 
 	protected IMessageDeliverer setMessageDeliverer() {
 		IMessageDeliverer messageDeliverer = EasyMock.createMock(IMessageDeliverer.class);
-		application.setMessageDelivererMock(messageDeliverer);
+		module.setMessageDelivererMock(messageDeliverer);
 		return messageDeliverer;
 	}
 
 	protected IMessageSender setMessageSender() {
 		IMessageSender messageSender = EasyMock.createMock(IMessageSender.class);
-		application.setMessageSenderMock(messageSender);
+		module.setMessageSenderMock(messageSender);
 		return messageSender;
 	}
 
@@ -97,8 +100,8 @@ public class TestWithTestableCommuneContainer {
 	}
 
 	protected ServiceManager createServiceManager(Object object, DeploymentID deploymentID) {
-		ObjectDeployment od = new ObjectDeployment(application, deploymentID, object);
-		return new ServiceManager(application, application.getContext(), od);
+		ObjectDeployment od = new ObjectDeployment(module, deploymentID, object);
+		return new ServiceManager(module, module.getContext(), od);
 	}
 	
 	protected DeploymentID createOtherMessageSource() {
@@ -109,12 +112,12 @@ public class TestWithTestableCommuneContainer {
 	protected void runInterestExecution(String monitorName, Object monitorObj, ServiceID monitoredID) {
 		IMessageSender messageSender = setMessageSender();
 		
-		DeploymentID monitorDID = application.getDeploymentID(monitorName);
+		DeploymentID monitorDID = module.getDeploymentID(monitorName);
 		messageSender.sendMessage(
 				eqInterestMessage(monitorDID, monitoredID, InterestProcessor.IS_IT_ALIVE_MESSAGE));
 		EasyMock.replay(messageSender);
 		
-		ObjectDeployment monitorDeployment = new ObjectDeployment(application, monitorDID, monitorObj);
+		ObjectDeployment monitorDeployment = new ObjectDeployment(module, monitorDID, monitorObj);
 		Monitor monitor = new Monitor(monitorDeployment, null, null);
 		TestableInterestManager.runInterestExecution(monitor, monitoredID);
 
@@ -124,7 +127,7 @@ public class TestWithTestableCommuneContainer {
 	protected DeploymentID sendIsItAliveToAvaliableObject(String monitoredName) {
 		IMessageSender messageSender = setMessageSender();
 		
-		DeploymentID monitoredDID = application.getDeploymentID(monitoredName);
+		DeploymentID monitoredDID = module.getDeploymentID(monitoredName);
 		DeploymentID monitorDID = createOtherMessageSource();
 		MessageParameter statusParam = new MessageParameter(MonitorableStatus.class, MonitorableStatus.AVAILABLE);
 		
@@ -135,8 +138,8 @@ public class TestWithTestableCommuneContainer {
 		Message message = 
 			new Message(monitorDID, monitoredDID.getServiceID(), InterestProcessor.IS_IT_ALIVE_MESSAGE, 
 					InterestProcessor.class.getName());
-		application.deliverMessage(message);
-		application.getInterestConsumer().consumeMessage();
+		module.deliverMessage(message);
+		module.getInterestConsumer().consumeMessage();
 
 		EasyMock.verify(messageSender);
 		
@@ -157,8 +160,8 @@ public class TestWithTestableCommuneContainer {
 		Message message = 
 			new Message(monitorDID, monitoredID, InterestProcessor.IS_IT_ALIVE_MESSAGE, 
 					InterestProcessor.class.getName());
-		application.deliverMessage(message);
-		application.getInterestConsumer().consumeMessage();
+		module.deliverMessage(message);
+		module.getInterestConsumer().consumeMessage();
 
 		EasyMock.verify(messageSender);
 		
@@ -175,7 +178,7 @@ public class TestWithTestableCommuneContainer {
 		IMessageSender messageSender = setMessageSender();
 		DeploymentID monitoredDID = new DeploymentID(monitoredID); 
 		
-		DeploymentID monitorDID = application.getDeploymentID(monitorName);
+		DeploymentID monitorDID = module.getDeploymentID(monitorName);
 		
 		MessageParameter stubParameter = new MessageParameter(monitoredType, new StubParameter(monitoredDID));
 		
@@ -196,8 +199,8 @@ public class TestWithTestableCommuneContainer {
 			new Message(monitoredDID, monitorDID, InterestProcessor.UPDATE_STATUS_MESSAGE, 
 					InterestProcessor.class.getName());
 		message.addParameter(MonitorableStatus.class, MonitorableStatus.AVAILABLE);
-		application.deliverMessage(message);
-		application.getInterestConsumer().consumeMessage();
+		module.deliverMessage(message);
+		module.getInterestConsumer().consumeMessage();
 
 		EasyMock.verify(messageSender);
 		
@@ -209,13 +212,13 @@ public class TestWithTestableCommuneContainer {
 		EasyMock.replay(messageSender);
 		
 		DeploymentID monitoredDID = new DeploymentID(monitoredID); 
-		DeploymentID monitorDID = application.getDeploymentID(monitorName);
+		DeploymentID monitorDID = module.getDeploymentID(monitorName);
 		Message message = 
 			new Message(monitoredDID, monitorDID, InterestProcessor.UPDATE_STATUS_MESSAGE, 
 					InterestProcessor.class.getName());
 		message.addParameter(MonitorableStatus.class, MonitorableStatus.AVAILABLE);
-		application.deliverMessage(message);
-		application.getInterestConsumer().consumeMessage();
+		module.deliverMessage(message);
+		module.getInterestConsumer().consumeMessage();
 
 		EasyMock.verify(messageSender);
 		
@@ -230,7 +233,7 @@ public class TestWithTestableCommuneContainer {
 	protected Message sendUpdateStatusUnvaliableAndFail(DeploymentID monitoredDID, String monitorName, 
 			String failureFunctionName, Class<?> monitoredType, boolean notificationHasDeploymentID) {
 
-		DeploymentID monitorDID = application.getDeploymentID(monitorName);
+		DeploymentID monitorDID = module.getDeploymentID(monitorName);
 		Message failureNotificationMessage = new Message(monitorDID.getContainerID(), monitorDID, failureFunctionName);
 		failureNotificationMessage.addStubParameter(monitoredType, monitoredDID);
 		
@@ -256,8 +259,8 @@ public class TestWithTestableCommuneContainer {
 			new Message(monitoredDID.getServiceID(), monitorDID, InterestProcessor.UPDATE_STATUS_MESSAGE, 
 					InterestProcessor.class.getName());
 		message.addParameter(MonitorableStatus.class, MonitorableStatus.UNAVAILABLE);
-		application.deliverMessage(message);
-		application.getInterestConsumer().consumeMessage();
+		module.deliverMessage(message);
+		module.getInterestConsumer().consumeMessage();
 
 		EasyMock.verify(messageSender);
 		
@@ -266,7 +269,7 @@ public class TestWithTestableCommuneContainer {
 	
 	protected void sendUpdateStatusUnvaliable(ServiceID monitoredDID, String monitorName) {
 
-		DeploymentID monitorDID = application.getDeploymentID(monitorName);
+		DeploymentID monitorDID = module.getDeploymentID(monitorName);
 
 		IMessageSender messageSender = setMessageSender();
 		
@@ -276,8 +279,8 @@ public class TestWithTestableCommuneContainer {
 			new Message(monitoredDID, monitorDID, InterestProcessor.UPDATE_STATUS_MESSAGE, 
 					InterestProcessor.class.getName());
 		message.addParameter(MonitorableStatus.class, MonitorableStatus.UNAVAILABLE);
-		application.deliverMessage(message);
-		application.getInterestConsumer().consumeMessage();
+		module.deliverMessage(message);
+		module.getInterestConsumer().consumeMessage();
 
 		EasyMock.verify(messageSender);
 	}

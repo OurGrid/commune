@@ -39,23 +39,23 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void unavaliableObject() throws Exception {
-		application = createApplication();
+		module = createApplication();
 
 		sendIsItAliveToUnavaliableObject(Context.A_SERVICE_NAME);
 	}
 	
 	@Test
 	public void avaliableObject1() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MyObject1());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MyObject1());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
 
 	@Test
 	public void avaliableAndUnavaliableObjects() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MyObject1());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MyObject1());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 		sendIsItAliveToUnavaliableObject(Context.OTHER_SERVICE_NAME);
@@ -63,8 +63,8 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 
 	@Test
 	public void avaliableAndUnavaliableObjectsManyTimes() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MyObject1());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MyObject1());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
@@ -86,56 +86,56 @@ public class InvokeIsItAlive extends TestWithTestableCommuneContainer {
 
 	@Test
 	public void avaliableObject2() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MySubObject1());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MySubObject1());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
 
 	@Test
 	public void avaliableObject3() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MySubInterfaceObject1());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MySubInterfaceObject1());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
 	
 	@Test
 	public void avaliableObject4() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MyObject2_1());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MyObject2_1());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
 	
 	@Test
 	public void avaliableObject5() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MyObject2_2());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MyObject2_2());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
 	
 	@Test
 	public void avaliableObject6() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MyObject2_3());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MyObject2_3());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
 	
 	@Test
 	public void avaliableObject7() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MyObject2_4<String>());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MyObject2_4<String>());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}
 	
 	@Test
 	public void avaliableObject8() throws Exception {
-		application = createApplication();
-		application.deploy(Context.A_SERVICE_NAME, new MyObject2_5_Sub());
+		module = createApplication();
+		module.deploy(Context.A_SERVICE_NAME, new MyObject2_5_Sub());
 		
 		sendIsItAliveToAvaliableObject(Context.A_SERVICE_NAME);
 	}

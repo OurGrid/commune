@@ -38,9 +38,9 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 
 	@Test
 	public void registerInterestSelf() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject1 object = new InterestedObject1();
-		application.deploy(InterestedObject1.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject1.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject1.USER, InterestedObject1.SERVER, InterestedObject1.CONTAINER);
@@ -51,11 +51,11 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void registerInterestOther() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject2 object = new InterestedObject2();
 		Monitor2 monitor = new Monitor2();
-		application.deploy(InterestedObject2.OTHER_SERVICE_NAME, monitor);
-		application.deploy(InterestedObject2.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject2.OTHER_SERVICE_NAME, monitor);
+		module.deploy(InterestedObject2.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject2.USER, InterestedObject2.SERVER, InterestedObject2.CONTAINER);
@@ -66,10 +66,10 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void twiceIsItAlive() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject2 object = new InterestedObject2();
-		application.deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
-		application.deploy(InterestedObject2.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject2.OTHER_SERVICE_NAME, new Monitor2());
+		module.deploy(InterestedObject2.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject2.USER, InterestedObject2.SERVER, InterestedObject2.CONTAINER);
@@ -82,9 +82,9 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void registerInterestSelfWithDeploymentID() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject3 object = new InterestedObject3();
-		application.deploy(InterestedObject3.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject3.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject3.USER, InterestedObject3.SERVER, InterestedObject3.CONTAINER);
@@ -95,9 +95,9 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 	
 	@Test
 	public void registerInterestSelfWithDeploymentIDOnlyOnRecovery() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject4 object = new InterestedObject4();
-		application.deploy(InterestedObject4.MY_SERVICE_NAME, object);
+		module.deploy(InterestedObject4.MY_SERVICE_NAME, object);
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject4.USER, InterestedObject4.SERVER, InterestedObject4.CONTAINER);
@@ -108,10 +108,10 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void wrongDeploymentIDOrderOnRecovery() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject5 object = new InterestedObject5();
-		application.deploy(InterestedObject5.MY_SERVICE_NAME, object);
-		application.getServiceConsumer().consumeMessage();
+		module.deploy(InterestedObject5.MY_SERVICE_NAME, object);
+		module.getServiceConsumer().consumeMessage();
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject5.USER, InterestedObject5.SERVER, InterestedObject5.CONTAINER);
@@ -122,10 +122,10 @@ public class RegisterInterest extends TestWithTestableCommuneContainer {
 
 	@Test(expected=InvalidMonitoringException.class)
 	public void wrongDeploymentIDOrderOnFailure() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		InterestedObject6 object = new InterestedObject6();
-		application.deploy(InterestedObject6.MY_SERVICE_NAME, object);
-		application.getServiceConsumer().consumeMessage();
+		module.deploy(InterestedObject6.MY_SERVICE_NAME, object);
+		module.getServiceConsumer().consumeMessage();
 
 		ContainerID containerID = 
 			new ContainerID(InterestedObject6.USER, InterestedObject6.SERVER, InterestedObject6.CONTAINER);

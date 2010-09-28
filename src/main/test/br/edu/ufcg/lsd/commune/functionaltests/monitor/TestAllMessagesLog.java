@@ -33,36 +33,36 @@ public class TestAllMessagesLog extends TestWithTestableCommuneContainer {
 
 	@Test
 	public void testGetEmptyLog() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
-		testServiceMessageLogUtil.getEmptyLog(application);
-		testInterestMessageLogUtil.getEmptyLog(application);
-		testFTMessageLogUtil.getEmptyLog(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
+		testServiceMessageLogUtil.getEmptyLog(module);
+		testInterestMessageLogUtil.getEmptyLog(module);
+		testFTMessageLogUtil.getEmptyLog(module);
 	}
 	
 	@Test
 	public void testSimpleGet() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		//ServiceProcessor
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testServiceMessageLogUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testServiceMessageLogUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
 		Message message1 = new Message(source, target, "invoke");
 		message1.addStubParameter(Stub.class, stubDID);
 
-		application.deliverMessage(message1);
+		module.deliverMessage(message1);
 		
 		//FileTransferProcessor
 		SenderClass senderObject = new SenderClass();
-		application.deploy(SenderClass.OBJECT_NAME, senderObject);
+		module.deploy(SenderClass.OBJECT_NAME, senderObject);
 		
-		DeploymentID destinationID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
-		DeploymentID listenerID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID destinationID = testFTMessageLogUtil.getObjectDeployment(module, SenderClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID listenerID = testFTMessageLogUtil.getObjectDeployment(module, SenderClass.OBJECT_NAME).getDeploymentID();
 		
 		OutgoingTransferHandle handle = new OutgoingTransferHandle(TestGetFileTransfers.TRANSFER_FILE_LOG_NAME,
 				new File(TestGetFileTransfers.TRANSFER_FILE), "", destinationID);
@@ -70,49 +70,49 @@ public class TestAllMessagesLog extends TestWithTestableCommuneContainer {
 		Message message2 = new Message(listenerID, destinationID, "sendFile", FileTransferProcessor.class.getName());
 		message2.addParameter(OutgoingTransferHandle.class, handle);
 
-		application.deliverMessage(message2);
+		module.deliverMessage(message2);
 		
 		//InterestProcessor
 		Message message3 = 
 			new Message(target, source.getServiceID(), InterestProcessor.IS_IT_ALIVE_MESSAGE, 
 					InterestProcessor.class.getName());
 
-		application.deliverMessage(message3);
+		module.deliverMessage(message3);
 		
 		//Consume Messages
-		application.getInterestConsumer().consumeMessage();
+		module.getInterestConsumer().consumeMessage();
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 
-		application.getFileTransferConsumer().consumeMessage();
+		module.getFileTransferConsumer().consumeMessage();
 		
 		//verify
-		testServiceMessageLogUtil.getMessagesLog(application, createMessageList(message1));
-		testFTMessageLogUtil.getMessagesLog(application, createMessageList(message2));
-		testInterestMessageLogUtil.getMessagesLog(application, createMessageList(message3));
+		testServiceMessageLogUtil.getMessagesLog(module, createMessageList(message1));
+		testFTMessageLogUtil.getMessagesLog(module, createMessageList(message2));
+		testInterestMessageLogUtil.getMessagesLog(module, createMessageList(message3));
 	}
 	
 	@Test
 	public void testOverflowAllQueues() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		//ServiceProcessor
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testServiceMessageLogUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testServiceMessageLogUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		ServiceID stubSID = new ServiceID(source.getContainerID(), "stub1");
 		DeploymentID stubDID = new DeploymentID(stubSID);
 		Message message1 = new Message(source, target, "invoke");
 		message1.addStubParameter(Stub.class, stubDID);
 
-		application.deliverMessage(message1);
+		module.deliverMessage(message1);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		
-		testServiceMessageLogUtil.getMessagesLog(application, createMessageList(message1));
+		testServiceMessageLogUtil.getMessagesLog(module, createMessageList(message1));
 		
 		List<Message> list1 = new ArrayList<Message>();
 		
@@ -120,19 +120,19 @@ public class TestAllMessagesLog extends TestWithTestableCommuneContainer {
 			message1 = new Message(source, target, "invoke");
 			message1.addStubParameter(Stub.class, stubDID);
 
-			application.deliverMessage(message1);		
+			module.deliverMessage(message1);		
 			
-			application.getServiceConsumer().consumeMessage();
+			module.getServiceConsumer().consumeMessage();
 			
 			list1.add(message1);
 		}
 		
 		//FileTransferProcessor
 		SenderClass senderObject = new SenderClass();
-		application.deploy(SenderClass.OBJECT_NAME, senderObject);
+		module.deploy(SenderClass.OBJECT_NAME, senderObject);
 		
-		DeploymentID destinationID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
-		DeploymentID listenerID = testFTMessageLogUtil.getObjectDeployment(application, SenderClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID destinationID = testFTMessageLogUtil.getObjectDeployment(module, SenderClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID listenerID = testFTMessageLogUtil.getObjectDeployment(module, SenderClass.OBJECT_NAME).getDeploymentID();
 		
 		OutgoingTransferHandle handle = new OutgoingTransferHandle(TestGetFileTransfers.TRANSFER_FILE_LOG_NAME, 
 				new File(TestGetFileTransfers.TRANSFER_FILE), "", destinationID);
@@ -140,11 +140,11 @@ public class TestAllMessagesLog extends TestWithTestableCommuneContainer {
 		Message message2 = new Message(listenerID, destinationID, "sendFile", FileTransferProcessor.class.getName());
 		message2.addParameter(OutgoingTransferHandle.class, handle);
 
-		application.deliverMessage(message2);
+		module.deliverMessage(message2);
 		
-		application.getFileTransferConsumer().consumeMessage();
+		module.getFileTransferConsumer().consumeMessage();
 		
-		testFTMessageLogUtil.getMessagesLog(application, createMessageList(message2));
+		testFTMessageLogUtil.getMessagesLog(module, createMessageList(message2));
 		
 		List<Message> list2 = new ArrayList<Message>();
 		
@@ -152,9 +152,9 @@ public class TestAllMessagesLog extends TestWithTestableCommuneContainer {
 			message2 = new Message(listenerID, destinationID, "sendFile", FileTransferProcessor.class.getName());
 			message2.addParameter(OutgoingTransferHandle.class, handle);
 
-			application.deliverMessage(message2);		
+			module.deliverMessage(message2);		
 			
-			application.getFileTransferConsumer().consumeMessage();
+			module.getFileTransferConsumer().consumeMessage();
 			
 			list2.add(message2);
 		}
@@ -164,11 +164,11 @@ public class TestAllMessagesLog extends TestWithTestableCommuneContainer {
 			new Message(target, source.getServiceID(), InterestProcessor.IS_IT_ALIVE_MESSAGE, 
 					InterestProcessor.class.getName());
 
-		application.deliverMessage(message3);
+		module.deliverMessage(message3);
 		
-		application.getInterestConsumer().consumeMessage();
+		module.getInterestConsumer().consumeMessage();
 		
-		testInterestMessageLogUtil.getMessagesLog(application, createMessageList(message3));
+		testInterestMessageLogUtil.getMessagesLog(module, createMessageList(message3));
 		
 		List<Message> list3 = new ArrayList<Message>();
 		
@@ -177,17 +177,17 @@ public class TestAllMessagesLog extends TestWithTestableCommuneContainer {
 				new Message(target, source.getServiceID(), InterestProcessor.IS_IT_ALIVE_MESSAGE, 
 						InterestProcessor.class.getName());
 
-			application.deliverMessage(message3);		
+			module.deliverMessage(message3);		
 			
-			application.getInterestConsumer().consumeMessage();
+			module.getInterestConsumer().consumeMessage();
 			
 			list3.add(message3);
 		}
 		
 		//verify
-		testServiceMessageLogUtil.getMessagesLog(application, list1);
-		testFTMessageLogUtil.getMessagesLog(application, list2);
-		testInterestMessageLogUtil.getMessagesLog(application, list3);
+		testServiceMessageLogUtil.getMessagesLog(module, list1);
+		testFTMessageLogUtil.getMessagesLog(module, list2);
+		testInterestMessageLogUtil.getMessagesLog(module, list3);
 		
 	}
 	

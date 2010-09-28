@@ -21,52 +21,52 @@ public class TestInterestProcessorMessagesLog extends TestWithTestableCommuneCon
 	
 	@Test
 	public void testGetEmptyLog() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
-		testInterestMessageLogUtil.getEmptyLog(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
+		testInterestMessageLogUtil.getEmptyLog(module);
 	}
 	
 	@Test
 	public void testSimpleGet() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testInterestMessageLogUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testInterestMessageLogUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		Message message = 
 			new Message(target, source.getServiceID(), InterestProcessor.IS_IT_ALIVE_MESSAGE, 
 					InterestProcessor.class.getName());
 
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
-		application.getInterestConsumer().consumeMessage();
+		module.getInterestConsumer().consumeMessage();
 		
-		testInterestMessageLogUtil.getMessagesLog(application, createMessageList(message));
+		testInterestMessageLogUtil.getMessagesLog(module, createMessageList(message));
 	}
 	
 	@Test
 	public void testQueueOverflow() throws Exception {
-		application = deployMonitorUtil.createAndStartApplication(application);
+		module = deployMonitorUtil.createAndStartApplication(module);
 		
 		DeployableClass object = new DeployableClass();
-		application.deploy(DeployableClass.OBJECT_NAME, object);
+		module.deploy(DeployableClass.OBJECT_NAME, object);
 		
 		DeploymentID source = createOtherMessageSource();
-		DeploymentID target = testInterestMessageLogUtil.getObjectDeployment(application, DeployableClass.OBJECT_NAME).getDeploymentID();
+		DeploymentID target = testInterestMessageLogUtil.getObjectDeployment(module, DeployableClass.OBJECT_NAME).getDeploymentID();
 
 		//message to be removed
 		Message message = 
 			new Message(target, source.getServiceID(), InterestProcessor.IS_IT_ALIVE_MESSAGE, 
 					InterestProcessor.class.getName());
 		
-		application.deliverMessage(message);		
+		module.deliverMessage(message);		
 		
-		application.getInterestConsumer().consumeMessage();
+		module.getInterestConsumer().consumeMessage();
 		
 		//verify
-		testInterestMessageLogUtil.getMessagesLog(application, createMessageList(message));
+		testInterestMessageLogUtil.getMessagesLog(module, createMessageList(message));
 		
 		//remaining messages
 		List<Message> list = new ArrayList<Message>();
@@ -76,15 +76,15 @@ public class TestInterestProcessorMessagesLog extends TestWithTestableCommuneCon
 				new Message(target, source.getServiceID(), InterestProcessor.IS_IT_ALIVE_MESSAGE, 
 						InterestProcessor.class.getName());
 
-			application.deliverMessage(message);		
+			module.deliverMessage(message);		
 			
-			application.getInterestConsumer().consumeMessage();
+			module.getInterestConsumer().consumeMessage();
 			
 			list.add(message);
 		}
 		
 		//verify
-		testInterestMessageLogUtil.getMessagesLog(application, list);
+		testInterestMessageLogUtil.getMessagesLog(module, list);
 	}
 	
 	private List<Message> createMessageList(Message... messages) {

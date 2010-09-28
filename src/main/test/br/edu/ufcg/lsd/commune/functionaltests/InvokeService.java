@@ -55,26 +55,26 @@ public class InvokeService extends TestWithTestableCommuneContainer {
 
 	@Before
 	public void init() throws Exception {
-		application = createApplication();
+		module = createApplication();
 		mock = EasyMock.createMock(MyInterface.class);
 		MyObject object = new MyObject();
 		object.setMock(mock);
 		
-		application.deploy(Context.A_SERVICE_NAME, object);
+		module.deploy(Context.A_SERVICE_NAME, object);
 		
 		source = createOtherMessageSource();
-		target = application.getDeploymentID(Context.A_SERVICE_NAME);
+		target = module.getDeploymentID(Context.A_SERVICE_NAME);
 	}
 
 	@Test
 	public void invokeFunctionWithoutParameters() throws Exception {
 		Message message = new Message(source, target, "withoutParameters");
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		mock.withoutParameters();
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 	}
 	
@@ -82,12 +82,12 @@ public class InvokeService extends TestWithTestableCommuneContainer {
 	public void invokeFunctionWithPrimitiveParameter() throws Exception {
 		Message message = new Message(source, target, "withPrimitiveParameter");
 		message.addParameter(int.class, INT_PARAMETER);
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		mock.withPrimitiveParameter(INT_PARAMETER);
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 
 	}
@@ -96,11 +96,11 @@ public class InvokeService extends TestWithTestableCommuneContainer {
 	public void invokeFunctionWithWrongPrimitiveParameter() throws Exception {
 		Message message = new Message(source, target, "withPrimitiveParameter");
 		message.addParameter(int.class, STRING_PARAMETER);
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 
 	}
@@ -109,11 +109,11 @@ public class InvokeService extends TestWithTestableCommuneContainer {
 	public void invokeFunctionWithWrongPrimitiveParameterType() throws Exception {
 		Message message = new Message(source, target, "withPrimitiveParameter");
 		message.addParameter(String.class, INT_PARAMETER);
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 
 	}
@@ -123,12 +123,12 @@ public class InvokeService extends TestWithTestableCommuneContainer {
 		Message message = new Message(source, target, "withPrimitiveParameters");
 		message.addParameter(Integer.class, INT_PARAMETER);
 		message.addParameter(String.class, STRING_PARAMETER);
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		mock.withPrimitiveParameters(INT_PARAMETER, STRING_PARAMETER);
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 
 	}
@@ -137,12 +137,12 @@ public class InvokeService extends TestWithTestableCommuneContainer {
 	public void invokeFunctionOverloadString() throws Exception {
 		Message message = new Message(source, target, "overload");
 		message.addParameter(String.class, STRING_PARAMETER);
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		mock.overload(STRING_PARAMETER);
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 	}
 
@@ -150,12 +150,12 @@ public class InvokeService extends TestWithTestableCommuneContainer {
 	public void invokeFunctionOverloadDouble() throws Exception {
 		Message message = new Message(source, target, "overload");
 		message.addParameter(double.class, DOUBLE_PARAMETER);
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		mock.overload(DOUBLE_PARAMETER);
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 	}
 	
@@ -163,12 +163,12 @@ public class InvokeService extends TestWithTestableCommuneContainer {
 	public void invokeFunctionSerializable() throws Exception {
 		Message message = new Message(source, target, "serializable");
 		message.addParameter(ExtendsSerializable.class, new SerializableObject(STRING_PARAMETER));
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		mock.serializable(new SerializableObject(STRING_PARAMETER));
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 	}
 	
@@ -177,13 +177,13 @@ public class InvokeService extends TestWithTestableCommuneContainer {
 		List<ExtendsSerializable> originalList = createSerializableList();
 		Message message = new Message(source, target, "list");
 		message.addParameter(List.class, originalList);
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		List<ExtendsSerializable> expectedList = createSerializableList();
 		mock.list(expectedList);
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 	}
 
@@ -199,13 +199,13 @@ public class InvokeService extends TestWithTestableCommuneContainer {
 		Set<ExtendsSerializable> originalSet = createSerializableSet();
 		Message message = new Message(source, target, "set");
 		message.addParameter(Set.class, originalSet);
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		Set<ExtendsSerializable> expectedSet = createSerializableSet();
 		mock.set(expectedSet);
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 	}
 
@@ -221,13 +221,13 @@ public class InvokeService extends TestWithTestableCommuneContainer {
 		Map<Serializable,ExtendsSerializable> originalMap = createSerializableMap();
 		Message message = new Message(source, target, "map");
 		message.addParameter(Map.class, originalMap);
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		Map<Serializable,ExtendsSerializable> expectedMap = createSerializableMap();
 		mock.map(expectedMap);
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 	}
 
@@ -247,14 +247,14 @@ public class InvokeService extends TestWithTestableCommuneContainer {
 		message.addParameter(Map.class, originalMap);
 		message.addParameter(List.class, originalList);
 		message.addParameter(Integer.class, INTEGER_PARAMETER);
-		application.deliverMessage(message);
+		module.deliverMessage(message);
 		
 		Map<Serializable,ExtendsSerializable> expectedMap = createSerializableMap();
 		List<String> expectedList = createSerializableListString();
 		mock.misc(INT_PARAMETER, expectedMap, expectedList, INTEGER_PARAMETER);
 		EasyMock.replay(mock);
 		
-		application.getServiceConsumer().consumeMessage();
+		module.getServiceConsumer().consumeMessage();
 		EasyMock.verify(mock);
 	}
 	

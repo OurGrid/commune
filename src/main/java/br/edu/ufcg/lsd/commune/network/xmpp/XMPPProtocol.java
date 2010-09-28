@@ -74,7 +74,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 	}
 
 	@Override
-	public void start() throws CommuneNetworkException {
+	public void start() {
 		if ( this.identification == null ) {
 			throw new InvalidIdentificationException( 
 					"The xmpp protocol could not be started. Identification is null");

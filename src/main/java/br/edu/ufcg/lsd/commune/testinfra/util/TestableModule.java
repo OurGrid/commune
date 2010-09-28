@@ -30,7 +30,7 @@ import br.edu.ufcg.lsd.commune.processor.filetransfer.FileTransferProcessor;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestProcessor;
 import br.edu.ufcg.lsd.commune.processor.objectdeployer.ServiceProcessor;
 
-public class TestableApplication extends Module {
+public class TestableModule extends Module {
 
 	
 	private TestableInterestProcessor interestProcessor;
@@ -38,7 +38,7 @@ public class TestableApplication extends Module {
 	private TestableFileTransferProcessor fileTransferProcessor;
 
 	
-	public TestableApplication(String containerName, ModuleContext context) 
+	public TestableModule(String containerName, ModuleContext context) 
 			throws CommuneNetworkException, ProcessorStartException {
 		super(containerName, context);
 	}
