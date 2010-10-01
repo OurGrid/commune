@@ -22,7 +22,6 @@ package br.edu.ufcg.lsd.commune;
 import br.edu.ufcg.lsd.commune.container.control.ServerModuleController;
 import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
-import br.edu.ufcg.lsd.commune.network.ConnectionListener;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 
@@ -31,11 +30,6 @@ public class ServerModule extends Module {
 	public ServerModule(String containerName, ModuleContext context)
 			throws CommuneNetworkException, ProcessorStartException {
 		super(containerName, context);
-	}
-	
-	public ServerModule(String containerName, ModuleContext context, ConnectionListener listener)
-	throws CommuneNetworkException, ProcessorStartException {
-		super(containerName, context, listener);
 	}
 	
 	@Override

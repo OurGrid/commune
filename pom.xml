@@ -28,7 +28,7 @@
   <repositories>
   	<repository>
   		<id>repo-lsd</id>
-  		<url>http://www.lsd.ufcg.edu.br/~abmar/og/repo</url>
+  		<url>http://maven.ourgrid.org/repos/</url>
   	</repository>
   </repositories>
   <dependencies>
