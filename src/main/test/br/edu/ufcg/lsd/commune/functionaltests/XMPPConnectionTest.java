@@ -15,6 +15,25 @@ import br.edu.ufcg.lsd.commune.testinfra.util.TestContext;
 import br.edu.ufcg.lsd.commune.testinfra.util.TestWithTestableCommuneContainer;
 import br.edu.ufcg.lsd.commune.testinfra.util.TestableModule;
 
+/* 
+ * To run the tests you will need to download one of these Openfire packages:
+ * 		- For windows users you will need to download "openfire_3_6_4.zip"
+ * 		  without java JRE
+ * 		
+ * 		- For linux users you will need to download "openfire_3_6_4.tar.gz"
+ *  	  without java JRE
+ *  
+ *	After the download, you will unzip the file on the project root.
+ *	Before the first test execution, run the openfire manually and configure the setup at
+ *	localhost:9090 in the browser.
+ *		-Server settings: Doamin = localhost
+ *		-Database settings: Embedded Database
+ *		-Profile settings: Default
+ *		-Admin account: The default login is admin and default password is admin
+ *
+ *	Now you can run the test normally.
+ *
+ */
 
 public class XMPPConnectionTest extends TestWithTestableCommuneContainer {
 
@@ -100,7 +119,7 @@ public class XMPPConnectionTest extends TestWithTestableCommuneContainer {
 		
 		TestableModule testableApplication = new TestableModule(Context.A_MODULE_NAME, context, connectionListener);
 
-		Thread.sleep(2000);
+		Thread.sleep(10000);
 		
 		return testableApplication;
 		
