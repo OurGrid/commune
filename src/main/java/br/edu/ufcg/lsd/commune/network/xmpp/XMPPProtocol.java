@@ -134,7 +134,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					}
 					
 					@Override
-					public void reconnectingIn(int arg0) {}
+					public void reconnectingIn(int arg0) { }
 					
 					@Override
 					public void connectionClosedOnError(Exception arg0) {
@@ -278,7 +278,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 	
 	private  class ConnectionRunnable implements Runnable {
 
-		private static final long SLEEP_TIME = 10000;
+		private static final long SLEEP_TIME = 60000;
 		
 		private final XMPPConnectionListener connectionListener;
 
