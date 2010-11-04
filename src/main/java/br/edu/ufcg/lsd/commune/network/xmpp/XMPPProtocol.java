@@ -72,6 +72,10 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 	private static synchronized String nextID() {
 		return prefix + Long.toString( id++ );
 	}
+	
+	protected int getSleepTime(){
+		return 60000;
+	}
 
 	@Override
 	public void start() {
@@ -152,7 +156,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 			});
 			}
 			}
-		})).start();
+		}, getSleepTime())).start();
 
 	}
 
@@ -278,13 +282,12 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 	
 	private  class ConnectionRunnable implements Runnable {
 
-		private static final long SLEEP_TIME = 60000;
-		
 		private final XMPPConnectionListener connectionListener;
+		private final int sleepTime;
 
-		public ConnectionRunnable(XMPPConnectionListener connectionListener) {
+		public ConnectionRunnable(XMPPConnectionListener connectionListener, int sleepTime) {
 			this.connectionListener = connectionListener;
-			
+			this.sleepTime = sleepTime;
 		}
 		
 		@Override
@@ -295,7 +298,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					connection.connect();
 				} catch (XMPPException e) {
 					try {
-						Thread.sleep(SLEEP_TIME);
+						Thread.sleep(sleepTime);
 					} catch (InterruptedException e1) {	}
 				}
 			}
