@@ -24,6 +24,8 @@ import br.edu.ufcg.lsd.commune.container.IMessageDeliverer;
 import br.edu.ufcg.lsd.commune.container.IMessageSender;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
+import br.edu.ufcg.lsd.commune.network.ConnectionListener;
+import br.edu.ufcg.lsd.commune.network.NetworkBuilder;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 import br.edu.ufcg.lsd.commune.processor.filetransfer.FileTransferProcessor;
@@ -32,17 +34,23 @@ import br.edu.ufcg.lsd.commune.processor.objectdeployer.ServiceProcessor;
 
 public class TestableModule extends Module {
 
-	
 	private TestableInterestProcessor interestProcessor;
 	private TestableServiceProcessor serviceProcessor;
 	private TestableFileTransferProcessor fileTransferProcessor;
+	private ConnectionListener listener;
 
+	protected NetworkBuilder networkBuilder = createNetworkBuilder();
 	
 	public TestableModule(String containerName, ModuleContext context) 
 			throws CommuneNetworkException, ProcessorStartException {
 		super(containerName, context);
 	}
 
+	public TestableModule(String containerName, ModuleContext context, ConnectionListener listener) 
+	throws CommuneNetworkException, ProcessorStartException {
+		super(containerName, context, listener);
+		this.listener = listener;
+	}
 
 	public DeploymentID getDeploymentID(String serviceName) {
 		return getObject(serviceName).getDeploymentID();
@@ -88,5 +96,10 @@ public class TestableModule extends Module {
 	
 	public FileTransferProcessor getFileTransferProcessor() {
 		return this.fileTransferProcessor;
+	}
+	
+	@Override
+	public NetworkBuilder createNetworkBuilder() {
+		return new TestableNetworkBuilder();
 	}
 }
