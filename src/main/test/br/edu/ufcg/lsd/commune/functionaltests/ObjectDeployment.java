@@ -53,6 +53,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void validateNotRemoteObject() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new Object());
 	}
 
@@ -60,6 +61,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void objectDeployment1() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject1());
 	}
 
@@ -67,6 +69,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void objectDeployment2() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MySubObject1());
 	}
 
@@ -74,6 +77,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void objectDeployment3() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MySubInterfaceObject1());
 	}
 	
@@ -81,6 +85,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void objectDeployment4() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject2_1());
 	}
 	
@@ -88,6 +93,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void objectDeployment5() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject2_2());
 	}
 	
@@ -95,6 +101,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void objectDeployment6() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject2_3());
 	}
 	
@@ -102,6 +109,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void objectDeployment7() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject2_4<String>());
 	}
 	
@@ -109,6 +117,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void objectDeployment8() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject2_5_Sub());
 	}
 	
@@ -116,6 +125,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void objectDeployment9() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject3());
 	}
 	
@@ -123,6 +133,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void objectDeployment10() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject4());
 	}
 	
@@ -130,6 +141,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void objectDeployment11() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject5());
 	}
 	
@@ -137,6 +149,7 @@ public class ObjectDeployment extends TestWithApplication {
 	public void objectDeployment12() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject6());
 	}
 	

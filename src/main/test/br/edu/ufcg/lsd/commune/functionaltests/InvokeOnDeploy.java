@@ -72,6 +72,7 @@ public class InvokeOnDeploy extends TestWithTestableCommuneContainer {
 	@Test(expected=InvalidDeploymentException.class)
 	public void notRemoteMethod() throws Exception {
 		module = createApplication();
+		Thread.sleep(3000);
 		module.deploy(Context.A_SERVICE_NAME, new MyObject2_2());
 	}
 

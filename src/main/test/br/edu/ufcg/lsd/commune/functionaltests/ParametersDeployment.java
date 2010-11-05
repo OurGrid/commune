@@ -99,6 +99,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment1() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(3000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject14_1());
 	}
 	
@@ -111,6 +112,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment2() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject14_2());
 	}
 	
@@ -122,6 +124,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment3() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject15());
 	}
 	
@@ -133,6 +136,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment4() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject16());
 	}
 	
@@ -146,6 +150,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment5() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject14_3());
 	}
 	
@@ -157,6 +162,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment6() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject1());
 	}
 	
@@ -168,6 +174,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment7() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject2());
 	}
 	
@@ -179,6 +186,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment8() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject3());
 	}
 	
@@ -190,6 +198,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment9() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject4());
 	}
 	
@@ -201,6 +210,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment10() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject5());
 	}
 	
@@ -212,6 +222,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment11() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject7());
 	}
 	
@@ -223,6 +234,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment12() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject8());
 	}
 	
@@ -234,6 +246,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment13() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject9());
 	}
 	
@@ -245,6 +258,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment14() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject10());
 	}
 	
@@ -256,6 +270,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment15() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject11());
 	}
 	
@@ -267,6 +282,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment16() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject6());
 	}
 	
@@ -278,6 +294,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment17() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject12());
 	}
 	
@@ -289,6 +306,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment18() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject13());
 	}
 	
@@ -300,6 +318,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment19() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject17());
 	}
 	
@@ -311,6 +330,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment20() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject18());
 	}
 	
@@ -322,6 +342,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment21() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject22());
 	}
 	
@@ -333,6 +354,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment22() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject23());
 	}
 	
@@ -344,6 +366,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment23() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject24());
 	}
 	
@@ -355,6 +378,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment24() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject25());
 	}
 	
@@ -366,6 +390,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment25() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject19());
 	}
 	
@@ -377,6 +402,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment26() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject20());
 	}
 	
@@ -388,6 +414,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment27() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject21());
 	}
 	
@@ -399,6 +426,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment28() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject26());
 	}
 	
@@ -410,6 +438,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment29() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject27());
 	}
 	
@@ -421,6 +450,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment30() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject28());
 	}
 	
@@ -432,6 +462,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment31() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject29());
 	}
 	
@@ -443,6 +474,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment32() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject30());
 	}
 	
@@ -454,6 +486,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment33() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject31());
 	}
 	
@@ -465,6 +498,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment34() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject32());
 	}
 	
@@ -476,6 +510,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment35() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject33());
 	}
 	
@@ -487,6 +522,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment36() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject34());
 	}
 	
@@ -498,6 +534,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment37() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject35());
 	}
 	
@@ -509,6 +546,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment38() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject36());
 	}
 	
@@ -520,6 +558,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment39() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject37());
 	}
 	
@@ -531,6 +570,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment40() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject38());
 	}
 	
@@ -542,6 +582,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment41() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject39());
 	}
 	
@@ -553,6 +594,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment42() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject40());
 	}
 	
@@ -564,6 +606,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment43() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject41());
 	}
 	
@@ -575,6 +618,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment44() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject42());
 	}
 	
@@ -586,6 +630,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment45() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject43());
 	}
 	
@@ -597,6 +642,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment46() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject44());
 	}
 	
@@ -608,6 +654,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment47() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject45());
 	}
 	
@@ -619,6 +666,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment48() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject46());
 	}
 	
@@ -630,6 +678,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment49() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject47());
 	}
 	
@@ -641,6 +690,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment50() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject48());
 	}
 	
@@ -652,6 +702,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment51() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject49());
 	}
 	
@@ -663,6 +714,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment52() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject51());
 	}
 	
@@ -674,6 +726,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment53() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject52());
 	}
 	
@@ -685,6 +738,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment54() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject50());
 	}
 	
@@ -696,6 +750,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment55() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject53());
 	}
 	
@@ -707,6 +762,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment56() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject54());
 	}
 	
@@ -718,6 +774,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment57() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject55());
 	}
 	
@@ -729,6 +786,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment58() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject56());
 	}
 	
@@ -740,6 +798,7 @@ public class ParametersDeployment extends TestWithApplication {
 	public void parametersDeployment59() throws Exception {
 		TestContext context = Context.createRealContext();
 		application = new Module(Context.A_MODULE_NAME, context);
+		Thread.sleep(1000);
 		application.deploy(Context.A_SERVICE_NAME, new MyObject57());
 	}
 }

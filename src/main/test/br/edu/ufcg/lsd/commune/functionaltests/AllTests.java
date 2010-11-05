@@ -8,7 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
  @SuiteClasses(value={ModuleCreation.class, FailureNotification.class, InvokeIsItAlive.class,
 		 InvokeOnDeploy.class, InvokeService.class, InvokeWithRemoteParameters.class, ObjectDeployment.class,
 		 ParametersDeployment.class, RecoveryNotification.class, RegisterInterest.class, RemoteCollectionParameters.class,
-		 RemoteParameters.class
+		 RemoteParameters.class, XMPPReconnection.class
   }
  )
  public class AllTests {}

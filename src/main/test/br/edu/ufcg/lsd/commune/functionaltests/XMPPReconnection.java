@@ -35,7 +35,7 @@ import br.edu.ufcg.lsd.commune.testinfra.util.TestableModule;
  *
  */
 
-public class XMPPConnectionTest extends TestWithTestableCommuneContainer {
+public class XMPPReconnection extends TestWithTestableCommuneContainer {
 
 	@Test
 	public void testReconnectionStartingModuleAfterXMPPCreation() throws CommuneNetworkException, ProcessorStartException, InterruptedException, XMPPException {
