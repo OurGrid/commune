@@ -28,6 +28,8 @@ import br.edu.ufcg.lsd.commune.container.control.ServerModuleManager;
 import br.edu.ufcg.lsd.commune.container.servicemanager.client.ClientModule;
 import br.edu.ufcg.lsd.commune.container.servicemanager.client.CommuneClientProperties;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
+import br.edu.ufcg.lsd.commune.network.ConnectionListener;
+import br.edu.ufcg.lsd.commune.network.ConnectionListenerAdapter;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
 
@@ -36,12 +38,31 @@ public abstract class SyncApplicationClient<A extends ServerModuleManager, B ext
 
 	protected BlockingQueue<Object> queue;
 	
+	@SuppressWarnings("unchecked")
 	public SyncApplicationClient(String containerName,
 			ModuleContext context) throws CommuneNetworkException,
 			ProcessorStartException {
 		super(containerName, context);
+		Object response = SyncContainerUtil.waitForeverForResponseObject(queue);
+		if(response instanceof CommuneNetworkException){
+			throw (CommuneNetworkException) response;
+		}
+		setManager((A) response);
+	}
+
+	@Override
+	protected void moduleCreated() {
 		this.queue = new ArrayBlockingQueue<Object>(1);
-		setManager(SyncContainerUtil.waitForResponseObject(queue, getManagerObjectType(), -1));
+		setConnectionListener(createConnectionListener());
+	}
+	
+	private ConnectionListener createConnectionListener() {
+		return new ConnectionListenerAdapter() {
+			@Override
+			public void connectionFailed(Exception e) {
+				SyncContainerUtil.putResponseObject(queue, e);
+			}
+		};
 	}
 
 	@Override
