@@ -99,6 +99,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 			@Override
 			public void connetionCreated() {
 				
+				LOG.debug("XMPP Connection created : " + identification.getUserAtServer());
 				try {
 					createAccount( login, password );
 					connection.login( login, password, resource );
@@ -295,6 +296,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 			
 			while (!connection.isConnected()) {
 				try {
+					LOG.debug("Trying to connect to xmpp server : " + identification.getUserAtServer());
 					connection.connect();
 				} catch (XMPPException e) {
 					try {

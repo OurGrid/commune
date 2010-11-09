@@ -108,7 +108,7 @@ public class XMPPReconnection extends TestWithTestableCommuneContainer {
 
 		EasyMock.verify(connectionListener);
 
-}
+	}
 	
 	protected Module createApplication(ConnectionListener connectionListener)
 			throws CommuneNetworkException, ProcessorStartException,
