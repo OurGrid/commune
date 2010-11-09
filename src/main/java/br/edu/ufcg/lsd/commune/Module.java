@@ -168,6 +168,8 @@ public class Module {
     	this.containerID = createContainerID(containerName);
     	this.objectRepository = new ObjectRepository(this);
 
+    	moduleCreated();
+    	
     	this.communeNetwork = networkBuilder.build(this);
         
     	this.service = createServiceProcessor();
@@ -193,6 +195,15 @@ public class Module {
 		
 		/* DAO */
 		this.containerDAO = createDAO(ContainerDAO.class);
+	}
+
+	protected void moduleCreated() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void setConnectionListener(ConnectionListener connectionListener) {
+		this.connectionListener = connectionListener;
 	}
 
 	private void createServices() {
