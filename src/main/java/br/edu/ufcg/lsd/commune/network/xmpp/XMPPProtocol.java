@@ -125,6 +125,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 				
 					@Override
 					public void reconnectionSuccessful() {
+						LOG.debug("XMPP Reconnection successful : " + identification.getUserAtServer());
 						if(connectionListener != null){
 							connectionListener.reconnected();
 						}
@@ -132,6 +133,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					
 					@Override
 					public void reconnectionFailed(Exception arg0) {
+						LOG.debug("XMPP Reconnection failed : " + identification.getUserAtServer());
 						if(connectionListener != null){
 							connectionListener.reconnectedFailed();
 						}
@@ -139,10 +141,13 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					}
 					
 					@Override
-					public void reconnectingIn(int arg0) { }
+					public void reconnectingIn(int arg0) {
+						LOG.debug("Trying to reconnect to XMPP server : " + identification.getUserAtServer());
+					}
 					
 					@Override
 					public void connectionClosedOnError(Exception arg0) {
+						LOG.debug("XMPP Connection closed on error : " + identification.getUserAtServer());
 						if(connectionListener != null){
 							connectionListener.disconnected();
 						}
@@ -150,6 +155,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					
 					@Override
 					public void connectionClosed() {
+						LOG.debug("XMPP Connection closed : " + identification.getUserAtServer());
 						if(connectionListener != null){
 							connectionListener.disconnected();
 						}
@@ -296,7 +302,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 			
 			while (!connection.isConnected()) {
 				try {
-					LOG.debug("Trying to connect to xmpp server : " + identification.getUserAtServer());
+					LOG.debug("Trying to connect to XMPP server : " + identification.getUserAtServer());
 					connection.connect();
 				} catch (XMPPException e) {
 					try {
