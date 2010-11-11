@@ -38,12 +38,25 @@ public abstract class SyncApplicationClient<A extends ServerModuleManager, B ext
 
 	protected BlockingQueue<Object> queue;
 	
-	@SuppressWarnings("unchecked")
 	public SyncApplicationClient(String containerName,
 			ModuleContext context) throws CommuneNetworkException,
 			ProcessorStartException {
+		this(containerName, context, true);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public SyncApplicationClient(String containerName,
+			ModuleContext context, boolean waitForever) throws CommuneNetworkException,
+			ProcessorStartException {
 		super(containerName, context);
-		Object response = SyncContainerUtil.waitForeverForResponseObject(queue);
+		
+		Object response;
+		
+		if(waitForever){
+			response = SyncContainerUtil.waitForeverForResponseObject(queue);
+		}else{
+			response = SyncContainerUtil.waitForResponseObject(queue, getManagerObjectType(), getQueueTimeout());
+		}
 		if(response instanceof CommuneNetworkException){
 			throw (CommuneNetworkException) response;
 		}
