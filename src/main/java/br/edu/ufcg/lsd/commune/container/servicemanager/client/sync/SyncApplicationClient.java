@@ -57,7 +57,9 @@ public abstract class SyncApplicationClient<A extends ServerModuleManager, B ext
 		}else{
 			response = SyncContainerUtil.waitForResponseObject(queue, getManagerObjectType(), getQueueTimeout());
 		}
-		if(response instanceof CommuneNetworkException){
+		if(response == null){
+		    throw new CommuneNetworkException("Component is not started.");
+		}else if(response instanceof CommuneNetworkException){
 			throw (CommuneNetworkException) response;
 		}
 		setManager((A) response);
