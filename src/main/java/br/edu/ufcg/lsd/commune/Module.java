@@ -253,8 +253,11 @@ public class Module {
 	 * @return the logger
 	 */
 	public CommuneLogger getLogger(Class<?> clazz) {
+		
+		String containerId = containerID.toString();
+		
 		if (logger == null) {
-			return CommuneLoggerFactory.getInstance().gimmeALogger(clazz);
+			return CommuneLoggerFactory.getInstance().gimmeALogger(clazz, containerId);
 		}
 		return logger;
 	}
@@ -266,10 +269,10 @@ public class Module {
 	 */
 	public CommuneLogger getLogger(String category) {
 		
-		String userInfo = containerID.toString();
+		String containerId = containerID.toString();
 		
 		if (logger == null) {
-			return CommuneLoggerFactory.getInstance().gimmeALogger(category, userInfo);
+			return CommuneLoggerFactory.getInstance().gimmeALogger(category, containerId);
 		}
 		return logger;
 	}

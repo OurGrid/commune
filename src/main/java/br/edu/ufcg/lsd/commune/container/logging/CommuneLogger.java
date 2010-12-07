@@ -26,23 +26,28 @@ import org.apache.log4j.spi.RootLogger;
 public class CommuneLogger{
 	
 	private Logger logger;
-	private String userInfo;
+	private String containerId;
 	
 	public CommuneLogger(Class<?> clazz) {
 		logger = RootLogger.getLogger(clazz);
+	}
+	
+	public CommuneLogger(Class<?> clazz, String containerId) {
+		logger = RootLogger.getLogger(clazz);
+		this.containerId = containerId;
 	}
 	
 	CommuneLogger(String category) {
 		logger = RootLogger.getLogger(category);
 	}	
 	
-	public CommuneLogger(String category, String userInfo) {
+	public CommuneLogger(String category, String containerId) {
 		logger = RootLogger.getLogger(category);
-		this.userInfo = userInfo;
+		this.containerId = containerId;
 	}
 	
 	public String getUserInfo(){
-		return userInfo;
+		return containerId;
 	}
 
 	public void enter(){
@@ -125,6 +130,6 @@ public class CommuneLogger{
 	}
 	
 	private Object addUserInfo(Object msg){
-		return "[" + this.userInfo + "] " + msg;
+		return (this.containerId != null) ? "[" + this.containerId + "] " + msg : msg;
 	}
 }

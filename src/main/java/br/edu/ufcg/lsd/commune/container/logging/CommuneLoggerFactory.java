@@ -42,8 +42,12 @@ public class CommuneLoggerFactory {
 		return new CommuneLogger(clazz);
 	}
 	
-	public CommuneLogger gimmeALogger(String category, String userIndo){
-		return new CommuneLogger(category, userIndo);
+	public CommuneLogger gimmeALogger(Class<?> clazz, String containerId){
+		return new CommuneLogger(clazz, containerId);
+	}
+	
+	public CommuneLogger gimmeALogger(String category, String containerId){
+		return new CommuneLogger(category, containerId);
 	}
 	
 	public CommuneLogger getConsoleLogger() {
