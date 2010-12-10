@@ -549,7 +549,6 @@ public class Module {
     	verifyShutdown();
     	this.communeNetwork.addProtocolChainStartedListener(new ProtocolCreationListener() {
 			
-			@Override
 			public void started() {
 		        service.start();
 		        interest.start();        

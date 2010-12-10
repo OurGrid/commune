@@ -96,7 +96,6 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 		connection = new XMPPConnection( cc);
 		new Thread(new ConnectionRunnable(new XMPPConnectionListener() {
 			
-			@Override
 			public void connetionCreated() {
 				
 				LOG.debug("XMPP Connection created : " + identification.getUserAtServer());
@@ -123,7 +122,6 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 				if(connection.isConnected()){
 				connection.addConnectionListener(new org.jivesoftware.smack.ConnectionListener() {
 				
-					@Override
 					public void reconnectionSuccessful() {
 						LOG.debug("XMPP Reconnection successful : " + identification.getUserAtServer());
 						if(connectionListener != null){
@@ -131,7 +129,6 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 						}
 					}
 					
-					@Override
 					public void reconnectionFailed(Exception arg0) {
 						LOG.debug("XMPP Reconnection failed : " + identification.getUserAtServer());
 						if(connectionListener != null){
@@ -140,12 +137,10 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 						
 					}
 					
-					@Override
 					public void reconnectingIn(int arg0) {
 						LOG.debug("Trying to reconnect to XMPP server : " + identification.getUserAtServer());
 					}
 					
-					@Override
 					public void connectionClosedOnError(Exception arg0) {
 						LOG.debug("XMPP Connection closed on error : " + identification.getUserAtServer());
 						if(connectionListener != null){
@@ -153,7 +148,6 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 						}
 					}
 					
-					@Override
 					public void connectionClosed() {
 						LOG.debug("XMPP Connection closed : " + identification.getUserAtServer());
 						if(connectionListener != null){
@@ -297,7 +291,6 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 			this.sleepTime = sleepTime;
 		}
 		
-		@Override
 		public void run() {
 			
 			while (!connection.isConnected()) {

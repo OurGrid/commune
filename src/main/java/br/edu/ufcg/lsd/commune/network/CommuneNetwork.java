@@ -76,7 +76,6 @@ public class CommuneNetwork implements IMessageSender {
 			final Protocol protocol = iterator.next();
 			protocol.addCreationListener(new ProtocolCreationListener() {
 				
-				@Override
 				public void started() {
 					try {
 						if(protocol.nextProtocol != null){
