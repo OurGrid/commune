@@ -85,8 +85,15 @@ public class IncomingTransfer extends AbstractTransfer {
 
 		if (newStatus == Status.complete) {
 			
-			boolean fileComplete = getHandle().getLocalFile().length() == transfer.getAmountWritten();
+			File localFile = getHandle().getLocalFile();
+			IncomingTransferHandle incomingTransferHandle = (IncomingTransferHandle) getHandle();
+			boolean fileComplete = localFile.length() == transfer.getAmountWritten();
 			if (fileComplete) {
+				
+				localFile.setExecutable(incomingTransferHandle.isExecutable());
+				localFile.setReadable(incomingTransferHandle.isReadable());
+				localFile.setWritable(incomingTransferHandle.isWritable());				
+				
 				Message message = new Message(module.getContainerID(), listenerID, "incomingTransferCompleted");
 				message.addParameter(IncomingTransferHandle.class, getHandle());
 				message.addParameter(long.class, transfer.getAmountWritten());

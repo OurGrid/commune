@@ -27,8 +27,14 @@ public class IncomingTransferHandle extends TransferHandle {
 	
 	private static final long serialVersionUID = 1L;
 	
+	
 	private ContainerID senderID;
+	private boolean readable;
+	private boolean writable;
+	private boolean executable;
+	
 
+	
 	public IncomingTransferHandle(long id, String logicalFileName, String description, 
 			long fileSize, ContainerID senderID) {
 		super(id, logicalFileName, fileSize, description);
@@ -56,5 +62,29 @@ public class IncomingTransferHandle extends TransferHandle {
 	@Override
 	public ContainerID getOppositeID() {
 		return getSenderID();
+	}
+
+	public boolean isReadable() {
+		return readable;
+	}
+
+	public void setReadable(boolean readable) {
+		this.readable = readable;
+	}
+
+	public boolean isWritable() {
+		return writable;
+	}
+
+	public void setWritable(boolean writable) {
+		this.writable = writable;
+	}
+
+	public boolean isExecutable() {
+		return executable;
+	}
+
+	public void setExecutable(boolean executable) {
+		this.executable = executable;
 	}
 }

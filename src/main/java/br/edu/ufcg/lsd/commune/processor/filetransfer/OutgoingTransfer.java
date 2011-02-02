@@ -19,6 +19,7 @@
  */
 package br.edu.ufcg.lsd.commune.processor.filetransfer;
 
+import static br.edu.ufcg.lsd.commune.processor.filetransfer.FileTransferConstants.*;
 import java.io.File;
 
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
@@ -57,11 +58,16 @@ public class OutgoingTransfer extends AbstractTransfer {
 		// request description is composed by a handle number followed by the
 		// destination objectID
 		try {
-			String messageToSend = getHandle() + " " + destinationObjectID;
+			File file = getFile();
+			String messageToSend = HANDLE_PROPERTY + PROPERTY_SEPARATOR + getHandle() + PROPERTIES_SEPARATOR + 
+				DESTINATION_PROPERTY + PROPERTY_SEPARATOR + destinationObjectID + PROPERTIES_SEPARATOR + 
+				EXECUTABLE_PROPERTY + PROPERTY_SEPARATOR + file.canExecute() + PROPERTIES_SEPARATOR + 
+				READABLE_PROPERTY + PROPERTY_SEPARATOR + file.canRead() + PROPERTIES_SEPARATOR + 
+				WRITABLE_PROPERTY + PROPERTY_SEPARATOR + file.canWrite();
 			if (transferDescription != null) {
-				messageToSend += " " + transferDescription;
+				messageToSend += PROPERTIES_SEPARATOR + DESCRIPTION_PROPERTY + PROPERTY_SEPARATOR + transferDescription;
 			}
-			transfer.sendFile( getFile(), messageToSend );
+			transfer.sendFile( file, messageToSend );
 			return true;
 		} catch ( Exception e ) {
 			handleTransferError( e );

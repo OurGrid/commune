@@ -19,11 +19,14 @@
  */
 package br.edu.ufcg.lsd.commune.processor.filetransfer;
 
+import static br.edu.ufcg.lsd.commune.processor.filetransfer.FileTransferConstants.*;
+
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
@@ -167,36 +170,70 @@ public class IncomingTransfersManager implements FileTransferListener {
 	}
 	
 	public void fileTransferRequest(FileTransferRequest ftr) {
-		String[ ] d = ftr.getDescription().split(" ");
-		if (d.length < 2) {
+		Map<String, String> props = getPropsMap(ftr);
+		
+		if (props.size() < 5) {
 			rejectRequest(ftr);
 			
 		} else {
-			DeploymentID receiverID = new DeploymentID(d[1]);
+			DeploymentID receiverID = new DeploymentID(props.get(DESTINATION_PROPERTY));
 			TransferReceiver receiver = receiverListeners.get(receiverID);
 			if (receiver != null) {
 				String transferDescription = null;
+				transferDescription = props.get(DESCRIPTION_PROPERTY);
 				
-				if (d.length > 2) {
-					transferDescription = d[2];
+				try {
+					long id = Long.parseLong(props.get(HANDLE_PROPERTY));
+					ContainerID senderID = ContainerID.parse(ftr.getRequestor());
+					
+					IncomingTransferHandle handle = 
+						new IncomingTransferHandle(id, ftr.getFileName(), transferDescription, ftr.getFileSize(), senderID);
+					
+					handle.setReadable(Boolean.parseBoolean(props.get(READABLE_PROPERTY)));
+					handle.setExecutable(Boolean.parseBoolean(props.get(EXECUTABLE_PROPERTY)));
+					handle.setWritable(Boolean.parseBoolean(props.get(WRITABLE_PROPERTY)));
+					
+					handlersRequestMap.put(handle, ftr);
+					
+					Message message = new Message(module.getContainerID(), receiverID, "transferRequestReceived");
+					message.addParameter(IncomingTransferHandle.class, handle);
+					module.sendMessage(message);
+
+				} catch (Exception e) {
+					rejectRequest(ftr);					
 				}
 				
-				long id = Long.parseLong(d[0]);
-				ContainerID senderID = ContainerID.parse(ftr.getRequestor());
-				
-				IncomingTransferHandle handle = 
-					new IncomingTransferHandle(id, ftr.getFileName(), transferDescription, ftr.getFileSize(), senderID);
-				
-				handlersRequestMap.put(handle, ftr);
-				
-				Message message = new Message(module.getContainerID(), receiverID, "transferRequestReceived");
-				message.addParameter(IncomingTransferHandle.class, handle);
-				module.sendMessage(message);
 				
 			} else {
-				rejectRequest( ftr );
+				rejectRequest(ftr);
 			}
 		}
+	}
+
+
+	private Map<String, String> getPropsMap(FileTransferRequest ftr) {
+		String[ ] msgArray = ftr.getDescription().split(PROPERTIES_SEPARATOR);
+		Map<String, String> props = new TreeMap<String, String>(); 
+		
+		for (String msg : msgArray) {
+
+			if (msg == null) {
+				continue;
+			}
+			
+			String[] data = msg.split(PROPERTY_SEPARATOR);
+			
+			if (data == null || data.length == 0 || data.length > 2) {
+				continue;
+			}
+			
+			if (data.length == 1) {
+				props.put(data[0], null);
+			} else {
+				props.put(data[0], data[1]);
+			}
+		}
+		return props;
 	}
 
 
