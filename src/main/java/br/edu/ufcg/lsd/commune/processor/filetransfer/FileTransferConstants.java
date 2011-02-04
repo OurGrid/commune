@@ -9,6 +9,6 @@ public interface FileTransferConstants {
 	String EXECUTABLE_PROPERTY = "e";
 	String DESCRIPTION_PROPERTY = "desc";
 	
-	String PROPERTIES_SEPARATOR = "|";
+	String PROPERTIES_SEPARATOR = ";";
 	String PROPERTY_SEPARATOR = "=";
 }
