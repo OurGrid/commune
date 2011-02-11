@@ -31,6 +31,9 @@ import br.edu.ufcg.lsd.commune.message.Message;
 
 public class IncomingTransfer extends AbstractTransfer {
 
+	public static final String INCOMING_TRANSFER_COMPLETED = "incomingTransferCompleted";
+
+
 	private static transient org.apache.log4j.Logger LOG = 
 		org.apache.log4j.Logger.getLogger( IncomingTransfer.class );
 
@@ -86,15 +89,10 @@ public class IncomingTransfer extends AbstractTransfer {
 		if (newStatus == Status.complete) {
 			
 			File localFile = getHandle().getLocalFile();
-			IncomingTransferHandle incomingTransferHandle = (IncomingTransferHandle) getHandle();
 			boolean fileComplete = localFile.length() == transfer.getAmountWritten();
+
 			if (fileComplete) {
-				
-				localFile.setExecutable(incomingTransferHandle.isExecutable());
-				localFile.setReadable(incomingTransferHandle.isReadable());
-				localFile.setWritable(incomingTransferHandle.isWritable());				
-				
-				Message message = new Message(module.getContainerID(), listenerID, "incomingTransferCompleted");
+				Message message = new Message(module.getContainerID(), listenerID, INCOMING_TRANSFER_COMPLETED);
 				message.addParameter(IncomingTransferHandle.class, getHandle());
 				message.addParameter(long.class, transfer.getAmountWritten());
 				module.sendMessage(message);

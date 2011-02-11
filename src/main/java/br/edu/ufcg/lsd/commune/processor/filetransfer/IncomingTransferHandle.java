@@ -29,9 +29,9 @@ public class IncomingTransferHandle extends TransferHandle {
 	
 	
 	private ContainerID senderID;
-	private boolean readable;
-	private boolean writable;
-	private boolean executable;
+	private Boolean readable;
+	private Boolean writable;
+	private Boolean executable;
 	
 
 	
@@ -42,10 +42,14 @@ public class IncomingTransferHandle extends TransferHandle {
 		
 	}
 	
-	
 	public IncomingTransferHandle(String logicalFileName, String description, long fileSize, ContainerID senderID) {
 		this(randomID(), logicalFileName, description, fileSize, senderID);
 	}
+	
+	public IncomingTransferHandle() {
+		this(randomID(), null, null, 0, null);
+	}
+	
 
 	/**
 	 * Originally without public key
@@ -64,27 +68,27 @@ public class IncomingTransferHandle extends TransferHandle {
 		return getSenderID();
 	}
 
-	public boolean isReadable() {
+	public Boolean isReadable() {
 		return readable;
 	}
 
-	public void setReadable(boolean readable) {
+	public void setReadable(Boolean readable) {
 		this.readable = readable;
 	}
 
-	public boolean isWritable() {
+	public Boolean isWritable() {
 		return writable;
 	}
 
-	public void setWritable(boolean writable) {
+	public void setWritable(Boolean writable) {
 		this.writable = writable;
 	}
 
-	public boolean isExecutable() {
+	public Boolean isExecutable() {
 		return executable;
 	}
 
-	public void setExecutable(boolean executable) {
+	public void setExecutable(Boolean executable) {
 		this.executable = executable;
 	}
 }

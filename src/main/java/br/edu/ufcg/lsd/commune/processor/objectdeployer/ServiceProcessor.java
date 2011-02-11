@@ -19,6 +19,7 @@
  */
 package br.edu.ufcg.lsd.commune.processor.objectdeployer;
 
+import java.io.File;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -42,6 +43,8 @@ import br.edu.ufcg.lsd.commune.message.MessageUtil;
 import br.edu.ufcg.lsd.commune.message.StubParameter;
 import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
 import br.edu.ufcg.lsd.commune.processor.AbstractProcessor;
+import br.edu.ufcg.lsd.commune.processor.filetransfer.IncomingTransfer;
+import br.edu.ufcg.lsd.commune.processor.filetransfer.IncomingTransferHandle;
 
 public class ServiceProcessor extends AbstractProcessor {
 
@@ -112,6 +115,11 @@ public class ServiceProcessor extends AbstractProcessor {
 				Object stub = parameterValues[0];
 				fireNotifyRecovery(getModule().getStubDeploymentID(stub).getServiceID());
 			}
+			
+			if (isIncomingTransferCompleted(method)) {
+				IncomingTransferHandle handle = (IncomingTransferHandle) parameterValues[0];
+				setFilePermissions(handle);
+			}
 
 			method.invoke(target, parameterValues);
 			
@@ -130,6 +138,17 @@ public class ServiceProcessor extends AbstractProcessor {
 		}		
 	}
 	
+	private boolean isIncomingTransferCompleted(Method method) {
+		return method.getName().equals(IncomingTransfer.INCOMING_TRANSFER_COMPLETED);
+	}
+
+	private void setFilePermissions(IncomingTransferHandle incomingTransferHandle) {
+		File localFile = incomingTransferHandle.getLocalFile();
+		localFile.setReadable(incomingTransferHandle.isReadable());
+		localFile.setWritable(incomingTransferHandle.isWritable());				
+		localFile.setExecutable(incomingTransferHandle.isExecutable());		
+	}
+
 	private void fireNotifyFailure(ServiceID serviceID) throws DiscardMessageException {
 		for (NotificationListener listener : notificationListeners) {
 			listener.notifyFailure(serviceID);

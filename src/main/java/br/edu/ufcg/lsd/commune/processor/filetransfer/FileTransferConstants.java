@@ -6,7 +6,7 @@ public interface FileTransferConstants {
 	String DESTINATION_PROPERTY = "destId";
 	String READABLE_PROPERTY = "r";
 	String WRITABLE_PROPERTY = "w";
-	String EXECUTABLE_PROPERTY = "e";
+	String EXECUTABLE_PROPERTY = "x";
 	String DESCRIPTION_PROPERTY = "desc";
 	
 	String PROPERTIES_SEPARATOR = ";";
