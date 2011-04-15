@@ -19,12 +19,15 @@
  */
 package br.edu.ufcg.lsd.commune.testinfra.util;
 
+import java.util.concurrent.Semaphore;
+
 import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.IMessageDeliverer;
 import br.edu.ufcg.lsd.commune.container.IMessageSender;
 import br.edu.ufcg.lsd.commune.context.ModuleContext;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.network.ConnectionListener;
+import br.edu.ufcg.lsd.commune.network.ConnectionListenerAdapter;
 import br.edu.ufcg.lsd.commune.network.NetworkBuilder;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 import br.edu.ufcg.lsd.commune.processor.ProcessorStartException;
@@ -43,7 +46,35 @@ public class TestableModule extends Module {
 	
 	public TestableModule(String containerName, ModuleContext context) 
 			throws CommuneNetworkException, ProcessorStartException {
-		super(containerName, context);
+		
+	    this(containerName, context, createSemaphore());
+	}
+	
+	private static Semaphore createSemaphore() {
+	    Semaphore semaphore = new Semaphore(1);
+	    try {
+		semaphore.acquire();
+	    } catch (InterruptedException e) {
+		throw new RuntimeException(e);
+	    }
+	    return semaphore;
+	}
+
+	public TestableModule(String containerName, ModuleContext context, final Semaphore semaphore) 
+	throws CommuneNetworkException, ProcessorStartException {
+
+	    super(containerName, context, new ConnectionListenerAdapter() {
+		@Override
+		public void connected() {
+		    semaphore.release();
+		}
+	    });
+	    
+	    try {
+		semaphore.acquire();
+	    } catch (InterruptedException e) {
+		throw new RuntimeException(e);
+	    }
 	}
 
 	public TestableModule(String containerName, ModuleContext context, ConnectionListener listener) 
