@@ -104,15 +104,11 @@ public class Communication {
 		incomingSequence = null;
 		outgoingSession = null;
 		outgoingSequence = null;
-		messageNonSequenceTime = null;
-		getPendingIncomingMessages().clear();
 	}
 	
 	public void invalidateIncoming() {
 		incomingSession = null;
 		incomingSequence = null;
-		messageNonSequenceTime = null;
-		getPendingIncomingMessages().clear();
 	}
 	
 	public void invalidateOutgoing() {
@@ -170,5 +166,9 @@ public class Communication {
 	
 	public void clearPendingIncomingMessages() {
 		this.pendingIncomingMessages.clear();
+	}
+	
+	public void resetTimeOut() {
+		setMessageNonSequenceTime(null);
 	}
 }
