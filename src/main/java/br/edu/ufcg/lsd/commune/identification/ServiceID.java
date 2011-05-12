@@ -106,7 +106,7 @@ public class ServiceID implements Serializable, CommuneAddress, Comparable<Servi
 	public static boolean validate(String serviceID) {
 
 		if ( serviceID != null ) {
-			Pattern p = Pattern.compile("[a-zA-Z_0-9-\\.]+@[a-zA-Z_0-9-\\.]+[/a-zA-Z_0-9-\\.]+[/a-zA-Z_0-9-\\.]");
+			Pattern p = Pattern.compile("[a-zA-Z_0-9-\\.]+@[a-zA-Z_0-9-\\.]+/[/a-zA-Z_0-9-\\.]+/[/a-zA-Z_0-9-\\.]+");
 			Matcher m = p.matcher( serviceID );
 			return m.matches();
 		}
