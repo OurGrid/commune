@@ -142,7 +142,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					}
 					
 					public void connectionClosedOnError(Exception arg0) {
-						LOG.debug("XMPP Connection closed on error : " + identification.getUserAtServer());
+						LOG.debug("XMPP Connection closed on error : " + identification.getUserAtServer() + " -> " + arg0);
 						if(connectionListener != null){
 							connectionListener.disconnected();
 						}
