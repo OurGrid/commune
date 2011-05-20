@@ -4,19 +4,25 @@
     <!-- ============================== -->
     <!-- Append messages to the console -->
     <!-- ==============================-->
+    
+    <!-- Console Appender -->
     <appender class="org.apache.log4j.ConsoleAppender" name="SYSTEM_OUT">
         <param name="Target" value="System.out"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d - %m%n"/>
         </layout>
-    </appender>
-    <appender class="org.apache.log4j.DailyRollingFileAppender" name="LOGFILE">
+    </appender>     
+       
+    <!-- File Appender -->
+    <appender class="org.apache.log4j.appender.TimeAndSizeRollingAppender" name="LOGFILE">
         <param name="File" value="logs/log"/>
         <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <param name="CompressionAlgorithm" value="ZIP"/>
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d [%t] %c %5p: %m%n"/>
+        <param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n"/>
         </layout>
-    </appender>
+    </appender>   
+    
      <appender class="br.edu.ufcg.lsd.commune.container.logging.appender.SyncFileAppender" name="SYNCLOGFILEAPPENDER">
         <param name="File" value="logs/synclog"/>
         <param name="DatePattern" value="'.'yyyy-MM-dd"/>
@@ -24,6 +30,7 @@
             <param name="ConversionPattern" value="%D %c %5p: %m%n"/>
         </layout>
     </appender>    
+    
     <appender class="org.apache.log4j.DailyRollingFileAppender" name="WS3GFILE">
         <param name="File" value="logs/ws3glog"/>
         <param name="DatePattern" value="'.'yyyy-MM-dd"/>
@@ -41,6 +48,7 @@
         <level value="warn"/>
         <appender-ref ref="LOGFILE"/>
     </logger>
+    
     <logger additivity="false" name="com.mchange">
         <level value="info"/>
         <appender-ref ref="LOGFILE"/>
@@ -55,14 +63,16 @@
         <level value="debug"/>
         <appender-ref ref="WS3GFILE"/>
     </logger>
+    
     <logger additivity="false" name="SYNCLOGFILE">
         <level value="debug"/>
         <appender-ref ref="SYNCLOGFILEAPPENDER"/>
     </logger>
     
+    
     <!-- Setup the Root category -->
     <root>
-        <priority value="info"/>
+        <priority value="INFO"/>
         <appender-ref ref="LOGFILE"/>
     </root>
 </log4j:configuration>
