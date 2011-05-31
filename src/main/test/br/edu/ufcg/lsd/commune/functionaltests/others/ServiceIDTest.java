@@ -19,6 +19,9 @@ public class ServiceIDTest {
 	private String notvalidServiceID04 = "peer@xmpp.org";
 	private String notvalidServiceID05 = "peer";
 	
+	/*
+	 * checks if the validate method is accepting the following strings that represent valid ServiceID
+	 */
 	@Test
 	public void MethodvalidateTest(){
 		Assert.assertTrue(ServiceID.validate(validServiceID01));
@@ -26,6 +29,9 @@ public class ServiceIDTest {
 		Assert.assertTrue(ServiceID.validate(validServiceID03));
 	}
 
+	/*
+	 * checks if the validate method is not accepting the following strings that represent invalid ServiceID
+	 */
 	@Test
 	public void invalidValidadeTest() {
 		Assert.assertFalse(ServiceID.validate(notvalidServiceID01));
@@ -35,6 +41,10 @@ public class ServiceIDTest {
 		Assert.assertFalse(ServiceID.validate(notvalidServiceID05));
 	}
 	
+	/*
+	 * verifies that parse method is throwing the exceptions for invalid Strings
+	 * The check is done for the following 5 calls
+	 */
 	@Test(expected = InvalidIdentificationException.class)
 	public void invalidParseTest01() throws InvalidIdentificationException{
 		ServiceID.parse(notvalidServiceID01);
@@ -60,6 +70,9 @@ public class ServiceIDTest {
 		ServiceID.parse(notvalidServiceID05);
 	}
 	
+	/*
+	 *checks the resulting address after the parse method 
+	 */
 	@Test
 	public void validParseTest(){
 		Assert.assertEquals(validServiceID01, ServiceID.parse(validServiceID01).toString());
