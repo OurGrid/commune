@@ -55,6 +55,7 @@ public class SignatureProtocol extends Protocol {
 		}
 
 		if (!verifySignature(message)) {
+			LOG.debug("Signature of message: " + message + " does not match");
 			throw new DiscardMessageException();
 		}
 	}
