@@ -33,6 +33,6 @@ public class ModuleNotStartedException extends Exception {
 
 	public ModuleNotStartedException( String moduleName, Exception errorCause ) {
 
-		super( moduleName + " control was not started", errorCause );
+		super( moduleName + " control was not started. " + errorCause.getMessage(), errorCause );
 	}
 }
