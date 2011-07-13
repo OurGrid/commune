@@ -183,7 +183,7 @@ public class ServiceManager implements Serializable {
 		}
 		
 		
-		return application.getLogger(objDeployment.getObject().getClass());
+		return application.getLogger(objDeployment.getObjectClass());
 		
 	}
 	
