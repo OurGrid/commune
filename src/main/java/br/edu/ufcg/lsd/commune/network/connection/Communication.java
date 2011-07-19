@@ -19,23 +19,16 @@
  */
 package br.edu.ufcg.lsd.commune.network.connection;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import br.edu.ufcg.lsd.commune.container.StubReference;
-import br.edu.ufcg.lsd.commune.message.Message;
 
 public class Communication {
 
-	private Long messageNonSequenceTime;
 	private Long incomingSession;
 	private Long incomingSequence;
 	private Long outgoingSession;
 	private Long outgoingSequence;
 	private CommunicationState state;
 	private StubReference stubReference;
-	private List<Message> pendingIncomingMessages = Collections.synchronizedList(new ArrayList<Message>());
 	
 
 	public StubReference getStubReference() {
@@ -81,10 +74,6 @@ public class Communication {
 	
 	public void incIncomingSequenceNumber() {
 		this.incomingSequence++;
-	}
-	
-	public void decIncomingSequenceNumber() {
-		this.incomingSequence--;
 	}
 
 	public void incOutgoingSequenceNumber() {
@@ -132,43 +121,5 @@ public class Communication {
 		
 		return stub + ":" + state +":>" + incomingSession + "," + incomingSequence + "< <" + outgoingSession + "," + 
 			outgoingSequence + ">";
-	}
-
-	public void setMessageNonSequenceTime(Long messageNonSequenceTime) {
-		this.messageNonSequenceTime = messageNonSequenceTime;
-	}
-
-	public Long getMessageNonSequenceTime() {
-		return messageNonSequenceTime;
-	}
-	
-	public void addPendingMessage(Message message) {
-		getPendingIncomingMessages().add(message);
-		
-		//since there is a buffer for the pending messages, the best thing to do is keep the new messages in order
-		//insertion sort: will sort almost in linear time, since all previous messages were already sorted
-		for (int i = 1; i < getPendingIncomingMessages().size(); i++) {
-			Message temp = getPendingIncomingMessages().get(i);
-			int j = i-1;
-			
-			while (temp.getSequence() < getPendingIncomingMessages().get(j).getSequence() && j >= 0) {
-				getPendingIncomingMessages().set(j + 1, getPendingIncomingMessages().get(j));
-				j--;
-			}
-			
-			getPendingIncomingMessages().set(j+1, temp);
-		}
-	}
-
-	public List<Message> getPendingIncomingMessages() {
-		return pendingIncomingMessages;
-	}
-	
-	public void clearPendingIncomingMessages() {
-		this.pendingIncomingMessages.clear();
-	}
-	
-	public void resetTimeOut() {
-		setMessageNonSequenceTime(null);
 	}
 }
