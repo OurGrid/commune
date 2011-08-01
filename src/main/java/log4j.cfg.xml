@@ -69,6 +69,10 @@
         <appender-ref ref="SYNCLOGFILEAPPENDER"/>
     </logger>
     
+    <logger additivity="false" name="XMPP_MESSAGES">
+        <level value="info"/>
+        <appender-ref ref="LOGFILE"/>
+    </logger>
     
     <!-- Setup the Root category -->
     <root>

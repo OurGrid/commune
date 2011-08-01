@@ -48,6 +48,9 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 	private static transient final org.apache.log4j.Logger LOG = 
 		org.apache.log4j.Logger.getLogger( XMPPProtocol.class );
 
+	private static transient final org.apache.log4j.Logger XMPP_LOGGER = 
+		org.apache.log4j.Logger.getLogger("XMPP_MESSAGES");
+	
 	private boolean wasShutdown;
 	private XMPPConnection connection;
 	protected ContainerID identification;
@@ -94,6 +97,9 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 		ConnectionConfiguration cc = new ConnectionConfiguration( serverName, serverPort );
 		cc.setReconnectionAllowed(true);
 		connection = new XMPPConnection( cc);
+		
+		initMessagesDebugListeners();
+		
 		new Thread(new ConnectionRunnable(new XMPPConnectionListener() {
 			
 			public void connetionCreated() {
@@ -159,6 +165,25 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 			}
 		}, getSleepTime())).start();
 
+	}
+
+
+	private void initMessagesDebugListeners() {
+		connection.addPacketListener(new PacketListener() {
+			
+			@Override
+			public void processPacket(Packet arg0) {
+				XMPP_LOGGER.debug("XR: " + arg0.toXML());
+			}
+		}, null);
+		
+		connection.addPacketWriterListener(new PacketListener() {
+			
+			@Override
+			public void processPacket(Packet arg0) {
+				XMPP_LOGGER.debug("XS: " + arg0.toXML());
+			}
+		}, null);
 	}
 
 
@@ -274,11 +299,6 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 				connection.sendPacket( messages[i] );
 			} catch (IllegalStateException ise) {}
 		}
-		
-		//TODO alternative solution to the openfire bug JM-835
-		try {
-			Thread.sleep(5);
-		} catch (InterruptedException e) {}
 	}
 	
 	private  class ConnectionRunnable implements Runnable {
