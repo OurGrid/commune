@@ -119,8 +119,19 @@ public class IncomingTransfersManager implements FileTransferListener {
 			module.sendMessage(message);
 		}
 
-		fileTransfer.start();
+		try {
+			fileTransfer.start();
+		} catch (IllegalArgumentException e) {
+			LOG.error("Destination is not writable. Handle: " + handle + ", dest: " + destination.getAbsolutePath());
+			reject(handle);
+		}
 		
+		addTransfer(handle, fileTransfer);
+	}
+
+
+	private void addTransfer(IncomingTransferHandle handle,
+			IncomingTransfer fileTransfer) {
 		try {
 			transfersLock.lock();
 			transfers.put( handle, fileTransfer );

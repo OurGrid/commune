@@ -26,20 +26,19 @@ import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 
 
 public class OutgoingTransferHandle extends TransferHandle {
-
 	
 	private static final long serialVersionUID = 1L;
 
 	private final DeploymentID destinationID;
 
-	public OutgoingTransferHandle(long id, String logicalFileName, File localFile, 
+	public OutgoingTransferHandle(Long id, String logicalFileName, File localFile, 
 			String description, DeploymentID destinationID) {
 		super(id, logicalFileName, localFile.length(), description);
 		this.destinationID = destinationID;
 		this.setLocalFile(localFile);
 	}
 
-	public OutgoingTransferHandle(long id, String logicalFileName, long fileLength, 
+	public OutgoingTransferHandle(Long id, String logicalFileName, long fileLength, 
 			String description, DeploymentID destinationID) {
 		super(id, logicalFileName, fileLength, description);
 		this.destinationID = destinationID;

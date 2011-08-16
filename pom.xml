@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ourgrid.commune</groupId>
   <artifactId>commune</artifactId>
-  <version>0.3.2</version>
+  <version>0.3.3</version>
   <build>
   	<plugins>
   		<plugin>
@@ -35,12 +35,12 @@
     <dependency>
     	<groupId>ourgrid-jivesoftware</groupId>
     	<artifactId>smack</artifactId>
-    	<version>3.2.1-b2</version>
+    	<version>3.2.1-b3</version>
     </dependency>
     <dependency>
     	<groupId>ourgrid-jivesoftware</groupId>
     	<artifactId>smackx</artifactId>
-    	<version>3.2.1-b2</version>
+    	<version>3.2.1-b3</version>
     </dependency>
   	<dependency>
   		<groupId>org.apache.commons</groupId>
