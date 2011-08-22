@@ -22,8 +22,8 @@ package br.edu.ufcg.lsd.commune.processor.filetransfer;
 import java.io.File;
 
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
+import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 
 import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
@@ -58,6 +58,7 @@ public class IncomingTransfer extends AbstractTransfer {
 		super.start();
 		setCurrentStatus( transfer.getStatus() );
 		try {
+			getFile().setWritable(true);
 			transfer.recieveFile( getFile() );
 		} catch (XMPPException e) {
 			throw new RuntimeException(e);
