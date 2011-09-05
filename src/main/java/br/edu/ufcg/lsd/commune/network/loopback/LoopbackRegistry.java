@@ -29,6 +29,8 @@ import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
 
 public class LoopbackRegistry {
 	
+	public static boolean ENABLE = true;
+	
 	private static transient final org.apache.log4j.Logger LOG = 
 		org.apache.log4j.Logger.getLogger( LoopbackRegistry.class );
 
@@ -52,6 +54,12 @@ public class LoopbackRegistry {
 	}
 
 	public static void sendMessage( Message message ) throws DiscardMessageException {
+		
+		if (!message.getSource().getContainerID().equals(
+				message.getDestination().getContainerID()) && !ENABLE) {
+			return;
+		}
+		
 		synchronized (objectMap) {
 			VirtualMachineLoopbackProtocol protocol = 
 				objectMap.get(message.getDestination().getContainerID().toString());
