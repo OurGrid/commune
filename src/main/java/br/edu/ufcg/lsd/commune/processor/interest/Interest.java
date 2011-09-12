@@ -44,6 +44,7 @@ public class Interest {
 	private volatile long lastUpdateStatusAvaliableArrival;
     private ReadWriteLock updateStatusLock = new ReentrantReadWriteLock(true);;
 
+    private int updates = 0;
 	
 	public Interest(Monitor monitor, ServiceID stubServiceID, InterestRequirements reqs) {
 		this.monitor = monitor;
@@ -51,6 +52,16 @@ public class Interest {
 		this.reqs = reqs;
 	}
 
+	public int getUpdates() {
+		
+		try {
+			updateStatusLock.readLock().lock();
+			return updates;
+		} finally {
+			updateStatusLock.readLock().unlock();
+		}
+		
+	}
 	
 	public ServiceID getStubServiceID() {
 		return stubServiceID;
@@ -128,6 +139,8 @@ public class Interest {
 	public void setLastHeartbeat() {
 		try {
 			updateStatusLock.writeLock().lock();
+			
+			this.updates++;
 			this.lastUpdateStatusAvaliableArrival = System.currentTimeMillis();
 			
 		} finally {

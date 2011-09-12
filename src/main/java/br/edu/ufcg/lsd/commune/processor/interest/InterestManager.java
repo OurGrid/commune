@@ -162,7 +162,8 @@ public class InterestManager {
 
 				boolean isNewMonitor = !origInterestedID.equals(newInterestedID);
 				
-				boolean isNewMonitored = isStubDown(origInterest) || origInterest.getInterestCertPath() == null; 
+				boolean isNewMonitored = isStubDown(origInterest) || 
+						origInterest.getUpdates() <= 3; 
 				
 				if (isNewMonitor || (parameter && isNewMonitored)) {
 					
