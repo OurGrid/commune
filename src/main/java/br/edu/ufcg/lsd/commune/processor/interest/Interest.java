@@ -33,6 +33,8 @@ import br.edu.ufcg.lsd.commune.message.Message;
 @SuppressWarnings("restriction")
 public class Interest {
 
+	private static final int RECENT_LIMIT = 3;
+	
 
 	private Monitor monitor;
 	private ServiceID stubServiceID;
@@ -51,18 +53,16 @@ public class Interest {
 		this.stubServiceID = stubServiceID;
 		this.reqs = reqs;
 	}
-
-	public int getUpdates() {
-		
+	
+	public boolean isRecent() {
 		try {
 			updateStatusLock.readLock().lock();
-			return updates;
+			return updates <= RECENT_LIMIT;
 		} finally {
 			updateStatusLock.readLock().unlock();
 		}
-		
 	}
-	
+
 	public ServiceID getStubServiceID() {
 		return stubServiceID;
 	}

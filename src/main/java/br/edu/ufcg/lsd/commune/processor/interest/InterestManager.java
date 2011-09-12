@@ -50,7 +50,6 @@ import br.edu.ufcg.lsd.commune.message.StubParameter;
 @SuppressWarnings("restriction")
 public class InterestManager {
 
-	
 	private static final int DEFAULT_INTEREST_DELAY = 500;
 	private static final int THREAD_POOL_SIZE = 10;
 	private static final long DEFAULT_TIMEOUT = 1000;
@@ -162,11 +161,10 @@ public class InterestManager {
 
 				boolean isNewMonitor = !origInterestedID.equals(newInterestedID);
 				
-				boolean isNewMonitored = isStubDown(origInterest) || 
-						origInterest.getUpdates() <= 3; 
+				boolean isNewStubParameter = parameter && (isStubDown(origInterest) || 
+						origInterest.isRecent()); 
 				
-				if (isNewMonitor || (parameter && isNewMonitored)) {
-					
+				if (isNewMonitor || isNewStubParameter) {
 					origInterest.cancelScheduledExecution();
 					setNewInterest(interest, parameter);
 				}
