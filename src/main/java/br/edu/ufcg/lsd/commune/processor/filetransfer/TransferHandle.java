@@ -29,7 +29,7 @@ public abstract class TransferHandle implements Serializable, Comparable<Transfe
 	
 	private static final long serialVersionUID = 1L;
 
-	private final long id;
+	private final Long id;
 	
 	private final String logicalFileName;
 	private final String description;
@@ -39,14 +39,14 @@ public abstract class TransferHandle implements Serializable, Comparable<Transfe
 	private boolean receiveProgressUpdate; //TODO synchronize
 	private long inactivityTimeout; //TODO synchronize
 
-	public TransferHandle(long id, String logicalFileName, long fileSize, String description) {
+	public TransferHandle(Long id, String logicalFileName, long fileSize, String description) {
 		this.id = id;
 		this.logicalFileName = logicalFileName;
 		this.description = description;
 		this.fileSize = fileSize;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -73,7 +73,7 @@ public abstract class TransferHandle implements Serializable, Comparable<Transfe
 
 	@Override
 	public int hashCode() {
-		return new Long( id ).hashCode();
+		return id.hashCode();
 	}
 
 	@Override
@@ -83,9 +83,7 @@ public abstract class TransferHandle implements Serializable, Comparable<Transfe
 		if ( !(obj instanceof TransferHandle) )
 			return false;
 		final TransferHandle other = (TransferHandle) obj;
-		if ( this.id != other.id )
-			return false;
-		return true;
+		return this.id.equals(other.id);
 	}
 
 	@Override
@@ -93,8 +91,8 @@ public abstract class TransferHandle implements Serializable, Comparable<Transfe
 		return String.valueOf( id );
 	}
 	
-	protected static long randomID() {
-		return (long) (Math.random() * Long.MAX_VALUE);
+	protected static Long randomID() {
+		return Long.valueOf((long) (Math.random() * Long.MAX_VALUE));
 	}
 	
 	public abstract ContainerID getOppositeID();
@@ -116,6 +114,6 @@ public abstract class TransferHandle implements Serializable, Comparable<Transfe
 	} 
 	
 	public int compareTo(TransferHandle h) {
-		return (int)(id - h.id);
+		return this.id.compareTo(h.id);
 	}
 }

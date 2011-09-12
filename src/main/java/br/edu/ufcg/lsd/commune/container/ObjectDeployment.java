@@ -30,7 +30,7 @@ public class ObjectDeployment {
 	private Object object;
 	private ServiceManager serviceManager;
 	private Object proxy;
-
+	private Class<?> objectClass;
 	
 	public ObjectDeployment(Module module, DeploymentID deploymentID,
 			Object object) {
@@ -38,8 +38,13 @@ public class ObjectDeployment {
 		this.module = module;
 		this.deploymentID = deploymentID;
 		this.object = object;
+		this.objectClass = object.getClass();
 	}
 
+	public Class<?> getObjectClass() {
+		return objectClass;
+	}
+	
 	public Module getModule() {
 		return module;
 	}

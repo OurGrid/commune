@@ -94,6 +94,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 		ConnectionConfiguration cc = new ConnectionConfiguration( serverName, serverPort );
 		cc.setReconnectionAllowed(true);
 		connection = new XMPPConnection( cc);
+		
 		new Thread(new ConnectionRunnable(new XMPPConnectionListener() {
 			
 			public void connetionCreated() {
@@ -248,7 +249,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 		}
 
 		String destinationModule = message.getDestination().getContainerID().toString();
-
+		
 		String chat = this.chats.get( destinationModule );
 		if ( chat == null ) {
 			chat = nextID();
@@ -264,6 +265,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 				FragmentationManager.createFragMessages(message, this.identification.toString(), 
 						destinationModule, chat, Message.Type.chat);
 		} catch (IOException e) {
+			e.printStackTrace();
 			LOG.error( "Error on message fragmentation: " + e.getMessage() );
 			throw new CommuneRuntimeException("Could not fragment message.", e);
 		}
@@ -274,11 +276,6 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 				connection.sendPacket( messages[i] );
 			} catch (IllegalStateException ise) {}
 		}
-		
-		//TODO alternative solution to the openfire bug JM-835
-		try {
-			Thread.sleep(5);
-		} catch (InterruptedException e) {}
 	}
 	
 	private  class ConnectionRunnable implements Runnable {

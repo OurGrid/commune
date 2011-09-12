@@ -47,10 +47,11 @@ import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.message.StubParameter;
 
+@SuppressWarnings("restriction")
 public class InterestManager {
 
 	
-	private static final int DEFAULT_INTEREST_DELAY = 1000;
+	private static final int DEFAULT_INTEREST_DELAY = 500;
 	private static final int THREAD_POOL_SIZE = 10;
 	private static final long DEFAULT_TIMEOUT = 1000;
 
@@ -159,7 +160,12 @@ public class InterestManager {
 				DeploymentID origInterestedID = origInterest.getInterested().getDeploymentID();
 				DeploymentID newInterestedID = interest.getInterested().getDeploymentID();
 
-				if (!origInterestedID.equals(newInterestedID) || parameter) {
+				boolean isNewMonitor = !origInterestedID.equals(newInterestedID);
+				
+				boolean isNewMonitored = isStubDown(origInterest) || origInterest.getInterestCertPath() == null; 
+				
+				if (isNewMonitor || (parameter && isNewMonitored)) {
+					
 					origInterest.cancelScheduledExecution();
 					setNewInterest(interest, parameter);
 				}
@@ -200,30 +206,55 @@ public class InterestManager {
 	}
 
 	void process(Interest interest) {
+		processTimeout(interest);
+		sendInterestMessage(interest);
+	}
+	
+	private void sendInterestMessage(Interest interest) {
+		
+		Message message = null;
 		
 		try {
 			interestLock.lock();
-
-			if (interest.isTimedOut()) {
-				fireTimeout(interest.getStubServiceID());
-			}
 			
 			if (isStubDown(interest)) {
-				sendIsItAliveMessage(interest);
-				
+				message = interest.createIsItAliveMessage();
 			} else {
 				
 				if (interest.isTimedOut()) {
-					sendNotifyFailureMessage(interest);
-					
+					message = createNotifyFailureMessage(interest);
 				} else {
-					sendIsItAliveMessage(interest);
+					message = interest.createIsItAliveMessage();
 				}
 			}
 			
 		} finally {
 			interestLock.unlock();
 		}
+		
+		
+		if (message != null) {
+			interestProcessor.sendMessage(message);
+		}
+	}
+
+
+	private void processTimeout(Interest interest) {
+		ServiceID stubServiceID = null; 
+		
+		try {
+			interestLock.lock();
+			if (interest.isTimedOut()) {
+				stubServiceID = interest.getStubServiceID();
+			}
+		} finally {
+			interestLock.unlock();
+		}
+		
+		if (stubServiceID != null) {
+			fireTimeout(stubServiceID);
+		}
+		
 	}
 	
 	private void fireTimeout(ServiceID stubServiceID) {
@@ -233,18 +264,24 @@ public class InterestManager {
 	}
 
 	public void sendNotifyFailureMessage(ServiceID key) {
+		Message interestMessage = null;
+		
 		try {
 			interestLock.lock();
 
 			Interest interest = interests.get(key);
-			sendNotifyFailureMessage(interest);
+			interestMessage = createNotifyFailureMessage(interest);
 		
 		} finally {
 			interestLock.unlock();
 		}
+		
+		if (interestMessage != null) {
+			interestProcessor.sendMessage(interestMessage);
+		}
 	}
 	
-	private void sendNotifyFailureMessage(Interest interest) {
+	private Message createNotifyFailureMessage(Interest interest) {
 		ObjectDeployment interested = interest.getInterested();
 		Message message = 
 			new Message(interested.getModule().getContainerID(), interested.getDeploymentID(), 
@@ -265,12 +302,7 @@ public class InterestManager {
 			message.addParameter(X509CertPath.class, interest.getInterestCertPath());
 		}
 		
-		this.interestProcessor.sendMessage(message);
-	}
-
-	private void sendIsItAliveMessage(Interest interest) {
-		Message message = interest.createIsItAliveMessage();
-		this.interestProcessor.sendMessage(message);
+		return message;
 	}
 
 	public void isItAlive(ServiceID monitoredID, DeploymentID sourceID) {
@@ -348,7 +380,6 @@ public class InterestManager {
 		}
 	}
 
-
 	private boolean isStubDown(Interest interest) {
 		return !interestProcessor.getModule().isStubUp(interest.getStubServiceID());
 	}
@@ -377,6 +408,9 @@ public class InterestManager {
 	}
 	
 	private void updateStatusUnavailable(CommuneAddress targetID, X509CertPath certPath) {
+		
+		Message interestMessage = null;
+		
 		try {
 			interestLock.lock();
 			ServiceID targetServiceID = (ServiceID) targetID; 
@@ -386,12 +420,16 @@ public class InterestManager {
 			if (interest != null) {
 				interest.setInterestCertPath(certPath);
 				if (interestProcessor.getModule().isStubUp(interest.getStubServiceID())) {
-					sendNotifyFailureMessage(interest);
+					interestMessage = createNotifyFailureMessage(interest);
 				}
 			}
 			
 		} finally {
 			interestLock.unlock();
+		}
+		
+		if (interestMessage != null) {
+			interestProcessor.sendMessage(interestMessage);
 		}
 	}
 	

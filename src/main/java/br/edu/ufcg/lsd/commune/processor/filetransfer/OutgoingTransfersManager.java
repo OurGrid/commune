@@ -115,12 +115,14 @@ public class OutgoingTransfersManager {
 	}
 
 
-	private void activateTransfer( OutgoingTransfer fileTransfer ) {
+	private boolean activateTransfer( OutgoingTransfer fileTransfer ) {
 
 		LOG.debug( "Activating outgoing transfer of file " + fileTransfer.getFile().getName() + ", handle: "
 				+ fileTransfer.getHandle() );
 
-		if ( fileTransfer.start() ) {
+		boolean started = fileTransfer.start();
+		
+		if ( started ) {
 			/*
 			 * if the file transfer can be successfully started, put it in the
 			 * map so that its progress can be monitored
@@ -129,10 +131,11 @@ public class OutgoingTransfersManager {
 		} else {
 			remove(fileTransfer);
 			fileTransfer.cancel();
-			
 			fileTransfer.createOutgoingTransferFailed((OutgoingTransferHandle)fileTransfer.getHandle(), 
 					new Exception("Can not start outgoing file transfer: " + fileTransfer.getHandle()));
 		}
+		
+		return started;
 	}
 
 
@@ -173,11 +176,18 @@ public class OutgoingTransfersManager {
 		transferStateMonitor.shutdown();
 	}
 
-	private void activateOtherTransfer() {
+	/**
+	 * 
+	 * @return false if the transfer failed, true if the transfer was activated
+	 * or there was no transfer to activate.
+	 */
+	private boolean activateOtherTransfer() {
 		OutgoingTransfer pendingTransfer = queuedTransfers.poll();
 		if ( pendingTransfer != null ) {
-			activateTransfer( pendingTransfer );
+			return activateTransfer( pendingTransfer );
 		}
+		
+		return true;
 	}
 
 	private class TransferStateMonitorThread implements Runnable {
@@ -208,9 +218,12 @@ public class OutgoingTransfersManager {
 						}
 					}
 					
-					for (int i = 0; i < activations; i++) {
-						activateOtherTransfer();
+					while (activations > 0) {
+						if (activateOtherTransfer()) {
+							activations--;
+						}
 					}
+					
 					
 				} finally {
 					transfersLock.unlock();

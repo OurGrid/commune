@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Universidade Federal de Campina Grande
+ * Copyright (C) 2009 Universidade Federal de Campina Grande
  *  
  * This file is part of Commune. 
  *
@@ -20,7 +20,6 @@
 package br.edu.ufcg.lsd.commune.network.connection;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -28,7 +27,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import br.edu.ufcg.lsd.commune.Module;
 import br.edu.ufcg.lsd.commune.container.StubListener;
 import br.edu.ufcg.lsd.commune.container.StubReference;
-import br.edu.ufcg.lsd.commune.container.logging.CommuneLoggerFactory;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
 import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
@@ -38,7 +36,6 @@ import br.edu.ufcg.lsd.commune.message.MessageParameter;
 import br.edu.ufcg.lsd.commune.message.MessageUtil;
 import br.edu.ufcg.lsd.commune.message.StubParameter;
 import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
-import br.edu.ufcg.lsd.commune.network.MessageNonSequenceException;
 import br.edu.ufcg.lsd.commune.network.loopback.LoopbackRegistry;
 import br.edu.ufcg.lsd.commune.processor.interest.InterestProcessor;
 import br.edu.ufcg.lsd.commune.processor.interest.MonitorableStatus;
@@ -47,17 +44,12 @@ import br.edu.ufcg.lsd.commune.processor.objectdeployer.NotificationListener;
 
 public class ConnectionManager implements StubListener, TimeoutListener, NotificationListener {
 	
-	
-	private static final long BUFFER_TIMEOUT = 30*1000; //30 seconds in millis
-	
-	
 	private Module module;
 	private ReadWriteLock connectionLock = new ReentrantReadWriteLock(true);
 	private Map<ContainerID, Communication> communications = new HashMap<ContainerID, Communication>();
 	
-	
 	//Communication states
-	CommunicationState empty_empty 			    = new Empty_Empty(this);
+	CommunicationState empty_empty 			= new Empty_Empty(this);
 	CommunicationState empty_zero 				= new Empty_Zero(this);
 	CommunicationState empty_greatherThenZero 	= new Empty_GreaterThenZero(this);
 	CommunicationState down_empty 				= new Down_Empty(this);
@@ -163,51 +155,6 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		return InterestProcessor.class.getName().equals(message.getProcessorType());
 	}
 	
-	private void onMessageTimeOut(Communication communication) throws DiscardMessageException {
-		//if there is a buffer, clear it
-		communication.clearPendingIncomingMessages();
-		communication.resetTimeOut();
-		
-		CommunicationState state = communication.getState();
-		state.messageNonSequence(communication);
-	}
-	
-	private void onHeartbeatTimeOut(Communication communication) throws DiscardMessageException {
-		//if there is a buffer, clear it
-		communication.clearPendingIncomingMessages();
-		communication.resetTimeOut();
-		
-		CommunicationState state = communication.getState();
-		state.heartbeatOkSessionNonSequence(communication);
-	}
-	
-	private void checkTimeOut(Communication communication) throws DiscardMessageException {
-		Long messageNonSequenceTime = communication.getMessageNonSequenceTime();
-		
-		if (messageNonSequenceTime != null) {
-			long since = System.currentTimeMillis() - messageNonSequenceTime;
-			
-			//check if 30 seconds passed since the out of order message has arrived
-			if (since  >  BUFFER_TIMEOUT) {
-				Message message = communication.getPendingIncomingMessages().get(0); //get the first message that has came out of order
-				
-				if (isFailureDetectorMessage(message)) {
-					String messageName = message.getFunctionName();
-					
-					if (InterestProcessor.IS_IT_ALIVE_MESSAGE.equals(messageName)) {
-						CommuneLoggerFactory.getInstance().getMessagesLogger().debug("Heartbeat time out: " + since/1000 + " seconds");
-						
-						onHeartbeatTimeOut(communication);
-					}
-				} else {
-					CommuneLoggerFactory.getInstance().getMessagesLogger().debug("Application message time out: " + since/1000 + " seconds");
-					
-					onMessageTimeOut(communication);
-				}
-			}	
-		}
-	}
-	
 	private Communication receivingRemoteMessage(Message message) throws DiscardMessageException {
 		try {
 			connectionLock.writeLock().lock();
@@ -261,52 +208,6 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		return communication;
 	}
 
-//XXX: this code doesn't handles out of order messages. Since this issue is corrected by the XMPP Servers, it could be restored	
-//	private void receiveHeartbeat(Message message, Communication communication) throws DiscardMessageException {
-//		Long expectedSession = defineExpectedSessionReceivingHeartbeat(message, communication);
-//		Long expectedSequence = communication.getIncomingSequence();
-//		Long messageSession = message.getSession();
-//		Long messageSequence = message.getSequence();
-//		CommunicationState state = communication.getState();
-//		
-//		validate(messageSession, messageSequence);
-//		
-//		if (messageSession.equals(expectedSession)) { //Session ok
-//			if(messageSequence == 0) {
-//				state.heartbeatOkSessionZeroSequence(communication);
-//				
-//			} else if(messageSequence.equals(expectedSequence)) {
-//				state.heartbeatOkSessionOkSequence(communication);
-//				
-//			} else {
-//				state.heartbeatOkSessionNonSequence(communication);
-//			}
-//			
-//		} else { //Other session
-//			if(messageSequence == 0) {
-//				changeSession(communication, message.getSession());
-//				state.heartbeatNonSessionZeroSequence(communication);
-//				
-//			} else if(messageSequence.equals(expectedSequence)) {
-//				state.heartbeatNonSessionOkSequence(communication);
-//				
-//			} else {
-//				state.heartbeatNonSessionNonSequence(communication);
-//			}
-//		}
-//	}
-	
-	/**
-	 * Receives a heart beat.
-	 * 
-	 * There is a problem at several XMPP Servers that not guarantees the order of the messages exchanged by two different servers.
-	 * To correct this issue, if a out of order message arrives, a buffer that waits 30 seconds for the correct sequence 
-	 * message is created.
-	 * 
-	 * @param message the received message
-	 * @param communication bean that represents the communication with an external application
-	 * @throws DiscardMessageException stops the protocol chain flow
-	 */
 	private void receiveHeartbeat(Message message, Communication communication) throws DiscardMessageException {
 		Long expectedSession = defineExpectedSessionReceivingHeartbeat(message, communication);
 		Long expectedSequence = communication.getIncomingSequence();
@@ -316,56 +217,18 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		
 		validate(messageSession, messageSequence);
 		
-		
 		if (messageSession.equals(expectedSession)) { //Session ok
 			if(messageSequence == 0) {
 				state.heartbeatOkSessionZeroSequence(communication);
 				
-				CommuneLoggerFactory.getInstance().getMessagesLogger().debug("Received heartbeat with sequence 0, clearing buffer");
-
-				//if there is a buffer, clear it
-				communication.clearPendingIncomingMessages();
-				communication.resetTimeOut();
-				
 			} else if(messageSequence.equals(expectedSequence)) {
 				state.heartbeatOkSessionOkSequence(communication);
 				
-				checkTimeOut(communication);
-				
-				List<Message> pendingIncomingMessages = communication.getPendingIncomingMessages();
-				
-				//check if there is pending messages
-				if (!pendingIncomingMessages.isEmpty()) { 
-					//the expected message arrives, so the next pending messages must be delivered
-					Message pendingMessage = pendingIncomingMessages.remove(0); //removes the next message
-					CommuneLoggerFactory.getInstance().getMessagesLogger().debug("There is pending messages, delivering the next one: " + pendingMessage);
-					
-					receivingRemoteMessage(pendingMessage);
-				} else {
-					//reset time out
-					communication.resetTimeOut();
-				}
-				
 			} else {
-				checkTimeOut(communication);
-
-				if (messageSequence > expectedSequence) {
-					CommuneLoggerFactory.getInstance().getMessagesLogger().debug("Received non sequence heartbeat: " + message);
-					
-					handleNonSequence(message, communication);
-				} else {
-					//An heart beat was sent before an application message, but arrived later
-					CommuneLoggerFactory.getInstance().getMessagesLogger().debug("Received old sequence heartbeat");
-					
-					throw new DiscardMessageException("Old heartbeat");
-				}
+				state.heartbeatOkSessionNonSequence(communication);
 			}
 			
 		} else { //Other session
-			//if there is a buffer, clear it
-			communication.clearPendingIncomingMessages();
-			communication.resetTimeOut();
-			
 			if(messageSequence == 0) {
 				changeSession(communication, message.getSession());
 				state.heartbeatNonSessionZeroSequence(communication);
@@ -377,23 +240,6 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				state.heartbeatNonSessionNonSequence(communication);
 			}
 		}
-	}
-	
-	private void handleNonSequence(Message message, Communication communication) throws MessageNonSequenceException {
-		Long messageNonSequenceTime = communication.getMessageNonSequenceTime();
-		
-		if (messageNonSequenceTime == null) {
-			long now = System.currentTimeMillis();
-			communication.setMessageNonSequenceTime(now);
-		}
-		
-		CommuneLoggerFactory.getInstance().getMessagesLogger().debug("Buffering message: " + message);
-		
-		//add message to pending list
-		communication.addPendingMessage(message);
-		
-		//throw MessageNonSequenceException
-		throw new MessageNonSequenceException();
 	}
 
 	private Long defineExpectedSessionReceivingHeartbeat(Message message, Communication communication) {
@@ -435,9 +281,6 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 				state.updateStatusDown(connection);
 			}
 		} else {
-			connection.clearPendingIncomingMessages();
-			connection.resetTimeOut();
-			
 			state.updateStatusNonSession(connection);
 		}
 	}
@@ -454,57 +297,8 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 			
 		throw new DiscardMessageException("Invalid update status message: " + message);
 	}
-	
-//XXX: this code doesn't handles out of order messages. Since this issue is corrected by the XMPP Servers, it could be restored	
-//	private void receivingRemoteApplicationMessage(Message message, Communication communication) throws DiscardMessageException {
-//		Long expectedSession = communication.getIncomingSession();
-//		communication.incIncomingSequenceNumber();
-//		Long expectedSequence = communication.getIncomingSequence();
-//
-//		Long messageSession = message.getSession();
-//		Long messageSequence = message.getSequence();
-//		validate(messageSession, messageSequence);
-//		
-//		CommunicationState state = communication.getState();
-//		
-//		if (expectedSession.equals(messageSession)) {
-//			
-//			if(expectedSequence.equals(messageSequence)) {
-//				
-//				if(hasCallback(message)) {
-//					
-//					if (!communication.isValidOutgoing() && 
-//							!module.isLocal(message.getSource())) {
-//						communication.setOutgoingSession(CommunicationStateAdapter.generateSessionNumber());
-//						communication.setOutgoingSequence(0L);
-//					}
-//					
-//					state.messageWithCallbackOkSessionOkSequence(communication);
-//
-//				} else {
-//					state.messageOkSessionOkSequence(communication);
-//				}
-//				
-//			} else {
-//				state.messageNonSequence(communication);
-//			}
-//		} else {
-//			state.messageNonSession(communication);
-//		}
-//	}
 
 
-	/**
-	 * Receives an application message.
-	 * 
-	 * There is a bug at Openfire XMPP Server that not guarantees the order of the messages exchanged by two different servers.
-	 * To correct this issue, if a out of order message arrives, a buffer that waits 30 seconds for the correct sequence 
-	 * message is created.
-	 * 
-	 * @param message the received message
-	 * @param communication bean that represents the communication with an external application
-	 * @throws DiscardMessageException stops the protocol chain flow
-	 */
 	private void receivingRemoteApplicationMessage(Message message, Communication communication) throws DiscardMessageException {
 		Long expectedSession = communication.getIncomingSession();
 		communication.incIncomingSequenceNumber();
@@ -514,68 +308,34 @@ public class ConnectionManager implements StubListener, TimeoutListener, Notific
 		Long messageSequence = message.getSequence();
 		validate(messageSession, messageSequence);
 		
+		CommunicationState state = communication.getState();
+		
 		if (expectedSession.equals(messageSession)) {
-			if (expectedSequence.equals(messageSequence)) {
-				checkTimeOut(communication);
+			
+			if(expectedSequence.equals(messageSequence)) {
 				
-				handleOkSequenceApplicationMessage(message, communication);
-
-				List<Message> pendingIncomingMessages = communication.getPendingIncomingMessages();
-				
-				//check if there is pending messages
-				if (!pendingIncomingMessages.isEmpty()) { 
-					//the expected message arrives, so the next pending messages must be delivered
-					Message pendingMessage = pendingIncomingMessages.remove(0); //removes the next message
-					CommuneLoggerFactory.getInstance().getMessagesLogger().debug("There is pending messages, delivering the next one: " + pendingMessage);
+				if(hasCallback(message)) {
 					
-					receivingRemoteMessage(pendingMessage);
+					if (!communication.isValidOutgoing() && 
+							!module.isLocal(message.getSource())) {
+						communication.setOutgoingSession(CommunicationStateAdapter.generateSessionNumber());
+						communication.setOutgoingSequence(0L);
+					}
+					
+					state.messageWithCallbackOkSessionOkSequence(communication);
+
 				} else {
-					communication.resetTimeOut();
+					state.messageOkSessionOkSequence(communication);
 				}
 				
 			} else {
-				CommuneLoggerFactory.getInstance().getMessagesLogger().debug("Received non sequence message: " + message);
-				checkTimeOut(communication);
-				
-				handleNonSequenceApplicationMessage(message, communication);
+				state.messageNonSequence(communication);
 			}
 		} else {
-			handleNonSessionApplicationMessage(communication);
+			state.messageNonSession(communication);
 		}
 	}
-	
-	private void handleNonSessionApplicationMessage(Communication communication) throws DiscardMessageException { 
-		//if there is a buffer, clear it
-		communication.clearPendingIncomingMessages();
-		communication.resetTimeOut();
-		
-		CommunicationState state = communication.getState();
-		state.messageNonSession(communication);
-	}
-	
-	private void handleOkSequenceApplicationMessage(Message message, Communication communication) throws DiscardMessageException {
-		CommunicationState state = communication.getState();
-		
-		if (hasCallback(message)) {
-			
-			if (!communication.isValidOutgoing() && 
-					!module.isLocal(message.getSource())) {
-				communication.setOutgoingSession(CommunicationStateAdapter.generateSessionNumber());
-				communication.setOutgoingSequence(0L);
-			}
-			
-			state.messageWithCallbackOkSessionOkSequence(communication);
-			
-		} else {
-			state.messageOkSessionOkSequence(communication);
-		}
-	}
-	
-	private void handleNonSequenceApplicationMessage(Message message, Communication communication) throws MessageNonSequenceException {
-		communication.decIncomingSequenceNumber();
-		handleNonSequence(message, communication);
-	}
-	
+
 	private boolean hasCallback(Message message) {
 		DeploymentID source = (DeploymentID) message.getSource();
 		

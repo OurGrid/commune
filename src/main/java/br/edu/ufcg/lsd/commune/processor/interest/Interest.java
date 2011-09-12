@@ -30,6 +30,7 @@ import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.message.Message;
 
+@SuppressWarnings("restriction")
 public class Interest {
 
 

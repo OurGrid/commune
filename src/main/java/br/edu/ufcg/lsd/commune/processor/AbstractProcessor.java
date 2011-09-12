@@ -21,7 +21,9 @@ package br.edu.ufcg.lsd.commune.processor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
 import br.edu.ufcg.lsd.commune.Module;
@@ -39,7 +41,7 @@ public abstract class AbstractProcessor implements MessageProcessor {
 	
     private Module module;
 
-    protected MessageQueue messageQueue;
+    protected BlockingQueue<Message> messageQueue;
     protected CountDownLatch shutdownCountDownLatch; 
     protected MessageConsumer messageConsumer;
     protected List<Message> incomingMessageQueue;
@@ -54,7 +56,7 @@ public abstract class AbstractProcessor implements MessageProcessor {
     	
     	this.module = module;
         this.shutdownCountDownLatch = new CountDownLatch(1);
-        this.messageQueue = new MessageQueue();
+        this.messageQueue = new LinkedBlockingQueue<Message>();
         this.messageConsumer = createMessageConsumer();
         
         if (module.getContext().isEnabled(MonitorProperties.PROP_COMMUNE_MONITOR)) {
@@ -72,7 +74,11 @@ public abstract class AbstractProcessor implements MessageProcessor {
     }
 
     public void receiveMessage(Message message){
-    	this.messageQueue.put(message);
+    	try {
+			this.messageQueue.put(message);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     }
     
     public void shutdown() {

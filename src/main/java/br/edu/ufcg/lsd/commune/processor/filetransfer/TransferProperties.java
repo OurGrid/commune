@@ -27,7 +27,7 @@ public interface TransferProperties {
 	public static final String PROP_FILE_TRANSFER_NOTIFY_PROGRESS = 
 		"commune.filetransfer.notify.progress";
 	
-	public static final String DEFAULT_FILE_TRANSFER_TIMEOUT = "600";
+	public static final String DEFAULT_FILE_TRANSFER_TIMEOUT = "120";
 	public static final String DEFAULT_FILE_TRANSFER_MAX_OUT = "10";
 	public static final String DEFAULT_FILE_TRANSFER_NOTIFY_PROGRESS = "no";
 

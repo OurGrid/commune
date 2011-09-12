@@ -33,9 +33,7 @@ public class IncomingTransferHandle extends TransferHandle {
 	private Boolean writable;
 	private Boolean executable;
 	
-
-	
-	public IncomingTransferHandle(long id, String logicalFileName, String description, 
+	public IncomingTransferHandle(Long id, String logicalFileName, String description, 
 			long fileSize, ContainerID senderID) {
 		super(id, logicalFileName, fileSize, description);
 		this.senderID = senderID;

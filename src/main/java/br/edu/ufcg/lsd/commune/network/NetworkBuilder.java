@@ -46,7 +46,7 @@ public class NetworkBuilder {
         if (connectionProtocol != null) {
         	communeNetwork.addProtocol(connectionProtocol);
         }
-
+        
         VirtualMachineLoopbackProtocol virtualMachineLoopbackProtocol = 
             createLoopbackProtocol(module, communeNetwork);
         if (virtualMachineLoopbackProtocol != null) {
@@ -56,15 +56,15 @@ public class NetworkBuilder {
         String privateKey = context.getProperty(SignatureProperties.PROP_PRIVATE_KEY);
         SignatureProtocol signatureProtocol = createSignatureProtocol(communeNetwork, privateKey);
         if (signatureProtocol != null) {
-            communeNetwork.addProtocol(signatureProtocol);
+        	communeNetwork.addProtocol(signatureProtocol);
         }
         
         CertificationProtocol certificationProtocol = createCertificationProtocol(module, communeNetwork);
         if (certificationProtocol != null) {
-            communeNetwork.addProtocol(certificationProtocol);
+        	communeNetwork.addProtocol(certificationProtocol);
         }
         
-         return communeNetwork;
+        return communeNetwork;
     }
 
 	protected ConnectionProtocol createConnectionProtocol() {

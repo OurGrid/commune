@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ourgrid.commune</groupId>
   <artifactId>commune</artifactId>
-  <version>0.3</version>
+  <version>0.3.3</version>
   <build>
   	<plugins>
   		<plugin>
@@ -35,12 +35,12 @@
     <dependency>
     	<groupId>ourgrid-jivesoftware</groupId>
     	<artifactId>smack</artifactId>
-    	<version>3.1.0</version>
+    	<version>3.2.1-b3</version>
     </dependency>
     <dependency>
     	<groupId>ourgrid-jivesoftware</groupId>
     	<artifactId>smackx</artifactId>
-    	<version>3.1.0</version>
+    	<version>3.2.1-b3</version>
     </dependency>
   	<dependency>
   		<groupId>org.apache.commons</groupId>
@@ -100,5 +100,14 @@
 		<artifactId>log4j</artifactId>
 		<version>1.2.16</version>
 	</dependency>
+    
+    <!--  Gson: Java to Json conversion -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>1.7.1</version>
+      <scope>compile</scope>
+    </dependency>
+	
   </dependencies>
 </project>

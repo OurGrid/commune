@@ -21,6 +21,8 @@ package br.edu.ufcg.lsd.commune.network;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
@@ -28,7 +30,7 @@ import br.edu.ufcg.lsd.commune.network.xmpp.CommuneNetworkException;
 
 public abstract class Protocol {
 
-	protected static final Object lock = new Object();
+	protected static final Lock protocolLock = new ReentrantLock();
 
 	protected List<ProtocolCreationListener> listeners = new ArrayList<ProtocolCreationListener>();
 	protected Protocol nextProtocol = null;
@@ -41,25 +43,30 @@ public abstract class Protocol {
 	}
 
 	public final void sendMessage(Message message) {
-		synchronized (Protocol.lock) {
-            try {
-                onSend(message);
-                callNext(message);
-            } catch (ProtocolException protocolException) {
-                notifyError(protocolException);
-            }
-        }
+		
+		try {
+			protocolLock.lock();
+			onSend(message);
+			callNext(message);
+		} catch (ProtocolException protocolException) {
+			notifyError(protocolException);
+		} finally {
+			protocolLock.unlock();
+		}
 	}
 
 	public final void receiveMessage(Message message) {
-		synchronized (Protocol.lock) {
-            try {
-				onReceive(message);
-                callPrevious(message);
-            } catch (ProtocolException protocolException) {
-                notifyError(protocolException);
-            }
-        }
+		
+		try {
+			protocolLock.lock();
+			onReceive(message);
+            callPrevious(message);
+		} catch (ProtocolException protocolException) {
+			notifyError(protocolException);
+		} finally {
+			protocolLock.unlock();
+		}
+		
 	}
 
 	protected final void callPrevious(Message message) {

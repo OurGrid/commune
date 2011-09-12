@@ -19,6 +19,7 @@
  */
 package br.edu.ufcg.lsd.commune.processor;
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
@@ -31,13 +32,13 @@ public class MessageConsumer implements Runnable {
 
 	protected static final String SHUTDOWN_MESSAGE = "commune.shutdownEventHandler";
 
-	protected MessageQueue messageQueue;
+	protected BlockingQueue<Message> messageQueue;
 	private Thread thread;
 	protected boolean isAlive;
 	private AbstractProcessor messageProcessor;
 	private CountDownLatch shutdownCountDownLatch;
 	
-	public MessageConsumer(AbstractProcessor messageProcessor, MessageQueue messageQueue,
+	public MessageConsumer(AbstractProcessor messageProcessor, BlockingQueue<Message> messageQueue,
 			CountDownLatch shutdownCountDownLatch) {
 		this.messageProcessor = messageProcessor;
 		this.messageQueue = messageQueue;
@@ -65,7 +66,7 @@ public class MessageConsumer implements Runnable {
 		if (SHUTDOWN_MESSAGE.equals(functionName)) {
 			return false;
 		}
-
+		
 		this.messageProcessor.consumeMessage(message);
 		return true;
 	}
@@ -77,11 +78,19 @@ public class MessageConsumer implements Runnable {
 	}
 
 	protected Message removeMessage() {
-		return messageQueue.blockingRemove();
+		try {
+			return messageQueue.take();
+		} catch (InterruptedException e) {
+			return null;
+		}
 	}
 
 	public void shutdown() {
-		this.messageQueue.put(getShutdownEvent());
+		try {
+			this.messageQueue.put(getShutdownEvent());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public boolean isAlive() {

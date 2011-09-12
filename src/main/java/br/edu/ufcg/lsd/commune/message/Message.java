@@ -19,8 +19,12 @@
  */
 package br.edu.ufcg.lsd.commune.message;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,20 +35,25 @@ import java.util.Set;
 import sun.security.provider.certpath.X509CertPath;
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
 import br.edu.ufcg.lsd.commune.identification.CommuneAddress;
+import br.edu.ufcg.lsd.commune.identification.ContainerID;
 import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.identification.InvalidIdentificationException;
+import br.edu.ufcg.lsd.commune.identification.ServiceID;
+import br.edu.ufcg.lsd.commune.processor.interest.InterestProcessor;
 import br.edu.ufcg.lsd.commune.processor.objectdeployer.ServiceProcessor;
 
+@SuppressWarnings("restriction")
 public class Message implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5841681088042142970L;
+	
 	private CommuneAddress source;
 	private CommuneAddress destination;
 	private String functionName;
 
-	private List<Class<?>> parameterTypes;
-	private List<Object> parameterValues;
 	private List<MessageParameter> parameters = new ArrayList<MessageParameter>();
 
 	private String processorType;
@@ -54,9 +63,6 @@ public class Message implements Serializable {
 	
 	private X509CertPath senderCertificateChain;
 	
-	private MessageMetadata metadata;
-
-	
 	public Message(CommuneAddress source, CommuneAddress destination, String functionName, MessageMetadata metadata, 
 			String processorType) {
 
@@ -65,11 +71,6 @@ public class Message implements Serializable {
 			
 			throw new InvalidIdentificationException(
 					"source neither can be empty or null nor can have empty or null container fields: " + source);
-		}
-		
-		if (source.getPublicKey() == null || "".equals(source.getPublicKey())) {
-			throw new InvalidIdentificationException(
-					"Every message source must have a public key set: " + source);
 		}
 		
 		this.source = source;
@@ -90,9 +91,6 @@ public class Message implements Serializable {
 		}
 		this.destination = destination;
 
-		this.parameterTypes = new ArrayList<Class<?>>();
-		this.parameterValues = new ArrayList<Object>();
-		this.metadata = (metadata == null ? new MessageMetadata() : metadata);
 		this.processorType = processorType;
 	}
 	
@@ -162,8 +160,6 @@ public class Message implements Serializable {
 
 	private void addMessageParameter(MessageParameter parameter) {
 		parameters.add(parameter);
-		parameterTypes.add(parameter.getType());
-		parameterValues.add(parameter.getValue());
 	}
 	
 	public CommuneAddress getSource() {
@@ -179,15 +175,23 @@ public class Message implements Serializable {
 	}
 
 	public Class<?>[] getParameterTypes() {
-		return MessageUtil.asClassArray(this.parameterTypes);
+		
+		Class<?>[] types = new Class<?>[parameters.size()];
+		for (int i = 0; i < types.length; i++) {
+			types[i] = parameters.get(i).getType();
+		}
+		
+		return types;
 	}
 
 	public Object[] getParameterValues() {
-		return MessageUtil.asArray(this.parameterValues);
-	}
-
-	public MessageMetadata getMetadata() {
-		return this.metadata;
+		
+		Object[] values = new Object[parameters.size()];
+		for (int i = 0; i < values.length; i++) {
+			values[i] = parameters.get(i).getValue();
+		}
+		
+		return values;
 	}
 
 	public String getProcessorType() {
@@ -224,13 +228,13 @@ public class Message implements Serializable {
 			if (this.source.equals(message.getSource()) && this.destination.equals(message.getDestination()) 
 					&& this.functionName.equals(message.getFunctionName())) {
 				
-				if (this.parameterTypes.size() == message.getParameterTypes().length) {
-					for (int i = 0; i < this.parameterTypes.size(); i++) {
-						if (!this.parameterTypes.get(i).getName().equals(message.getParameterTypes()[i].getName())) {
+				if (this.parameters.size() == message.getParameterTypes().length) {
+					for (int i = 0; i < this.parameters.size(); i++) {
+						if (!this.parameters.get(i).getType().getName().equals(message.getParameterTypes()[i].getName())) {
 							return false;
 						}
 					}
-					return equalsMetadata(message) && this.session == message.session 
+					return this.session == message.session 
 							&& this.sequence == message.sequence;
 				}
 			}
@@ -238,19 +242,14 @@ public class Message implements Serializable {
 		return false;
 	}
 
-	private boolean equalsMetadata(Message message) {
-		return (metadata == null ? message.metadata == null : metadata.equals(message.metadata));
-	}
-	
 	@Override
 	public int hashCode() {
 		final int PRIME = 31;
 		int result = 1;
 		result = PRIME * result + ((source == null) ? 0 : source.hashCode());
 		result = PRIME * result + ((destination == null) ? 0 : destination.hashCode());
-		result = PRIME * result + ((metadata == null) ? 0 : metadata.hashCode());
 		result = PRIME * result + ((functionName == null) ? 0 : functionName.hashCode());
-		result = PRIME * result + parameterTypes.hashCode();
+		result = PRIME * result + getParameterTypes().hashCode();
 		result = PRIME * result + ((processorType == null) ? 0 : processorType.hashCode());
 		result += session - sequence;
 		return result;
@@ -261,7 +260,7 @@ public class Message implements Serializable {
 		
 		String fromTo = source.getUserName() + "->" + destination.getUserName();
 		String conn = ":" + session + "," + sequence;
-		String params = toString(parameterValues);
+		String params = toString(Arrays.asList(getParameterValues()));
 		String call = ":" + functionName + "(" + params + ")";
 		
 		return fromTo + conn + call;
@@ -309,5 +308,35 @@ public class Message implements Serializable {
 	
 	public List<MessageParameter> getParameters() {
 		return parameters;
+	}
+	
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		ContainerID source = new ContainerID("sourceUser", "SourceServer", "MODULE");
+		source.setPublicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7qdm+PmfEQ0Of28aYHZpnphtRTBs+hrP1j813GpgE659DWdNGe/WZjFStFFt/rk8j5hg2tms6flI4iFq3txytcJzSokB0yD491+VFYZv7C9QjzjLaALJHf5bLzcICxEDXhHLbllKTV2Nlfb2pr5wRD3Aypgu45k2gq05tcwdyGwIDAQAB");
+		DeploymentID sourceDID = new DeploymentID(new ServiceID(source, "SERVICE"), 109321023710293L); 
+		
+		System.out.println(sourceDID);
+		
+		ContainerID target = new ContainerID("sourceUser", "SourceServer", "MODULE");
+		target.setPublicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7qdm+PmfEQ0Of28aYHZpnphtRTBs+hrP1j813GpgE659DWdNGe/WZjFStFFt/rk8j5hg2tms6flI4iFq3txytcJzSokB0yD491+VFYZv7C9QjzjLaALJHf5bLzcICxEDXhHLbllKTV2Nlfb2pr5wRD3Aypgu45k2gq05tcwdyGwIDAQAB");
+		DeploymentID targetDID = new DeploymentID(new ServiceID(target, "SERVICE"), 109321023710293L); 
+		
+//		Message message = new Message(source, target, "method");
+		
+		String processorType = InterestProcessor.class.getName();
+		Message m = new Message(sourceDID, targetDID, InterestProcessor.IS_IT_ALIVE_MESSAGE, processorType);
+		m.setSession(0L);
+		m.setSequence(0L);
+		m.addParameter(int.class, 1234);
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(baos);
+		oos.writeObject(m);
+		System.out.println(baos.toByteArray().length);
+		byte[] bytes = JsonMessageUtil.toBytes(m);
+		System.out.println(bytes.length);
+		
+		Message parse = JsonMessageUtil.parse(bytes);
+		
 	}
 }

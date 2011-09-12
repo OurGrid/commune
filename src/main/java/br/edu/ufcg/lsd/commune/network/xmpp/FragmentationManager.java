@@ -53,7 +53,6 @@ public class FragmentationManager {
 			messages[a].setProperty( FRAG_MESSAGE, fe.getFragment( a ) );
 			messages[a].setProperty( FRAG_NUM, numOfFrags );
 			messages[a].setProperty( FRAG_ID, a );
-			messages[a].setProperty( "functionName", event.getFunctionName() );
 			messages[a].setFrom( from );
 			messages[a].setTo( to );
 			messages[a].setThread( thread );
@@ -123,4 +122,5 @@ public class FragmentationManager {
 			}
 		}
 	}
+
 }
