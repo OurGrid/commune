@@ -161,10 +161,7 @@ public class InterestManager {
 
 				boolean isNewMonitor = !origInterestedID.equals(newInterestedID);
 				
-				boolean isNewStubParameter = parameter && (isStubDown(origInterest) || 
-						origInterest.isRecent()); 
-				
-				if (isNewMonitor || isNewStubParameter) {
+				if (isNewMonitor || parameter) {
 					origInterest.cancelScheduledExecution();
 					setNewInterest(interest, parameter);
 				}

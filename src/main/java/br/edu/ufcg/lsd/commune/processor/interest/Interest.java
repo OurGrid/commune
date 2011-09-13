@@ -33,9 +33,6 @@ import br.edu.ufcg.lsd.commune.message.Message;
 @SuppressWarnings("restriction")
 public class Interest {
 
-	private static final int RECENT_LIMIT = 3;
-	
-
 	private Monitor monitor;
 	private ServiceID stubServiceID;
 	private InterestRequirements reqs;
@@ -46,23 +43,13 @@ public class Interest {
 	private volatile long lastUpdateStatusAvaliableArrival;
     private ReadWriteLock updateStatusLock = new ReentrantReadWriteLock(true);;
 
-    private int updates = 0;
-	
 	public Interest(Monitor monitor, ServiceID stubServiceID, InterestRequirements reqs) {
 		this.monitor = monitor;
 		this.stubServiceID = stubServiceID;
 		this.reqs = reqs;
 	}
 	
-	public boolean isRecent() {
-		try {
-			updateStatusLock.readLock().lock();
-			return updates <= RECENT_LIMIT;
-		} finally {
-			updateStatusLock.readLock().unlock();
-		}
-	}
-
+	
 	public ServiceID getStubServiceID() {
 		return stubServiceID;
 	}
@@ -139,10 +126,7 @@ public class Interest {
 	public void setLastHeartbeat() {
 		try {
 			updateStatusLock.writeLock().lock();
-			
-			this.updates++;
 			this.lastUpdateStatusAvaliableArrival = System.currentTimeMillis();
-			
 		} finally {
 			updateStatusLock.writeLock().unlock();
 		}
