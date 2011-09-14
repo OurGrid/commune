@@ -19,16 +19,17 @@
  */
 package br.edu.ufcg.lsd.commune.testinfra.util;
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 
 import br.edu.ufcg.lsd.commune.message.Message;
 import br.edu.ufcg.lsd.commune.processor.AbstractProcessor;
 import br.edu.ufcg.lsd.commune.processor.MessageConsumer;
-import br.edu.ufcg.lsd.commune.processor.MessageQueue;
 
 public class TestableMessageConsumer extends MessageConsumer {
 
-	public TestableMessageConsumer(AbstractProcessor messageProcessor, MessageQueue messageQueue, CountDownLatch shutdownCountDownLatch) {
+	public TestableMessageConsumer(AbstractProcessor messageProcessor, 
+			BlockingQueue<Message> messageQueue, CountDownLatch shutdownCountDownLatch) {
 		super(messageProcessor, messageQueue, shutdownCountDownLatch);
 	}
 
@@ -44,7 +45,7 @@ public class TestableMessageConsumer extends MessageConsumer {
 	
 	@Override
 	protected Message removeMessage() {
-		return messageQueue.unblockingRemove();
+		return messageQueue.poll();
 	}
 	
 	@Override

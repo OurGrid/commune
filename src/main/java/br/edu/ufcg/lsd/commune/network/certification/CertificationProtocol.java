@@ -34,6 +34,7 @@ import br.edu.ufcg.lsd.commune.network.DiscardMessageException;
 import br.edu.ufcg.lsd.commune.network.Protocol;
 import br.edu.ufcg.lsd.commune.network.ProtocolException;
 
+@SuppressWarnings("restriction")
 public class CertificationProtocol extends Protocol {
 
 	protected final X509CertPath myCertificatePath;
@@ -61,7 +62,6 @@ public class CertificationProtocol extends Protocol {
 		if (message.getSequence() != null && message.getSequence().equals(0L)) {
 			message.setSenderCertificatePath(myCertificatePath);
 		}
-		
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class CertificationProtocol extends Protocol {
 		
 		X509CertPath senderCertificateChain = message.getSenderCertificatePath();
 		
-		if (message.getSequence() != null && message.getSequence() != 0) {
+		if (senderCertificateChain == null) {
 			
 			X509CertPath certificateChain = certificateCache.get(
 					message.getSource().getContainerID());
@@ -92,16 +92,6 @@ public class CertificationProtocol extends Protocol {
 			certificateCache.put(message.getSource().getContainerID(), 
 					senderCertificateChain);
 		}
-		
-//		if (!isCertificateValid(senderCertificateChain)) {
-//			throw new DiscardMessageException();
-//		}
-		
-		
-//		if (!isCertificateIssuedByCA(senderCertificateChain)) {
-//			throw new DiscardMessageException();
-//		}
-		
 	}
 
 	/**

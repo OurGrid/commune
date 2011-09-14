@@ -41,6 +41,7 @@ import br.edu.ufcg.lsd.commune.network.ProtocolException;
 
 /**
  */
+@SuppressWarnings("restriction")
 public class CertificationUtils {
 
 	private static final String CERT_EXTENSION = ".cer";

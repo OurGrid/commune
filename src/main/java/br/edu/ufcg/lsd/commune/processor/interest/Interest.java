@@ -30,8 +30,8 @@ import br.edu.ufcg.lsd.commune.identification.DeploymentID;
 import br.edu.ufcg.lsd.commune.identification.ServiceID;
 import br.edu.ufcg.lsd.commune.message.Message;
 
+@SuppressWarnings("restriction")
 public class Interest {
-
 
 	private Monitor monitor;
 	private ServiceID stubServiceID;
@@ -43,13 +43,12 @@ public class Interest {
 	private volatile long lastUpdateStatusAvaliableArrival;
     private ReadWriteLock updateStatusLock = new ReentrantReadWriteLock(true);;
 
-	
 	public Interest(Monitor monitor, ServiceID stubServiceID, InterestRequirements reqs) {
 		this.monitor = monitor;
 		this.stubServiceID = stubServiceID;
 		this.reqs = reqs;
 	}
-
+	
 	
 	public ServiceID getStubServiceID() {
 		return stubServiceID;
@@ -128,7 +127,6 @@ public class Interest {
 		try {
 			updateStatusLock.writeLock().lock();
 			this.lastUpdateStatusAvaliableArrival = System.currentTimeMillis();
-			
 		} finally {
 			updateStatusLock.writeLock().unlock();
 		}

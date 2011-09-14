@@ -249,7 +249,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 		}
 
 		String destinationModule = message.getDestination().getContainerID().toString();
-
+		
 		String chat = this.chats.get( destinationModule );
 		if ( chat == null ) {
 			chat = nextID();
@@ -265,6 +265,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 				FragmentationManager.createFragMessages(message, this.identification.toString(), 
 						destinationModule, chat, Message.Type.chat);
 		} catch (IOException e) {
+			e.printStackTrace();
 			LOG.error( "Error on message fragmentation: " + e.getMessage() );
 			throw new CommuneRuntimeException("Could not fragment message.", e);
 		}

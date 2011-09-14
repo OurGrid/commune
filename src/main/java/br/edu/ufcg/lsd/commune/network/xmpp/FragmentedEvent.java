@@ -19,14 +19,11 @@
  */
 package br.edu.ufcg.lsd.commune.network.xmpp;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InvalidClassException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import br.edu.ufcg.lsd.commune.container.logging.CommuneLoggerFactory;
+import br.edu.ufcg.lsd.commune.message.JsonMessageUtil;
 import br.edu.ufcg.lsd.commune.message.Message;
 
 public class FragmentedEvent {
@@ -43,15 +40,15 @@ public class FragmentedEvent {
 	}
 
 	public FragmentedEvent(Message event) throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ObjectOutputStream oos = new ObjectOutputStream(baos);
-		oos.writeObject(event);
-		oos.reset();
-		oos.flush();
-		oos.close();
+//		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//		ObjectOutputStream oos = new ObjectOutputStream(baos);
+//		oos.writeObject(event);
+//		oos.reset();
+//		oos.flush();
+//		oos.close();
 		
-		byte[] bs = baos.toByteArray();
-
+		byte[] bs = JsonMessageUtil.toBytes(event);
+		
 		numOfFragments = (bs.length / MESSAGE_SIZE) + 1;
 
 		fragments = new byte[numOfFragments][];
@@ -111,18 +108,21 @@ public class FragmentedEvent {
 		System.arraycopy(fragments[index], 0, bs, index * MESSAGE_SIZE,
 				bs.length - (index * MESSAGE_SIZE));
 		
-		ByteArrayInputStream bais = new ByteArrayInputStream(bs);
-		ObjectInputStream ois = new ObjectInputStream(bais);
+//		ByteArrayInputStream bais = new ByteArrayInputStream(bs);
+//		ObjectInputStream ois = new ObjectInputStream(bais);
 
 		try {
-			return (Message) ois.readObject();
+//			Message message = (Message) ois.readObject();
+//			message.unwrap();
+			Message message = JsonMessageUtil.parse(bs);
+			return message;
 		} catch (ClassNotFoundException e) {
 			throw new IOException(e.getMessage());
 		} catch (InvalidClassException e) {
 			CommuneLoggerFactory.getInstance().getLogger("Compatibility").warn("Receiving a incompatible message");
 			throw new IOException(e.getMessage());
 		} finally {
-			ois.close();
+//			ois.close();
 		}
 	}
 }

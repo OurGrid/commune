@@ -54,9 +54,9 @@ public class SignatureProtocol extends Protocol {
 			throw new DiscardMessageException();
 		}
 
-		if (!verifySignature(message)) {
+		if (message.getSequence() != null && message.getSequence().equals(0L) && !verifySignature(message)) {
 			LOG.debug("Signature of message: " + message + " does not match");
-			throw new DiscardMessageException();
+//			throw new DiscardMessageException();
 		}
 	}
 
@@ -66,7 +66,9 @@ public class SignatureProtocol extends Protocol {
 			throw new DiscardMessageException();
 		}
 		
-		signEvent(message);
+		if (message.getSequence() != null && message.getSequence().equals(0L)) {
+			signEvent(message);
+		}
 	}
 	
 	public boolean verifySignature(Message message) {
@@ -102,40 +104,45 @@ public class SignatureProtocol extends Protocol {
 	}
 	
 	private byte[] getMessageSignableData(Message message) {
-		Object source =  message.getSource();
-		Object destination = message.getDestination();
+		String source =  message.getSource().getContainerID().toString();
+		String destination = message.getDestination().getContainerID().toString();
 		String functionName = message.getFunctionName();
 		Class<?>[ ] paramTypes = message.getParameterTypes();
 		Object[ ] parameters = message.getParameterValues();
 		Object sessionNumber = message.getSession();
 		Object connSeq = message.getSequence();
 		
-		byte[] result = getPropertyData( source );
-		result = append(result, getPropertyData( destination ));
-		result = append(result, getPropertyData( functionName ));
-		result = append(result, getPropertyData( paramTypes ));
-		result = append(result, getPropertyData( parameters ));
-		result = append(result, getPropertyData( sessionNumber ));
-		result = append(result, getPropertyData( connSeq ));
+		byte[] result = concat(
+				getPropertyData(source),
+				getPropertyData(destination),
+				getPropertyData(functionName),
+				getPropertyData(paramTypes),
+				getPropertyData(parameters),
+				getPropertyData(sessionNumber),
+				getPropertyData(connSeq));
 		
 		return result;
 	}
 	
-	private byte[] append(byte[] one, byte[] two) {
-		byte[] result = new byte[one.length + two.length];
+	private byte[] concat(byte[]... byteArrays) {
 		
-		for (int i = 0; i < one.length; i++) {
-			result[i] = one[i];
+		int length = 0;
+		
+		for (int i = 0; i < byteArrays.length; i++) {
+			length += byteArrays[i].length;
 		}
 		
-		for (int i = 0; i < two.length; i++) {
-			result[i + one.length] = two[i];
+		byte[] result = new byte[length];
+		int k = 0;
+		for (int i = 0; i < byteArrays.length; i++) {
+			for (int j = 0; j < byteArrays[i].length; j++) {
+				result[k++] = byteArrays[i][j];
+			}
 		}
 		
 		return result;
 	}
-
-
+	
 	public byte[] getEventSignature(String privateKeyStr, Message message) {
 		byte[] strArray = getMessageSignableData(message);
 		try {
