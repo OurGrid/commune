@@ -344,35 +344,34 @@ public class InterestManager {
 			updateStatusUnavailable(targetID, certPath);
 		}
 	}
-
+	
 	private void updateStatusAvailable(CommuneAddress targetID, X509CertPath certPath) {
 		DeploymentID targetDeploymentID = (DeploymentID) targetID; 
+		Message interestMessage = null;
 		
 		try {
 			interestLock.lock();
-			//TODO validate
 			Interest interest = interests.get(targetDeploymentID.getServiceID());
 			
-			
 			if (interest == null) {
-				return;//TODO
+				return;
 			}
 
 			interest.setLastHeartbeat();
-			
 			interest.setInterestCertPath(certPath);
 			
 			if (isStubDown(interest)) {
 				
 				interestProcessor.getModule().setStubDeploymentID(targetDeploymentID);
-				sendNotifyRecoveryMessage(interest);
+				interestMessage = createNotifyRecoveryMessage(interest);
 
 			} 
-			
-			
-			
 		} finally {
 			interestLock.unlock();
+		}
+		
+		if (interestMessage != null) {
+			interestProcessor.sendMessage(interestMessage);
 		}
 	}
 
@@ -380,7 +379,7 @@ public class InterestManager {
 		return !interestProcessor.getModule().isStubUp(interest.getStubServiceID());
 	}
 	
-	private void sendNotifyRecoveryMessage(Interest interest) {
+	private Message createNotifyRecoveryMessage(Interest interest) {
 		ObjectDeployment interested = interest.getInterested();
 		Message message = 
 			new Message(interested.getModule().getContainerID(), interested.getDeploymentID(), 
@@ -400,7 +399,7 @@ public class InterestManager {
 			message.addParameter(X509CertPath.class, interest.getInterestCertPath());
 		}
 		
-		this.interestProcessor.sendMessage(message);
+		return message;
 	}
 	
 	private void updateStatusUnavailable(CommuneAddress targetID, X509CertPath certPath) {
