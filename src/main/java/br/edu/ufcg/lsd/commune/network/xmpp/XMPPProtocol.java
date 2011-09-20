@@ -21,14 +21,18 @@ package br.edu.ufcg.lsd.commune.network.xmpp;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.Semaphore;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.Presence.Type;
 import org.jivesoftware.smack.util.StringUtils;
 
 import br.edu.ufcg.lsd.commune.CommuneRuntimeException;
@@ -91,22 +95,31 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 		final String password = context.getProperty(XMPPProperties.PROP_PASSWORD);
 		int serverPort = context.parseIntegerProperty(XMPPProperties.PROP_XMPP_SERVERPORT);
 
-		ConnectionConfiguration cc = new ConnectionConfiguration( serverName, serverPort );
+		final ConnectionConfiguration cc = new ConnectionConfiguration( serverName, serverPort );
 		cc.setReconnectionAllowed(true);
 		connection = new XMPPConnection( cc);
 		
-		new Thread(new ConnectionRunnable(new XMPPConnectionListener() {
+		new Thread(new ConnectionRunnable(connection, new XMPPConnectionListener() {
 			
-			public void connetionCreated() {
+			public void connectionCreated() {
 				
 				LOG.debug("XMPP Connection created : " + identification.getUserAtServer());
+				createAccount(login, password);
+				
 				try {
-					createAccount( login, password );
-					connection.login( login, password, resource );
-				} catch ( XMPPException e ) {
+					checkResource(login, cc, password, resource);
+				} catch (CommuneNetworkException e) {
 					if(connectionListener != null){
-						connectionListener.connectionFailed(new CommuneNetworkException( "Error logging in to XMPP server with user name: '" + login +
-							"'. Check XMPP user name and password. " + e.getMessage() , e ));
+						connectionListener.connectionFailed(e);
+					}
+					return;
+				}
+				
+				try {
+					connection.login(login, password, resource);
+				} catch (XMPPException e) {
+					if(connectionListener != null){
+						connectionListener.connectionFailed(new CommuneNetworkException(e));
 					}
 					return;
 				}
@@ -158,10 +171,63 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 			});
 			}
 			}
+
 		}, getSleepTime())).start();
 
 	}
 
+	private void checkResource(String login, ConnectionConfiguration cc, String password,
+			String resource) throws CommuneNetworkException {
+		
+		XMPPConnection checkResourceConnection = new XMPPConnection(cc);
+		final Semaphore semaphore = new Semaphore(0);
+		
+		new Thread(new ConnectionRunnable(checkResourceConnection, 
+				new XMPPConnectionListener() {
+
+			@Override
+			public void connectionCreated() {
+				semaphore.release();
+			}
+			
+		}, getSleepTime())).start();
+		
+		try {
+			semaphore.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		String randomResource = Long.toHexString(Double.doubleToLongBits(Math.random()));
+		
+		try {
+			checkResourceConnection.login(login, password, randomResource);
+		} catch (XMPPException e) {
+			throw new CommuneNetworkException( "Error logging in to XMPP server with user name: '" + login +
+					"'. Check XMPP user name and password. " + e.getMessage() , e );
+		}
+		
+		
+		Roster roster = checkResourceConnection.getRoster();
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		Presence presence = roster.getPresenceResource(
+				login + "@" + cc.getHost() + "/" + resource);
+		
+		boolean available = presence.getType().equals(Type.available);
+		
+		checkResourceConnection.disconnect();
+		
+		if (available) {
+			throw new CommuneNetworkException( "Error logging in to XMPP server with user name: '" + login +
+					"'. Resource " + resource + " is already in use.");
+		}
+	}
 
 	public class AFilter implements PacketFilter {
 
@@ -282,8 +348,11 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 
 		private final XMPPConnectionListener connectionListener;
 		private final int sleepTime;
+		private final XMPPConnection connection;
 
-		public ConnectionRunnable(XMPPConnectionListener connectionListener, int sleepTime) {
+		public ConnectionRunnable(XMPPConnection connection, 
+				XMPPConnectionListener connectionListener, int sleepTime) {
+			this.connection = connection;
 			this.connectionListener = connectionListener;
 			this.sleepTime = sleepTime;
 		}
@@ -300,14 +369,14 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					} catch (InterruptedException e1) {	}
 				}
 			}
-			connectionListener.connetionCreated();
+			connectionListener.connectionCreated();
 			
 		}
 	}
 	
 	private interface XMPPConnectionListener{
 		
-		public void connetionCreated();
+		public void connectionCreated();
 	}
 
 }

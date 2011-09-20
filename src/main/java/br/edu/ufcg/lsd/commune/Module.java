@@ -128,7 +128,7 @@ public class Module {
     private MonitoredByHelper monitoredByHelper;
     private ReceiverHelper receiverHelper;
 
-    protected ConnectionListener connectionListener;
+    private ConnectionListener connectionListener;
 	
     public Module(String containerName, ModuleContext context, ConnectionListener listener) 
 		throws CommuneNetworkException, ProcessorStartException{
