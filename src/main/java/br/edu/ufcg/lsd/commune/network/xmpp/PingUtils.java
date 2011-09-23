@@ -9,6 +9,7 @@ import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.AndFilter;
+import org.jivesoftware.smack.filter.FromContainsFilter;
 import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.PacketIDFilter;
 import org.jivesoftware.smack.packet.Message;
@@ -75,18 +76,24 @@ public class PingUtils {
         
 	}
 	
-	private static PacketFilter createPongFilter(Ping ping) {
-		return new AndFilter(new PacketIDFilter(ping.getPacketID()),
+	private static PacketFilter createPongFilter(final Ping ping) {
+		return new AndFilter(
+				new PacketIDFilter(ping.getPacketID()),
+				new FromContainsFilter(ping.getTo()),
 				new PacketFilter() {
 
 					@Override
 					public boolean accept(Packet packet) {
 						Message message = (Message) packet;
-						if (message.getProperty(Ping.PROPERTY)
-								.equals(Ping.PONG)) {
-							return true;
+						if (message.getProperty(Ping.PROPERTY) == null) {
+							return false;
 						}
-						return false;
+						
+						if (!message.getProperty(Ping.PROPERTY).equals(Ping.PONG)) {
+							return false;
+						}
+						
+						return true;
 					}
 				});
 	}
