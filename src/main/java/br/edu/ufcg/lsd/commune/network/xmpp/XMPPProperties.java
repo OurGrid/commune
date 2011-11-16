@@ -40,5 +40,9 @@ public interface XMPPProperties {
 	 */
 	public static final String PROP_PASSWORD = "commune.xmpp.password";
 
+	/**
+	 * Enables resource checking before creating connection.
+	 */
+	public static final String PROP_CHECK_RESOURCE = "commune.xmpp.checkresource";
 
 }

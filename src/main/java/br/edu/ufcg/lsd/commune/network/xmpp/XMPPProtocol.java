@@ -92,7 +92,8 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 
 		final String password = context.getProperty(XMPPProperties.PROP_PASSWORD);
 		int serverPort = context.parseIntegerProperty(XMPPProperties.PROP_XMPP_SERVERPORT);
-
+		final boolean checkResource = context.isEnabled(XMPPProperties.PROP_CHECK_RESOURCE);
+		
 		final ConnectionConfiguration cc = new ConnectionConfiguration( serverName, serverPort );
 		cc.setReconnectionAllowed(true);
 		connection = new XMPPConnection( cc);
@@ -104,14 +105,16 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 				LOG.debug("XMPP Connection created : " + identification.getUserAtServer());
 				createAccount(login, password);
 				
-				try {
-					PingUtils.checkResource(cc, login, password, 
-							resource, getSleepTime());
-				} catch (CommuneNetworkException e) {
-					if(connectionListener != null){
-						connectionListener.connectionFailed(e);
+				if (checkResource) {
+					try {
+						PingUtils.checkResource(cc, login, password, 
+								resource, getSleepTime());
+					} catch (CommuneNetworkException e) {
+						if(connectionListener != null){
+							connectionListener.connectionFailed(e);
+						}
+						return;
 					}
-					return;
 				}
 				
 				try {
