@@ -19,6 +19,12 @@
  */
 package br.edu.ufcg.lsd.commune.testinfra;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PublicKey;
+import java.security.SignatureException;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,7 +66,7 @@ public class AcceptanceTestUtil {
 		return type.isInstance(testObject);
 	}
 	
-	public static DeploymentID getBoundObjectID(ServiceID serviceID){
+	public static DeploymentID getBoundDeploymentID(ServiceID serviceID){
 		return TestObjectsRegistry.getTestDeploymentID(serviceID);
 	}
 

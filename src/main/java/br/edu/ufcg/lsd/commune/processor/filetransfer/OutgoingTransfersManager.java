@@ -44,7 +44,7 @@ public class OutgoingTransfersManager {
 	/** Smack File Transfer Manager. */
 	private final FileTransferManager manager;
 
-	/** Listeners on this manager. ObjectID is the key, the value is a stub. */
+	/** Listeners on this manager. DeploymentID is the key, the value is a stub. */
 	private final ConcurrentHashMap<TransferHandle,OutgoingTransfer> transfers;
 
 	private final LinkedList<OutgoingTransfer> queuedTransfers;

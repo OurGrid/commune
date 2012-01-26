@@ -325,7 +325,7 @@ public class ServiceManager implements Serializable {
 		return (T) application.getStub(serviceID, clazz);
 	}
 
-	public DeploymentID getLocalObjectID(Object object) {
+	public DeploymentID getLocalDeploymentID(Object object) {
 		return application.getLocalObjectDeploymentID(object);
 	}
 	

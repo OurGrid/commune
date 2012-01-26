@@ -36,17 +36,17 @@ public class OutgoingTransfer extends AbstractTransfer {
 
 	
 	private OutgoingFileTransfer transfer;
-	private final String destinationObjectID;
+	private final String destinationDeploymentID;
 	private final String transferDescription;
 
 
 	public OutgoingTransfer(Module module, DeploymentID listenerID, TransferHandle handle, OutgoingFileTransfer transfer,
-									File file, String destinationObjectID, long inactivityTimeout, 
+									File file, String destinationDeploymentID, long inactivityTimeout, 
 									boolean notifyProgress, String transferDescription) {
 
 		super(module, listenerID, inactivityTimeout, handle, file, file.length(), notifyProgress);
 		this.transfer = transfer;
-		this.destinationObjectID = destinationObjectID;
+		this.destinationDeploymentID = destinationDeploymentID;
 		this.transferDescription = transferDescription;
 	}
 
@@ -60,7 +60,7 @@ public class OutgoingTransfer extends AbstractTransfer {
 		try {
 			File file = getFile();
 			String messageToSend = HANDLE_PROPERTY + PROPERTY_SEPARATOR + getHandle() + PROPERTIES_SEPARATOR + 
-				DESTINATION_PROPERTY + PROPERTY_SEPARATOR + destinationObjectID + PROPERTIES_SEPARATOR + 
+				DESTINATION_PROPERTY + PROPERTY_SEPARATOR + destinationDeploymentID + PROPERTIES_SEPARATOR + 
 				EXECUTABLE_PROPERTY + PROPERTY_SEPARATOR + file.canExecute() + PROPERTIES_SEPARATOR + 
 				READABLE_PROPERTY + PROPERTY_SEPARATOR + file.canRead() + PROPERTIES_SEPARATOR + 
 				WRITABLE_PROPERTY + PROPERTY_SEPARATOR + file.canWrite();

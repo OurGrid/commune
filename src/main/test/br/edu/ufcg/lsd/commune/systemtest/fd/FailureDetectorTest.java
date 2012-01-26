@@ -19,24 +19,24 @@ public class FailureDetectorTest {
 	@Test
 	public void test1() throws Exception {
 		
-		ServiceID moduleObjID = new ServiceID(
+		ServiceID moduleDeploymentID = new ServiceID(
 				new ContainerID("commune_test_user", "xmpp.ourgrid.org", "MODULE_A"), 
 				Module.CONTROL_OBJECT_NAME);
 		
-		SystemTestModule moduleClient = createClientModule(moduleObjID);
+		SystemTestModule moduleClient = createClientModule(moduleDeploymentID);
 		
 		ConditionChecker<ManagerObserverReceiver> condition = createCondition(moduleClient);
 		Assert.assertTrue(condition.waitUntilCondition(5000, 20));
 		
 		moduleClient.stop();
 		
-		moduleClient = createClientModule(moduleObjID);
+		moduleClient = createClientModule(moduleDeploymentID);
 		condition = createCondition(moduleClient);
 		Assert.assertTrue(condition.waitUntilCondition(5000, 20));
 		
 		moduleClient.stop();
 		
-		moduleClient = createClientModule(moduleObjID);
+		moduleClient = createClientModule(moduleDeploymentID);
 		condition = createCondition(moduleClient);
 		Assert.assertTrue(condition.waitUntilCondition(5000, 20));
 		
