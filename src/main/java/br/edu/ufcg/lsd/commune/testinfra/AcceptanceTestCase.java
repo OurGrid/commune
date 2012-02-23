@@ -35,7 +35,7 @@ import br.edu.ufcg.lsd.commune.testinfra.util.TestContext;
  */
 public abstract class AcceptanceTestCase {
 
-	private TestContext context = createComponentContext();
+	private TestContext context = buildComponentContext();
 	
 	//TODO Verify if it can be removed
 	private IMocksControl mockControl;
@@ -59,6 +59,15 @@ public abstract class AcceptanceTestCase {
 		if (context == null) {
 			throw new IllegalStateException("Component context was not created.");
 		}
+		return context;
+	}
+	
+	private TestContext buildComponentContext() {
+		TestContext context = createComponentContext();
+		
+		//disable check resource property
+		context.set(XMPPProperties.PROP_CHECK_RESOURCE, "no");
+		
 		return context;
 	}
 	
