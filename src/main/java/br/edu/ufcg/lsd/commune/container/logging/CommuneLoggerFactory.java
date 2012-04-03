@@ -19,7 +19,6 @@
  */
 package br.edu.ufcg.lsd.commune.container.logging;
 
-import org.apache.log4j.xml.DOMConfigurator;
 
 public class CommuneLoggerFactory {
 	
@@ -27,10 +26,6 @@ public class CommuneLoggerFactory {
 	private static final String MESSAGES_CATEGORY = "MESSAGES";
 	private static CommuneLoggerFactory instance = null;
 
-	private CommuneLoggerFactory(){
-		DOMConfigurator.configure(CommuneLoggerFactory.class.getResource("/log4j.cfg.xml"));
-	}
-	
 	public static CommuneLoggerFactory getInstance(){
 		if(instance == null){
 			instance = new CommuneLoggerFactory();
