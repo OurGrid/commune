@@ -156,7 +156,8 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					}
 					
 					public void reconnectingIn(int arg0) {
-						LOG.debug("Trying to reconnect to XMPP server : " + identification.getUserAtServer());
+						LOG.debug("Trying to reconnect to XMPP server with jid: " + 
+								identification.getUserAtServer());
 					}
 					
 					public void connectionClosedOnError(Exception arg0) {
