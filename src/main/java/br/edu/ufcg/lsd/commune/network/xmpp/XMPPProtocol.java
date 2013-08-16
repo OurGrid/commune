@@ -125,7 +125,8 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					LOG.debug("Successful logged with resource: " + resource);
 				} catch (Exception e) {
 					if(connectionListener != null){
-						connectionListener.connectionFailed(new CommuneNetworkException(e));
+						connectionListener.connectionFailed(
+								new CommuneNetworkException("Wrong credentials or resource in use.", e));
 					}
 					return;
 				}
