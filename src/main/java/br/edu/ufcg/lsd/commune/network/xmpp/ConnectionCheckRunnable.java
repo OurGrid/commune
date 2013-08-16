@@ -1,5 +1,7 @@
 package br.edu.ufcg.lsd.commune.network.xmpp;
 
+import java.util.UUID;
+
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
@@ -21,9 +23,12 @@ public class ConnectionCheckRunnable implements Runnable {
 	
 	public void run() {
 		
+		UUID connectionAttempt = UUID.randomUUID();
+		
 		while (!connection.isConnected()) {
 			try {
-				LOG.debug("Trying to connect to XMPP server : " + connection.getHost());
+				LOG.debug("Trying to connect to XMPP server : " + connection.getHost() + 
+						", attempt: " + connectionAttempt);
 				connection.connect();
 			} catch (XMPPException e) {
 				try {

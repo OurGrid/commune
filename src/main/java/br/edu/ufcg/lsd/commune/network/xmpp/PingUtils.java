@@ -2,6 +2,7 @@ package br.edu.ufcg.lsd.commune.network.xmpp;
 
 import java.util.concurrent.Semaphore;
 
+import org.apache.log4j.Logger;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.PacketListener;
@@ -18,11 +19,12 @@ import br.edu.ufcg.lsd.commune.network.xmpp.ConnectionCheckRunnable.XMPPConnecti
 
 public class PingUtils {
 
+	private static transient final Logger LOG = Logger.getLogger( PingUtils.class );
+	
 	public static void addPingListener(XMPPConnection connection) {
 		connection.addPacketListener(
 				createPingListener(connection), 
 				createPingFilter());
-		
 	}
 	
 	public static void checkResource(ConnectionConfiguration cc, String login, String password,
@@ -30,6 +32,8 @@ public class PingUtils {
 		
 		XMPPConnection checkResourceConnection = new XMPPConnection(cc);
 		final Semaphore semaphore = new Semaphore(0);
+		
+		LOG.debug("Checking resource for " + resource);
 		
 		new Thread(new ConnectionCheckRunnable(checkResourceConnection, 
 				new XMPPConnectionListener() {
@@ -48,6 +52,8 @@ public class PingUtils {
 		}
 		
 		String randomResource = Long.toHexString(Double.doubleToLongBits(Math.random()));
+		
+		LOG.debug("Using random for resource check: " + randomResource);
 		
 		try {
 			checkResourceConnection.login(login, password, randomResource);
@@ -68,6 +74,8 @@ public class PingUtils {
         Packet response = collector.nextResult(SmackConfiguration.getPacketReplyTimeout());
         collector.cancel();
 		
+        checkResourceConnection.disconnect();
+        
 		if (response != null) {
 			throw new CommuneNetworkException( "Error logging in to XMPP server with user name: '" + login +
 					"'. Resource " + resource + " is already in use.");

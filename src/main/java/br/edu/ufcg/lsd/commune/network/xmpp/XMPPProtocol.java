@@ -91,12 +91,12 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 		final String resource = identification.getContainerName();
 
 		final String password = context.getProperty(XMPPProperties.PROP_PASSWORD);
-		int serverPort = context.parseIntegerProperty(XMPPProperties.PROP_XMPP_SERVERPORT);
+		final int serverPort = context.parseIntegerProperty(XMPPProperties.PROP_XMPP_SERVERPORT);
 		final boolean checkResource = context.isEnabled(XMPPProperties.PROP_CHECK_RESOURCE);
 		
-		final ConnectionConfiguration cc = new ConnectionConfiguration( serverName, serverPort );
+		final ConnectionConfiguration cc = new ConnectionConfiguration(serverName, serverPort);
 		cc.setReconnectionAllowed(true);
-		connection = new XMPPConnection( cc);
+		connection = new XMPPConnection(cc);
 		
 		new Thread(new ConnectionCheckRunnable(connection, new XMPPConnectionListener() {
 			
@@ -107,8 +107,10 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 				
 				if (checkResource) {
 					try {
-						PingUtils.checkResource(cc, login, password, 
-								resource, getSleepTime());
+						ConnectionConfiguration pingCc = new ConnectionConfiguration(
+								serverName, serverPort);
+						pingCc.setReconnectionAllowed(false);
+						PingUtils.checkResource(cc, login, password, resource, getSleepTime());
 					} catch (CommuneNetworkException e) {
 						if(connectionListener != null){
 							connectionListener.connectionFailed(e);
@@ -118,8 +120,10 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 				}
 				
 				try {
+					LOG.debug("Trying to login with resource: " + resource);
 					connection.login(login, password, resource);
-				} catch (XMPPException e) {
+					LOG.debug("Successful logged with resource: " + resource);
+				} catch (Exception e) {
 					if(connectionListener != null){
 						connectionListener.connectionFailed(new CommuneNetworkException(e));
 					}
@@ -157,7 +161,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					
 					public void reconnectingIn(int arg0) {
 						LOG.debug("Trying to reconnect to XMPP server with jid: " + 
-								identification.getUserAtServer());
+								identification.getUserAtServer() + " in " + arg0);
 					}
 					
 					public void connectionClosedOnError(Exception arg0) {
@@ -168,7 +172,7 @@ public class XMPPProtocol extends Protocol implements PacketListener{
 					}
 					
 					public void connectionClosed() {
-						LOG.debug("XMPP Connection closed : " + identification.getUserAtServer());
+						LOG.debug("XMPP Connection closed : " + identification.getContainerID());
 						if(connectionListener != null){
 							connectionListener.disconnected();
 						}
