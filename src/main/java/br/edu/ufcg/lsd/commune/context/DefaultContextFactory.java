@@ -74,7 +74,7 @@ public class DefaultContextFactory implements ContextFactory {
 		
 		properties.put( XMPPProperties.PROP_XMPP_SERVERPORT, "5222" );
 		properties.put( XMPPProperties.PROP_XMPP_SERVER_SECURE_PORT, "5223" );
-		properties.put( XMPPProperties.PROP_CHECK_RESOURCE, "yes" );
+		properties.put( XMPPProperties.PROP_CHECK_RESOURCE, "no" );
 		
 		properties.put( InterestProperties.PROP_WAN_HEARTBEAT_DELAY, "30" );
 		properties.put( InterestProperties.PROP_WAN_DETECTION_TIME, "120" );
