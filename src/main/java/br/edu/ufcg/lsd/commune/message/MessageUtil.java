@@ -189,7 +189,7 @@ public class MessageUtil {
 	}
 
 	public static boolean equals(Method a, Method b) {
-		if (a.getName() == b.getName()) {
+		if (a.getName().equals(b.getName())) {
 			if (!a.getReturnType().equals(b.getReturnType())) {
 				return false;
 			}
